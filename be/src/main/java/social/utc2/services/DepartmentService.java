@@ -1,0 +1,20 @@
+package social.utc2.services;
+
+import org.springframework.stereotype.Service;
+import social.utc2.entities.Department;
+
+import java.util.List;
+
+@Service
+public interface DepartmentService {
+
+    Department insertDepartment(Department department) throws Exception;
+
+    Department updateDepartment(Department department);
+
+    Department getDepartmentById(String id);
+
+    boolean deleteDepartments(List<Department> departments);
+
+    List<Department> getAllDepartment();
+}

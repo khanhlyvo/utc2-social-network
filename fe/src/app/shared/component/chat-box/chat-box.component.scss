@@ -1,0 +1,24 @@
+.showChat_inner {
+  position: fixed;
+  bottom: 32px;
+  background-color: white;
+  right: 32px;
+  width: 300px;
+  height: calc(100% - 580px);
+  z-index: 99;
+  border-left: 1px solid #ccc;
+  margin-bottom: 0;
+}
+
+.back_chatBox {
+  margin: 0 auto;
+  font-weight: 600;
+  i {
+    float: right;
+    position: absolute;
+    margin-top: 5px;
+    right: 20px;
+    cursor: pointer;
+  }
+}
+
