@@ -27,7 +27,7 @@
 
         <div class="navbar-container">
           <div>
-            <ul class="nav-left">
+            <!-- <ul class="nav-left">
               <li>
                 <div class="sidebar_toggle"><a href="javascript:;" (click)="toggleOpened()"><i class="ti-menu f-18"></i></a></div>
               </li>
@@ -154,7 +154,7 @@
                   </li>
                 </ul>
               </li>
-            </ul>
+            </ul> -->
             <ul [@mobileMenuTop]="isCollapsedMobile" class="nav-right" [ngClass]="isCollapsedMobile">
               <li class="header-notification lng-dropdown">
                 <a href="javascript:;" id="dropdown-active-item">
@@ -424,14 +424,14 @@
               <div *ngFor="let asideItems of menuItems.getAll()" class="d-color">
                 <div class="pcoded-navigatio-lavel" [attr.menu-title-theme]="menuTitleTheme">{{asideItems.label}}</div>
                 <ul class="pcoded-item pcoded-left-item" [attr.item-border]="itemBorder" [attr.item-border-style]="itemBorderStyle" [attr.subitem-border]="subItemBorder" *ngFor="let asideItem of asideItems.main" appAccordionLink group="{{asideItem.state}}">
-                  <li [routerLinkActive]="['active']" *ngIf="asideItem.type === 'external'" appAccordionLink group="{{asideItem.state}}">
+                  <!-- <li [routerLinkActive]="['active']" *ngIf="asideItem.type === 'external'" appAccordionLink group="{{asideItem.state}}">
                     <a href="{{asideItem.external}}" target="{{asideItem.target ? '_blank' : '_self'}}" appAccordionToggle>
                       <span class="pcoded-micon"><i class="{{ asideItem.icon }}"></i><b>{{ asideItem.short_label }}</b></span>
                       <span class="pcoded-mtext">{{ asideItem.name }}</span>
                       <span *ngFor="let asideBadge of asideItem.badge" class="pcoded-badge label label-{{ asideBadge.type }}">{{asideBadge.value}}</span>
                       <span class="pcoded-mcaret"></span>
                     </a>
-                  </li>
+                  </li> -->
 
                   <li [routerLinkActive]="['active']" *ngIf="asideItem.type === 'link'" appAccordionLink group="{{asideItem.state}}">
                     <a [routerLink]="['/', asideItem.main_state, asideItem.state]" target="{{asideItem.target ? '_blank' : '_self'}}" appAccordionToggle *ngIf="asideItem.main_state; else mainContent">

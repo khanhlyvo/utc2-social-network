@@ -1,5 +1,7 @@
     package social.utc2.controllers;
 
+    import social.utc2.constants.Constant.API;
+    import social.utc2.constants.Constant.WEB_CONSTANT;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
@@ -13,8 +15,10 @@
     import org.springframework.web.bind.annotation.RestController;
     import social.utc2.entities.User;
     import social.utc2.repositories.UserRepository;
+    import social.utc2.responses.LoginResponse;
     import social.utc2.securities.TokenJWTUltils;
 
+    import javax.servlet.http.Cookie;
     import javax.servlet.http.HttpServletResponse;
 
     @RestController
@@ -44,10 +48,19 @@
                 // return jwt to client
                 String jwt = tokenProvider.generateJWT(authentication);
                 User user = userRepository.findByUserName(loginRequest.getUserName());
-                User userEntity = new User();
-                userEntity.setId(user.getId());
-                userEntity.setUserName(user.getUserName());
-                return new ResponseEntity<>(userEntity,HttpStatus.OK);
+
+                Cookie token = new Cookie(WEB_CONSTANT.TOKEN, jwt);
+                response.addCookie(token);
+                LoginResponse loginResponse = new LoginResponse();
+                loginResponse.setId(user.getId().toString());
+                loginResponse.setToken(jwt);
+                loginResponse.setUsername(user.getUserName());
+                loginResponse.setRole(user.getRole());
+
+//                User userEntity = new User();
+//                userEntity.setId(user.getId());
+//                userEntity.setUserName(user.getUserName());
+                return new ResponseEntity<>(loginResponse,HttpStatus.OK);
             } catch (Exception e) {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

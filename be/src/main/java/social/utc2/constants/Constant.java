@@ -3,7 +3,7 @@ package social.utc2.constants;
 public class Constant {
     public static class WEB_CONSTANT {
 
-        public static final String TOKEN = "X-TOKEN";
+        public static final String TOKEN = "token";
     }
 
     public static class API {

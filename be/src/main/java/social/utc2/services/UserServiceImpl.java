@@ -1,6 +1,5 @@
 package social.utc2.services;
 
-import com.sun.corba.se.spi.ior.ObjectId;
 import social.utc2.constants.Constant.ERROR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +10,7 @@ import social.utc2.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -34,16 +34,23 @@ public class UserServiceImpl implements UserService{
    @Override
    public User updateUser(User user) {
       User currentUtc2User = userRepository.findById(user.getId()).get();
-        currentUtc2User.setPassWord(passwordEncoder.encode(user.getPassWord()));
+//        currentUtc2User.setPassWord(passwordEncoder.encode(user.getPassWord()));
       currentUtc2User.setFirstName(user.getFirstName());
+      currentUtc2User.setLastName(user.getLastName());
+      currentUtc2User.setBirthDate(user.getBirthDate());
       currentUtc2User.setEmail(user.getEmail());
+//      currentUtc2User.setDepartment(user.getDepartment());
+      currentUtc2User.setGender(user.getGender());
+      currentUtc2User.setPhone(user.getPhone());
+      currentUtc2User.setRole(user.getRole());
+
 //      currentUtc2User.setUserMobileNumber(user.getUserMobileNumber());
 //      currentUtc2User.setDtUpdDate(LocalDateTime.now());
       return userRepository.save(currentUtc2User);
    }
 
    @Override
-   public User getUserById(String userId) {
+   public User getUserById(Integer userId) {
       return userRepository.findById(userId).get();
    }
 
@@ -63,7 +70,7 @@ public class UserServiceImpl implements UserService{
       return userRepository.findAll();
    }
 
-//    public Optional<UserEntity> getById(UserEntity id) {
+//    public Optional<User> getById(String id) {
 //        return userRepository.getOne(id);
 //    }
 }

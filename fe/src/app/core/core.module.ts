@@ -1,8 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-// import { MessageService } from 'primeng/api';
-// import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
@@ -28,8 +28,8 @@ import { ChatBoxService } from './services/chat-box.service';
     InoutService,
     CardService,
     ChatBoxService,
-    // MessageService,
-    // ConfirmationService,
+    MessageService,
+    ConfirmationService,
     { provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true

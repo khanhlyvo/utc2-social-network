@@ -35,6 +35,21 @@ const MENUITEMS = [
     label: 'Navigation',
     main: [
       {
+        state: 'list',
+        short_label: 'U',
+        main_state: 'user',
+        name: 'User',
+        type: 'link',
+        icon: 'ti-home',
+        // children: [
+        //   {
+        //     state: 'list',
+        //     type: 'link',
+        //     name: 'Login',
+        //   }
+        // ]
+      },
+      {
         state: 'dashboard',
         short_label: 'D',
         name: 'Dashboard',
@@ -110,8 +125,8 @@ const MENUITEMS = [
         ]
       },
       {
-        state: 'user',
-        short_label: 'U',
+        state: 'profile',
+        short_label: 'P',
         name: 'User Profile',
         type: 'link',
         icon: 'ti-user'

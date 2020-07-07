@@ -1,14 +1,16 @@
 package social.utc2.controllers;
 
-import com.sun.corba.se.spi.ior.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import social.utc2.entities.Department;
+import social.utc2.request.Pagination;
 import social.utc2.services.DepartmentService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -72,4 +74,16 @@ public class DepartmentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ResponseEntity<?> searchDepartmentByPaging(@RequestParam(value = "timeFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timeFrom,
+//                                                       @RequestParam(value = "timeTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime timeTo,
+//                                                       Pagination pagination) {
+//        try {
+//            return new ResponseEntity<>(departmentService.search(timeFrom, timeTo, pagination), HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }

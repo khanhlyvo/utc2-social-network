@@ -8,24 +8,32 @@ import {Pagination} from '../models/pagination.model';
 
 @Injectable()
 export class UserService {
-  baseUrl = Constants.CONTEXT_PATH + 'user';
+  baseUrl = Constants.CONTEXT_PATH + 'api/user';
 
   constructor(private apiService: ApiService) {
   }
 
-  getUsers(pagination: Pagination): Observable<any> {
-    return this.apiService.get(`${this.baseUrl}`, pagination);
+  getUsers(): Observable<any> {
+    return this.apiService.get(this.baseUrl + '/getAll');
   }
 
-  addUser(user: User): Observable<User> {
+  addUser(user: any): Observable<boolean> {
     return this.apiService.post(this.baseUrl, user);
   }
 
-  updateUser(user: User): Observable<User> {
+  updateUser(user: any): Observable<boolean> {
     return this.apiService.put(this.baseUrl, user);
   }
 
-  deleteUser(id: string): Observable<boolean> {
-    return this.apiService.delete(this.baseUrl + '/' + id);
+  deleteUser(id: any): Observable<boolean> {
+    return this.apiService.delete(`${this.baseUrl}/delete`, id);
+  }
+
+  getUserById(id: number): Observable<any> {
+    return this.apiService.get(this.baseUrl + '/' + id);
+  }
+
+  getExport(): Observable<any> {
+    return this.apiService.post(this.baseUrl + '/download', {});
   }
 }

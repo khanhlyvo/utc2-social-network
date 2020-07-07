@@ -1,5 +1,7 @@
 package social.utc2.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +31,13 @@ public class Department {
     @Column
     private boolean flgDel;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "group_id")
     @Getter @Setter
     private Group group;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "department")
     private List<User> users = new ArrayList<>();
 

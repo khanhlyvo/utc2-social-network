@@ -17,6 +17,11 @@ import {PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScroll
 import {ClickOutsideModule} from 'ng-click-outside';
 import { LoadingComponent } from './component/loading/loading.component';
 import { ChatBoxComponent } from './component/chat-box/chat-box.component';
+import { PaginationComponent } from './component/pagination/pagination.component';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {CalendarModule} from 'primeng/calendar';
+
 import {} from './component/chat-box/chat-box.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -46,7 +51,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DataFilterPipe,
     ParentRemoveDirective,
     LoadingComponent,
-    ChatBoxComponent
+    ChatBoxComponent,
+    PaginationComponent
   ],
   exports: [
     FormsModule,
@@ -66,7 +72,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgbModule,
     PerfectScrollbarModule,
     ClickOutsideModule,
-    ChatBoxComponent
+
+    ChatBoxComponent,
+    PaginationComponent,
+    ToastModule,
+    ConfirmDialogModule,
+    CalendarModule,
   ],
   providers: [
     MenuItems,

@@ -1,0 +1,22 @@
+<div class="row pagination">
+    <div class="col-md-7" *ngIf="totalCount > size">
+        <ngb-pagination [collectionSize]="totalCount"
+                        [pageSize]="size" [(page)]="page" [maxSize]="5"
+                        [boundaryLinks]="true" [rotate]="true"
+                        (pageChange)="onPageChange(page, size)"></ngb-pagination>
+    </div>
+    <div class="col">
+        <div class="float-right">
+            <select class="pagination-number form-control" [(ngModel)]="size" (change)="changeNumberSize()"
+                    [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let item of sizeList" [ngValue]="item">
+                    {{ item }}
+                </option>
+            </select>
+            <span class="p-2 pagination-item-per">mục / 1 trang</span>
+            <span class="p-2">
+                {{ (page-1)*size +1 }} đến {{ (page*size >totalCount) ? totalCount: page*size }} trong tổng cộng {{ totalCount }} mục
+            </span>
+        </div>
+    </div>
+</div>

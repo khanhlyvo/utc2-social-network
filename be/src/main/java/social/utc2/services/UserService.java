@@ -1,6 +1,5 @@
 package social.utc2.services;
 
-import com.sun.corba.se.spi.ior.ObjectId;
 import org.springframework.stereotype.Service;
 import social.utc2.entities.User;
 
@@ -14,7 +13,7 @@ public interface UserService {
 
     User updateUser(User user);
 
-    User getUserById(String userId);
+    User getUserById(Integer userId);
 
     boolean deleteUser(String userId);
 

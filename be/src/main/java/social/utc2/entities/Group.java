@@ -1,5 +1,6 @@
 package social.utc2.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Group {
     @Column
     private boolean flgDel;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "group")
     private List<Department> departments;
 }

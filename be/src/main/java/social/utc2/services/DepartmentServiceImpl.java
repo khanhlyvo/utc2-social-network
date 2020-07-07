@@ -1,13 +1,20 @@
 package social.utc2.services;
 
+import org.hibernate.Criteria;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import social.utc2.entities.Department;
 import social.utc2.entities.User;
 import social.utc2.repositories.DepartmentRepository;
+import social.utc2.request.Pagination;
+import social.utc2.responses.PageResponse;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +42,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public boolean deleteDepartments(List<Department> departments) {
         try {
-            for (Department expenditure : departments) {
-                expenditure.setFlgDel(true);
+            for (Department department : departments) {
+                department.setFlgDel(true);
             }
             departmentRepository.saveAll(departments);
             return true;

@@ -62,7 +62,7 @@ public class GroupController {
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.PUT)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteGroups(@RequestBody List<Group> groups) {
         try {
             return new ResponseEntity<>(groupService.deleteGroups(groups), HttpStatus.OK);

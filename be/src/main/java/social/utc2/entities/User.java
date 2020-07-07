@@ -1,5 +1,6 @@
 package social.utc2.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,6 +65,7 @@ public class User {
     @Convert(converter = GenderConverter.class)
     private Gender gender = Gender.UNDEFINED;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;

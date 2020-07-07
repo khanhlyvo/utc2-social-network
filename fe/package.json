@@ -38,6 +38,8 @@
     "ng2-google-charts": "^3.4.0",
     "ng2-toasty": "^4.0.3",
     "ngx-perfect-scrollbar": "^5.3.5",
+    "primeicons": "^4.0.0",
+    "primeng": "^9.1.0",
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.0.0-rc.0",
     "screenfull": "^3.3.2",

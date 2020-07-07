@@ -12,17 +12,21 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'user',
+        redirectTo: 'profile',
         pathMatch: 'full'
       }, {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard-default/dashboard-default.module').then(m => m.DashboardDefaultModule),
 
+        canActivate: [AuthGuard],
         data: { roles: [Role.Admin] }
       }, {
         path: 'basic',
         loadChildren: () => import('./pages/ui-elements/basic/basic.module').then(m => m.BasicModule)
-      }, {
+      },  {
+        path: 'user',
+        loadChildren: () => import('./modules/admin/user/user.module').then(m => m.UserModule),
+      },{
         path: 'notifications',
         loadChildren: () => import('./pages/ui-elements/advance/notifications/notifications.module').then(m => m.NotificationsModule)
       }, {
@@ -32,7 +36,7 @@ const routes: Routes = [
         path: 'map',
         loadChildren: () => import('./pages/map/google-map/google-map.module').then(m => m.GoogleMapModule),
       }, {
-        path: 'user',
+        path: 'profile',
         loadChildren: () => import('./modules/user/profile/profile.module').then(m => m.ProfileModule)
       },
        {
@@ -40,7 +44,7 @@ const routes: Routes = [
         loadChildren: () => import('./pages/simple-page/simple-page.module').then(m => m.SimplePageModule)
       }
     ],
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
