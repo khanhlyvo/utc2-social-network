@@ -1,0 +1,239 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row mx-0">
+      <!-- <div class="form-group mr-3">
+        <label>Loại thu chi:</label>
+        <select class="form-control" [(ngModel)]="searchCriterial.type">
+          <option value="">Tất cả</option>
+          <option value="THU">Thu</option>
+          <option value="CHI">Chi</option>
+        </select>
+      </div> -->
+      <div class="form-group mr-3">
+        <label>Nội dung tìm kiếm:</label>
+        <input
+          class="form-control"
+          type="text"
+          [(ngModel)]="searchCriterial.freeText"
+          placeholder="Nhập Nội Dung Tìm Kiếm..."
+          style="width: 400px;"
+        />
+      </div>
+      <!-- <div class="form-group mr-3">
+        <label>Từ ngày:</label>
+        <div class="input-group">
+          <p-calendar
+            name="startDate"
+            [showIcon]="true"
+            [readonlyInput]="true"
+            dateFormat="dd/mm/yy"
+            hourFormat="24"
+            [(ngModel)]="searchCriterial.fromDate"
+          ></p-calendar>
+        </div>
+      </div> -->
+      <!-- <div class="form-group mr-3">
+        <label>Đến ngày:</label>
+        <div class="input-group">
+          <p-calendar
+            name="startDate"
+            [showIcon]="true"
+            [readonlyInput]="true"
+            dateFormat="dd/mm/yy"
+            hourFormat="24"
+            [(ngModel)]="searchCriterial.toDate"
+          ></p-calendar>
+        </div>
+      </div> -->
+      <button
+        type="button"
+        class="btn btn-primary mt-auto mb-3"
+        style="height: calc(1.5em + 0.75rem + 2px);"
+        (click)="doSearch()"
+      >
+        Tìm Kiếm
+      </button>
+    </div>
+    <div class="row mx-0">
+      <button
+        type="button"
+        class="btn btn-danger mb-3 mr-3"
+        (click)="doDelete()"
+      >
+        Xóa
+      </button>
+      <div class="ml-auto">
+        <button
+          type="button"
+          class="btn btn-info mb-3 mr-3"
+          (click)="doExport()"
+        >
+          Xuất Excel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary mb-3"
+          (click)="openModal(createModal, 'lg'); isEdit = false"
+        >
+          Tạo Mới
+        </button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th style="width: 5px;">
+              <div class="form-check">
+                <input
+                  class="form-check-input position-static"
+                  type="checkbox"
+                  id="multiCheckbox"
+                  value="option1"
+                  aria-label="..."
+                  (click)="doCheckAll()"
+                  [(ngModel)]="isCheckAll"
+                />
+              </div>
+            </th>
+            <th class="first-col" scope="col">STT</th>
+            <th scope="col">Nhóm</th>
+            <th scope="col">Tên Nhóm</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listGroup; let i = index">
+            <td>
+              <div class="form-check">
+                <input
+                  class="form-check-input position-static"
+                  type="checkbox"
+                  id="checkbox-{{ i }}"
+                  [(ngModel)]="listCheckbox[i]"
+                  aria-label="..."
+                />
+              </div>
+            </td>
+            <td class="first-col">{{ (page - 1) * pageSize + (i + 1) }}</td>
+            <td>{{ item.groupId }}</td>
+            <td>{{ item.groupName }}</td>
+            <td>
+              <div class="flex-container">
+                <button
+                  (click)="openModal(createModal, 'lg', item.id)"
+                  type="button"
+                  class="btn btn-icon btn-info mr-1"
+                > Sửa
+                </button>
+                <button
+                  (click)="doDelete(item)"
+                  type="button"
+                  class="btn btn-icon btn-danger"
+                > Xóa
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- <div class="d-flex justify-content-between p-2">
+        <ngb-pagination
+          (pageChange)="clickPagination($event)"
+          [collectionSize]="collectionSize"
+          [(page)]="page"
+          [pageSize]="pageSize"
+        >
+        </ngb-pagination>
+
+        <select
+          class="custom-select"
+          style="width: auto;"
+          [(ngModel)]="pageSize"
+          (ngModelChange)="changePageSize($event)"
+        >
+          <option *ngFor="let item of pageSizeList" [ngValue]="item"
+            >{{ item }} items per page</option
+          >
+        </select>
+      </div> -->
+    </div>
+
+    <app-pagination
+      *ngIf="listGroup && collectionSize > 0"
+      [size]="pageSize"
+      [page]="page"
+      [totalCount]="collectionSize"
+      (pageChange)="pageChange($event)"
+    ></app-pagination>
+  </div>
+</div>
+
+<!-- createModal Modal -->
+<ng-template #createModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Nhóm</h4>
+    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Nhóm</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="form" (ngSubmit)="addGroup(group, f)" #f="ngForm">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label>ID Nhóm:</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastName"
+              [(ngModel)]="group.groupId"
+              [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
+              #lastName="ngModel"
+              required
+            />
+            <div *ngIf="f.submitted && lastName.invalid" class="invalid-feedback">
+              Vui lòng nhập Họ
+            </div>
+            <label>Tên Nhóm:</label>
+            <input
+              type="text"
+              class="form-control"
+              name="firstName"
+              [(ngModel)]="group.groupName"
+              [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }"
+              #firstName="ngModel"
+              required
+            />
+            <div *ngIf="f.submitted && firstName.invalid" class="invalid-feedback">
+              Vui lòng nhập Tên
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="submit"
+        class="btn btn-primary mx-auto"
+        *ngIf="!isEdit"
+      >
+        Tạo Mới
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary mx-auto"
+        *ngIf="isEdit"
+      >
+        Cập Nhật
+      </button>
+    </div>
+  </form>
+</ng-template>

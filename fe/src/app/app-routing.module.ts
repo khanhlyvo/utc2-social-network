@@ -26,7 +26,13 @@ const routes: Routes = [
       },  {
         path: 'user',
         loadChildren: () => import('./modules/admin/user/user.module').then(m => m.UserModule),
-      },{
+      }, {
+        path: 'group',
+        loadChildren: () => import('./modules/admin/group/group.module').then(m => m.GroupModule),
+      }, {
+        path: 'department',
+        loadChildren: () => import('./modules/admin/department/department.module').then(m => m.DepartmentModule),
+      }, {
         path: 'notifications',
         loadChildren: () => import('./pages/ui-elements/advance/notifications/notifications.module').then(m => m.NotificationsModule)
       }, {

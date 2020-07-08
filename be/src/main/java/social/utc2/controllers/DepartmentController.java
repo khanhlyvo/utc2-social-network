@@ -55,6 +55,16 @@ public class DepartmentController {
         }
     }
 
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public ResponseEntity getAllUser() {
+        try {
+            return new ResponseEntity(departmentService.getAllDepartment(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<?> getAllDepartment() {
         try {
@@ -66,9 +76,9 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.PUT)
-    public ResponseEntity<?> deleteDepartments(@RequestBody List<Department> departments) {
+    public ResponseEntity<?> deleteDepartments(@RequestBody List<Integer> departmentsIds) {
         try {
-            return new ResponseEntity<>(departmentService.deleteDepartments(departments), HttpStatus.OK);
+            return new ResponseEntity<>(departmentService.deleteDepartments(departmentsIds), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -71,10 +71,10 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteGroups(@RequestBody String userId) {
+    @RequestMapping(value = "/delete", method = RequestMethod.PUT)
+    public ResponseEntity<?> deleteGroups(@RequestBody List<Integer> userIds) {
         try {
-            return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
+            return new ResponseEntity<>(userService.deleteUsers(userIds), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,4 +1,11 @@
 <router-outlet>
   <app-spinner></app-spinner>
+  <p-toast baseZIndex="1"></p-toast>
   <app-loading></app-loading>
+  <p-confirmDialog #cd icon="pi pi-info-circle" baseZIndex="3000" class="custom-confirm-dialog">
+    <p-footer>
+        <button class="btn btn-secondary" (click)="cd.reject()">Không</button>
+        <button class="btn btn-primary" (click)="cd.accept()">Có</button>
+    </p-footer>
+  </p-confirmDialog>
 </router-outlet>

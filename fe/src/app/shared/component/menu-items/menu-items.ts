@@ -36,18 +36,27 @@ const MENUITEMS = [
     main: [
       {
         state: 'list',
+        short_label: 'D',
+        main_state: 'department',
+        name: 'Department',
+        type: 'link',
+        icon: 'ti-home',
+      },
+      {
+        state: 'list',
+        short_label: 'G',
+        main_state: 'group',
+        name: 'Group',
+        type: 'link',
+        icon: 'ti-home',
+      },
+      {
+        state: 'list',
         short_label: 'U',
         main_state: 'user',
         name: 'User',
         type: 'link',
         icon: 'ti-home',
-        // children: [
-        //   {
-        //     state: 'list',
-        //     type: 'link',
-        //     name: 'Login',
-        //   }
-        // ]
       },
       {
         state: 'dashboard',

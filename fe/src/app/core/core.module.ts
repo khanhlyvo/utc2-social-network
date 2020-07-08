@@ -15,6 +15,8 @@ import { UserService } from './services/user.service';
 import { InoutService } from './services/inout.service';
 import { CardService } from './services/card.service';
 import { ChatBoxService } from './services/chat-box.service';
+import { GroupService } from './services/group.service';
+import { DepartmentService } from './services/department.service';
 
 @NgModule({
   imports: [
@@ -28,6 +30,8 @@ import { ChatBoxService } from './services/chat-box.service';
     InoutService,
     CardService,
     ChatBoxService,
+    GroupService,
+    DepartmentService,
     MessageService,
     ConfirmationService,
     { provide: HTTP_INTERCEPTORS,

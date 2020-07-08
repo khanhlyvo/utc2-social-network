@@ -1,7 +1,7 @@
-import { first } from 'rxjs/operators';
+// import { first } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserService } from '../../../../core/services/user.service';
+import { GroupService } from '../../../../core/services/group.service';
 import { Constants } from '../../../../constants-config';
 // import { Pagination } from 'src/app/core/models/pagination.model';
 import { LoadingService } from '../../../../shared/services/loading.service';
@@ -9,30 +9,21 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 // import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  selector: 'app-group-list',
+  templateUrl: './group-list.component.html',
+  styleUrls: ['./group-list.component.scss']
 })
-export class UserListComponent implements OnInit {
+export class GroupListComponent implements OnInit {
 
-  user = {
+  group = {
     id: null,
-    firstName: '',
-    lastName: '',
-    fullName: '',
-    email: '',
-    department: '',
-    birthDate: null,
-    gender: 0,
-    phone: null,
-    role: null,
-    passWord: '',
-
+    groupId: '',
+    groupName: ''
   };
   birthDate = new Date();
   startDate = new Date();
   isEdit = false;
-  listUser = [];
+  listGroup = [];
   page = 1;
   pageSize = Constants.PAGE_SIZE;
   pageSizeList = Constants.SIZE_LIST;
@@ -51,7 +42,7 @@ export class UserListComponent implements OnInit {
   fileName: 'thu_chi.xlsx';
 
   constructor(private modalService: NgbModal,
-              private readonly userService: UserService,
+              private readonly groupService: GroupService,
               private readonly loadingService: LoadingService,
               private readonly confirmationService: ConfirmationService,
               private readonly messageService: MessageService) {}
@@ -75,9 +66,9 @@ export class UserListComponent implements OnInit {
       // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
     };
     this.loadingService.startLoading();
-    this.userService.getUsers().subscribe(res => {
+    this.groupService.getGroups().subscribe(res => {
       console.log(res);
-      this.listUser = res;
+      this.listGroup = res;
       this.collectionSize = res.totalElements;
       this.listCheckbox.length = res.length;
       this.listCheckbox.fill(false);
@@ -88,16 +79,16 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  openModal(content, size, userId) {
+  openModal(content, size, GroupId) {
 
     console.log(this.page);
     this.modalService.open(content, {size, centered: true });
-    if (userId) {
+    if (GroupId) {
       this.isEdit = true;
       this.loadingService.startLoading();
-      this.userService.getUserById(userId).subscribe(res => {
-        this.user = res;
-        console.log("user", res , this.user);
+      this.groupService.getGroupById(GroupId).subscribe(res => {
+        this.group = res;
+        console.log("group", res , this.group);
         this.loadingService.stopLoading();
       }, err => {
         this.loadingService.stopLoading();
@@ -109,48 +100,32 @@ export class UserListComponent implements OnInit {
   }
 
   clearModalData() {
-    this.user = {
+    this.group = {
       id: null,
-      firstName: '',
-      lastName: '',
-      fullName: '',
-      email: '',
-      department: '',
-      birthDate: null,
-      gender: null,
-      phone: null,
-      role: null,
-      passWord: ''
+      groupId: '',
+      groupName: ''
     };
   }
 
-  addUser(user, form): void {
+  addGroup(group, form): void {
     if (!form.invalid && form.submitted) {
       if (this.isEdit) {
-        this.updateUser(user);
+        this.updateGroup(group);
       } else {
-        this.createUser(user);
+        this.createGroup(group);
         console.log(this.startDate);
       }
     }
   }
 
-  updateUser(user) {
-    const userModel = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      fullName: user.fullName,
-      email: user.email,
-      // department: user.department,
-      birthDate: this.birthDate.toISOString(),
-      gender: user.gender,
-      phone: user.phone,
-      role: user.role
-
+  updateGroup(group) {
+    const GroupModel = {
+      id: group.id,
+      groupId: group.groupId,
+      groupName: group.groupName
     };
     this.loadingService.startLoading();
-    this.userService.updateUser(userModel).subscribe(() => {
+    this.groupService.updateGroup(GroupModel).subscribe(() => {
       this.getDataDefault();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
@@ -160,22 +135,13 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  createUser(user) {
-    const userModel = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      fullName: user.fullName,
-      email: user.email,
-      // group: user.group,
-      // department: user.department,
-      birthDate: this.birthDate.toISOString(),
-      gender: user.gender,
-      phone: user.phone,
-      role: user.role,
-      passWord: user.passWord,
+  createGroup(group) {
+    const GroupModel = {
+      groupId: group.groupId,
+      groupName: group.groupName
     };
     this.loadingService.startLoading();
-    this.userService.addUser(userModel).subscribe(() => {
+    this.groupService.addGroup(GroupModel).subscribe(() => {
       this.getDataDefault();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
@@ -202,9 +168,11 @@ export class UserListComponent implements OnInit {
   //   this.getDataDefault();
   // }
 
-  doDelete(user) {
-    if (user) {
-    this.listDelete.push(user);
+  doDelete(group) {
+    console.log(group);
+    if (group) {
+    this.listDelete.push(group.id);
+    console.log("listDelete", this.listDelete);
     this.deleteRecords();
     } else {
       if (this.listCheckbox.every(e => e === false)) {
@@ -216,10 +184,10 @@ export class UserListComponent implements OnInit {
       } else {
         for ( let i = 0; i < this.listCheckbox.length; i++) {
           if (this.listCheckbox[i] === true) {
-            this.listDelete.push(this.listUser[i]);
+            this.listDelete.push(this.listGroup[i].id);
           }
         }
-        console.log(this.listDelete);
+        console.log("listDelete", this.listDelete);
         this.deleteRecords();
       }
     }
@@ -231,7 +199,7 @@ export class UserListComponent implements OnInit {
       message: 'Bạn có chắc chắn muốn xóa dữ liệu ?',
       accept: () => {
         this.loadingService.startLoading();
-        this.userService.deleteUser(this.listDelete).subscribe(() => {
+        this.groupService.deleteGroup(this.listDelete).subscribe(() => {
           this.messageService.add({
             severity: Constants.MSG_SUCCESS,
             detail: Constants.MSG_DETELE_SUCCESSFUL,
@@ -265,7 +233,7 @@ export class UserListComponent implements OnInit {
       message: 'Bạn có chắc chắn muốn xuất file Excel ?',
       accept: () => {
         this.loadingService.startLoading();
-        this.userService.getExport().subscribe(res => {
+        this.groupService.getExport().subscribe(res => {
           this.loadingService.stopLoading();
           const byteCharacters = atob(res.file);
           const byteNumbers = new Array(byteCharacters.length);

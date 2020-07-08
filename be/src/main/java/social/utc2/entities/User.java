@@ -38,7 +38,7 @@ public class User {
     private String lastName;
 
     @Column(insertable = false)
-    @Formula(value = "concat(first_name, ' ', last_name)")
+    @Formula(value = "concat(last_name, ' ', first_name)")
     private String fullName;
 
     @Column
@@ -52,7 +52,7 @@ public class User {
     private String role;
 
     @Column
-    private boolean flagDel;
+    private boolean flgDel;
 
     @Temporal(TemporalType.DATE)
     private Date birthDate;

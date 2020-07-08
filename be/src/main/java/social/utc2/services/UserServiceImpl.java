@@ -1,10 +1,12 @@
 package social.utc2.services;
 
+import org.springframework.transaction.annotation.Transactional;
 import social.utc2.constants.Constant.ERROR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import social.utc2.entities.Group;
 import social.utc2.entities.User;
 import social.utc2.repositories.UserRepository;
 
@@ -55,19 +57,24 @@ public class UserServiceImpl implements UserService{
    }
 
    @Override
-   public boolean deleteUser(String userId) {
-      User user = userRepository.findById(userId).get();
-      if (!ObjectUtils.isEmpty(user)) {
-         user.setFlagDel(true);
-         user = userRepository.save(user);
-         return !ObjectUtils.isEmpty(user);
+   @Transactional
+   public boolean deleteUsers(List<Integer> ids) {
+      try {
+         List<User> users = userRepository.findByIdIn(ids);
+         for (User user : users) {
+            user.setFlgDel(true);
+         }
+         userRepository.saveAll(users);
+         return true;
+      } catch (Exception e) {
+         e.printStackTrace();
+         return false;
       }
-      return false;
    }
 
    @Override
    public List<User> getAllUser() {
-      return userRepository.findAll();
+      return userRepository.findAllByFlgDelFalse();
    }
 
 //    public Optional<User> getById(String id) {

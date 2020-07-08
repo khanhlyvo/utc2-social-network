@@ -45,10 +45,21 @@ public class GroupController {
     @RequestMapping(value = "/{groupId}", method = RequestMethod.GET)
     public ResponseEntity<?> getGroupById(@PathVariable("groupId") String groupId) {
         try {
-            return new ResponseEntity<>(groupService.getGroupById(groupId), HttpStatus.OK);
+            int id = Integer.parseInt(groupId);
+            return new ResponseEntity<>(groupService.getGroupById(id), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public ResponseEntity getAllUser() {
+        try {
+            return new ResponseEntity(groupService.getAllGroup(), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -62,8 +73,8 @@ public class GroupController {
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteGroups(@RequestBody List<Group> groups) {
+    @RequestMapping(value = "/delete", method = RequestMethod.PUT)
+    public ResponseEntity<?> deleteGroups(@RequestBody List<Integer> groups) {
         try {
             return new ResponseEntity<>(groupService.deleteGroups(groups), HttpStatus.OK);
         } catch (Exception e) {

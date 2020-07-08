@@ -24,16 +24,17 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Group getGroupById(String groupId) {
+    public Group getGroupById(Integer groupId) {
         return groupRepository.findById(groupId).get();
     }
 
     @Override
     @Transactional
-    public boolean deleteGroups(List<Group> groups) {
+    public boolean deleteGroups(List<Integer> groupIds) {
         try {
-            for (Group expenditure : groups) {
-                expenditure.setFlgDel(true);
+            List<Group> groups = groupRepository.findByIdIn(groupIds);
+            for (Group group : groups) {
+                group.setFlgDel(true);
             }
             groupRepository.saveAll(groups);
             return true;
@@ -45,6 +46,6 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<Group> getAllGroup() {
-        return groupRepository.findAll();
+        return groupRepository.findAllByFlgDelFalse();
     }
 }

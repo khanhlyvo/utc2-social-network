@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import social.utc2.entities.Department;
+import social.utc2.entities.Group;
 import social.utc2.entities.User;
 import social.utc2.repositories.DepartmentRepository;
 import social.utc2.request.Pagination;
@@ -40,8 +41,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional
-    public boolean deleteDepartments(List<Department> departments) {
+    public boolean deleteDepartments(List<Integer> departmentIds) {
         try {
+            List<Department> departments = departmentRepository.findByIdIn(departmentIds);
             for (Department department : departments) {
                 department.setFlgDel(true);
             }
@@ -55,7 +57,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<Department> getAllDepartment() {
-        return departmentRepository.findAll();
+        return departmentRepository.findAllByFlgDelFalse();
     }
 
 }

@@ -99,13 +99,11 @@
             <th class="first-col" scope="col">STT</th>
             <th scope="col">Họ Và Tên</th>
             <th scope="col">Account</th>
-            <th scope="col">Nhóm</th>
             <th scope="col">Khoa</th>
             <th>Ngày Sinh</th>
             <th>Giới Tính</th>
             <th>Số Điện Thoại</th>
             <th>Role</th>
-            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -125,11 +123,9 @@
             <td class="first-col">{{ (page - 1) * pageSize + (i + 1) }}</td>
             <td>{{ item.fullName }}</td>
             <td>{{ item.email }}</td>
-            <td>{{ item.group }}</td>
             <td>{{ item.department }}</td>
             <td>{{ item.birthDate }}</td>
             <td>{{ item.gender }}</td>
-            <td>{{ item.department }}</td>
             <td>{{ item.phone }}</td>
             <td>{{ item.role }}</td>
             <td>
@@ -142,7 +138,7 @@
                   <i class="feather icon-edit-2 mr-1"></i> Sửa
                 </button>
                 <button
-                  (click)="doDelete(user)"
+                  (click)="doDelete(item)"
                   type="button"
                   class="btn btn-icon btn-danger"
                 >
@@ -189,8 +185,8 @@
 <!-- createModal Modal -->
 <ng-template #createModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Xe Tháng</h4>
-    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Xe Tháng</h4>
+    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Người Dùng</h4>
+    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Người Dùng</h4>
     <button
       type="button"
       class="close btn"
@@ -247,21 +243,37 @@
           </div>
           <div class="form-group">
             <label>Giới Tính:</label>
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row"><div class="custom-control custom-radio mr-4">
+              <input
+                type="radio"
+                class="custom-control-input"
+                id="customControlValidation2"
+                name="radio-stacked"
+                [(ngModel)]="user.gender"
+                #type="ngModel"
+                required
+                value="0"
+              />
+              <label
+                class="custom-control-label"
+                for="customControlValidation2"
+                >Không Xác Định</label
+              >
+            </div>
               <div class="custom-control custom-radio mr-4">
                 <input
                   type="radio"
                   class="custom-control-input"
-                  id="customControlValidation2"
+                  id="customControlValidation1"
                   name="radio-stacked"
                   [(ngModel)]="user.gender"
                   #type="ngModel"
                   required
-                  value="0"
+                  value="1"
                 />
                 <label
                   class="custom-control-label"
-                  for="customControlValidation2"
+                  for="customControlValidation1"
                   >Nam</label
                 >
               </div>
@@ -274,7 +286,7 @@
                   [(ngModel)]="user.gender"
                   #type="ngModel"
                   required
-                  value="1"
+                  value="2"
                 />
                 <label
                   class="custom-control-label"
@@ -300,6 +312,21 @@
             />
             <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
               Vui lòng nhập Account
+            </div>
+          </div>
+          <div class="form-group" *ngIf="!isEdit" >
+            <label>Mật Khẩu:</label>
+            <input
+              type="password"
+              class="form-control"
+              name="passWord"
+              [(ngModel)]="user.passWord"
+              [ngClass]="{ 'is-invalid': f.submitted && passWord.invalid }"
+              #passWord="ngModel"
+              required
+            />
+            <div *ngIf="f.submitted && passWord.invalid" class="invalid-feedback">
+              Vui lòng nhập Mật khẩu
             </div>
           </div>
           <div class="form-group">

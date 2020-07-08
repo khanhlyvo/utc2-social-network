@@ -11,9 +11,9 @@ public interface GroupService {
 
     Group updateGroup(Group group);
 
-    Group getGroupById(String id);
+    Group getGroupById(Integer id);
 
-    boolean deleteGroups(List<Group> groups);
+    boolean deleteGroups(List<Integer> groups);
 
     List<Group> getAllGroup();
 }
