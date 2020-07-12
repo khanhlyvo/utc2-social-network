@@ -14,7 +14,7 @@ export class UserService {
   }
 
   getUsers(): Observable<any> {
-    return this.apiService.get(this.baseUrl + '/getAll');
+    return this.apiService.get(this.baseUrl);
   }
 
   addUser(user: any): Observable<boolean> {

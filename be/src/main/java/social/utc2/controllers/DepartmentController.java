@@ -48,24 +48,25 @@ public class DepartmentController {
     @RequestMapping(value = "/{departmentId}", method = RequestMethod.GET)
     public ResponseEntity<?> getDepartmentById(@PathVariable("departmentId") String departmentId) {
         try {
-            return new ResponseEntity<>(departmentService.getDepartmentById(departmentId), HttpStatus.OK);
+            int id = Integer.parseInt(departmentId);
+            return new ResponseEntity<>(departmentService.getDepartmentById(id), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity getAllUser() {
-        try {
-            return new ResponseEntity(departmentService.getAllDepartment(), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @RequestMapping(value = "", method = RequestMethod.GET)
+//    public ResponseEntity getAllUser() {
+//        try {
+//            return new ResponseEntity(departmentService.getAllDepartment(), HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getAllDepartment() {
         try {
             return new ResponseEntity<>(departmentService.getAllDepartment(), HttpStatus.OK);

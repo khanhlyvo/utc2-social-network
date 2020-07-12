@@ -2,10 +2,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DepartmentService } from '../../../../core/services/department.service';
+import { GroupService } from '../../../../core/services/group.service';
 import { Constants } from '../../../../constants-config';
 // import { Pagination } from 'src/app/core/models/pagination.model';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { zip } from 'rxjs';
 // import { saveAs } from 'file-saver';
 
 @Component({
@@ -17,8 +19,9 @@ export class DepartmentListComponent implements OnInit {
 
   department = {
     id: null,
-    departmentId: '',
-    departmentName: ''
+    departId: '',
+    departName: '',
+    groupId: null
   };
   birthDate = new Date();
   startDate = new Date();
@@ -40,9 +43,11 @@ export class DepartmentListComponent implements OnInit {
   listCheckbox = [];
   isCheckAll: false;
   fileName: 'thu_chi.xlsx';
+  listGroup = [];
 
   constructor(private modalService: NgbModal,
               private readonly departmentService: DepartmentService,
+              private readonly groupService: GroupService,
               private readonly loadingService: LoadingService,
               private readonly confirmationService: ConfirmationService,
               private readonly messageService: MessageService) {}
@@ -66,29 +71,35 @@ export class DepartmentListComponent implements OnInit {
       // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
     };
     this.loadingService.startLoading();
-    this.departmentService.getDepartments().subscribe(res => {
+    zip(this.departmentService.getDepartments(),
+    this.groupService.getGroups()).subscribe(res => {
       console.log(res);
-      this.listDepartment = res;
-      this.collectionSize = res.totalElements;
-      this.listCheckbox.length = res.length;
+      if (res[0].length > 0) {res[0].forEach(e => {
+        delete e.group;
+      }); }
+      this.listDepartment = res[0];
+      // this.collectionSize = res[0].totalElements;
+      // this.listCheckbox.length = res[0].length;
       this.listCheckbox.fill(false);
-      this.totalMoney = res.totalMoney;
+      // this.totalMoney = res[0].totalMoney;
+
+      res[1].forEach(e => {delete e.departments; });
+      this.listGroup = res[1];
       this.loadingService.stopLoading();
     }, err => {
       this.loadingService.stopLoading();
     });
   }
 
-  openModal(content, size, DepartmentId) {
-
+  openModal(content, size, departId) {
     console.log(this.page);
     this.modalService.open(content, {size, centered: true });
-    if (DepartmentId) {
+    if (departId) {
       this.isEdit = true;
       this.loadingService.startLoading();
-      this.departmentService.getDepartmentById(DepartmentId).subscribe(res => {
+      this.departmentService.getDepartmentById(departId).subscribe(res => {
         this.department = res;
-        console.log("department", res , this.department);
+        console.log('department', res , this.department);
         this.loadingService.stopLoading();
       }, err => {
         this.loadingService.stopLoading();
@@ -102,8 +113,9 @@ export class DepartmentListComponent implements OnInit {
   clearModalData() {
     this.department = {
       id: null,
-      departmentId: '',
-      departmentName: ''
+      departId: '',
+      departName: '',
+      groupId: ''
     };
   }
 
@@ -119,13 +131,14 @@ export class DepartmentListComponent implements OnInit {
   }
 
   updateDepartment(department) {
-    const DepartmentModel = {
+    const departmentModel = {
       id: department.id,
-      departmentId: department.departmentId,
-      departmentName: department.departmentName
+      departId: department.departId,
+      departName: department.departName,
+      groupId: department.groupId
     };
     this.loadingService.startLoading();
-    this.departmentService.updateDepartment(DepartmentModel).subscribe(() => {
+    this.departmentService.updateDepartment(departmentModel).subscribe(() => {
       this.getDataDefault();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
@@ -136,12 +149,13 @@ export class DepartmentListComponent implements OnInit {
   }
 
   createDepartment(department) {
-    const DepartmentModel = {
-      departmentId: department.departmentId,
-      departmentName: department.departmentName
+    const departmentModel = {
+      departId: department.departId,
+      departName: department.departName,
+      groupId: department.groupId
     };
     this.loadingService.startLoading();
-    this.departmentService.addDepartment(DepartmentModel).subscribe(() => {
+    this.departmentService.addDepartment(departmentModel).subscribe(() => {
       this.getDataDefault();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
@@ -172,7 +186,7 @@ export class DepartmentListComponent implements OnInit {
     console.log(department);
     if (department) {
     this.listDelete.push(department.id);
-    console.log("listDelete", this.listDelete);
+    console.log('listDelete', this.listDelete);
     this.deleteRecords();
     } else {
       if (this.listCheckbox.every(e => e === false)) {
@@ -187,7 +201,7 @@ export class DepartmentListComponent implements OnInit {
             this.listDelete.push(this.listDepartment[i].id);
           }
         }
-        console.log("listDelete", this.listDelete);
+        console.log('listDelete', this.listDelete);
         this.deleteRecords();
       }
     }

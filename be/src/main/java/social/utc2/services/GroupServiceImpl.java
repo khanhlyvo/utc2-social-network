@@ -3,7 +3,9 @@ package social.utc2.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import social.utc2.entities.Department;
 import social.utc2.entities.Group;
+import social.utc2.repositories.DepartmentRepository;
 import social.utc2.repositories.GroupRepository;
 
 import java.util.List;
@@ -12,6 +14,9 @@ import java.util.List;
 public class GroupServiceImpl implements GroupService {
     @Autowired
     GroupRepository groupRepository;
+
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     @Override
     public Group insertGroup(Group group) {
@@ -42,6 +47,11 @@ public class GroupServiceImpl implements GroupService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Department> getDepartByGroupId(Integer groupId) {
+        return departmentRepository.findAllByGroupId(groupId);
     }
 
     @Override

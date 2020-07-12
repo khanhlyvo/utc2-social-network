@@ -53,17 +53,28 @@ public class GroupController {
         }
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public ResponseEntity getAllUser() {
+    @RequestMapping(value = "/{groupId}/department", method = RequestMethod.GET)
+    public ResponseEntity<?> getDepartByGroupId(@PathVariable("groupId") String groupId) {
         try {
-            return new ResponseEntity(groupService.getAllGroup(), HttpStatus.OK);
+            int id = Integer.parseInt(groupId);
+            return new ResponseEntity<>(groupService.getDepartByGroupId(id), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+//    public ResponseEntity getAllUser() {
+//        try {
+//            return new ResponseEntity(groupService.getAllGroup(), HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getAllGroup() {
         try {
             return new ResponseEntity<>(groupService.getAllGroup(), HttpStatus.OK);

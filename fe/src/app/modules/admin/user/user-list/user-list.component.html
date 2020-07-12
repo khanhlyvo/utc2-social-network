@@ -304,13 +304,13 @@
             <input
               type="text"
               class="form-control"
-              name="email"
-              [(ngModel)]="user.email"
-              [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"
-              #email="ngModel"
+              name="userName"
+              [(ngModel)]="user.userName"
+              [ngClass]="{ 'is-invalid': f.submitted && userName.invalid }"
+              #userName="ngModel"
               required
             />
-            <div *ngIf="f.submitted && email.invalid" class="invalid-feedback">
+            <div *ngIf="f.submitted && userName.invalid" class="invalid-feedback">
               Vui lòng nhập Account
             </div>
           </div>
@@ -333,28 +333,25 @@
             <label>Nhóm:</label>
             <select
               class="form-control"
-              name="carType"
-              [(ngModel)]="user.group"
-              #carType="ngModel"
+              name="groupSelected"
+              [(ngModel)]="groupSelected"
+              #groupSelectedModel="ngModel"
+              (change)="chooseGroup()"
               >
               <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
-              <option [ngValue]="1">Xe Máy</option>
-              <option [ngValue]="2">Xe Đạp</option>
-              <option [ngValue]="3">Ô Tô</option>
+              <option *ngFor="let item of listGroup" [ngValue]="item.id">{{item.groupName}}</option>
             </select>
           </div>
           <div class="form-group">
             <label>Khoa:</label>
             <select
               class="form-control"
-              name="carType"
+              name="department"
               [(ngModel)]="user.department"
-              #carType="ngModel"
+              #department="ngModel"
               >
               <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
-              <option [ngValue]="1">Xe Máy</option>
-              <option [ngValue]="2">Xe Đạp</option>
-              <option [ngValue]="3">Ô Tô</option>
+              <option *ngFor="let item of listDepartment" [ngValue]="item.id">{{item.departName}}</option>
             </select>
           </div>
           <div class="form-group">

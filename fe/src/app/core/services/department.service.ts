@@ -14,7 +14,7 @@ export class DepartmentService {
   }
 
   getDepartments(): Observable<any> {
-    return this.apiService.get(this.baseUrl + '/getAll');
+    return this.apiService.get(this.baseUrl);
   }
 
   addDepartment(department: any): Observable<boolean> {

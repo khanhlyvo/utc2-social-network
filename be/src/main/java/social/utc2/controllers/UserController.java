@@ -50,7 +50,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity getAllUser() {
         try {
             return new ResponseEntity(userService.getAllUser(), HttpStatus.OK);

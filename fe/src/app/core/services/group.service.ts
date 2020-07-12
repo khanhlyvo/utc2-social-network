@@ -14,7 +14,7 @@ export class GroupService {
   }
 
   getGroups(): Observable<any> {
-    return this.apiService.get(this.baseUrl + '/getAll');
+    return this.apiService.get(this.baseUrl);
   }
 
   addGroup(group: any): Observable<boolean> {
@@ -35,5 +35,9 @@ export class GroupService {
 
   getExport(): Observable<any> {
     return this.apiService.post(this.baseUrl + '/download', {});
+  }
+
+  getDepartByGroupId(id: number): Observable<any> {
+    return this.apiService.get(this.baseUrl + '/' + id + '/department');
   }
 }

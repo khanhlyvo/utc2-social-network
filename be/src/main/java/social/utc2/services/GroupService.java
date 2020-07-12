@@ -1,6 +1,7 @@
 package social.utc2.services;
 
 import org.springframework.stereotype.Service;
+import social.utc2.entities.Department;
 import social.utc2.entities.Group;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface GroupService {
     boolean deleteGroups(List<Integer> groups);
 
     List<Group> getAllGroup();
+
+    List<Department> getDepartByGroupId(Integer id);
 }

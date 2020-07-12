@@ -31,14 +31,22 @@ public class Department {
     @Column
     private boolean flgDel;
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "group_id")
-    @Getter @Setter
-    private Group group;
+    @Column
+    private Integer groupId;
+
+//    @JsonBackReference
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "group_id", referencedColumnName = "id")
+//    @Getter @Setter
+//    private Group group;
+//    @JsonBackReference
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Group group;
+
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
+
 
 }

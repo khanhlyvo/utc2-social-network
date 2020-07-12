@@ -6,6 +6,9 @@ import { Constants } from '../../../../constants-config';
 // import { Pagination } from 'src/app/core/models/pagination.model';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { GroupService } from '../../../../core/services/group.service';
+import { DepartmentService } from '../../../../core/services/department.service';
+import { zip } from 'rxjs';
 // import { saveAs } from 'file-saver';
 
 @Component({
@@ -27,6 +30,7 @@ export class UserListComponent implements OnInit {
     phone: null,
     role: null,
     passWord: '',
+    userName: null,
 
   };
   birthDate = new Date();
@@ -49,9 +53,15 @@ export class UserListComponent implements OnInit {
   listCheckbox = [];
   isCheckAll: false;
   fileName: 'thu_chi.xlsx';
+  listDepartment;
+  listDepartOrigin;
+  listGroup: [];
+  groupSelected: null;
 
   constructor(private modalService: NgbModal,
               private readonly userService: UserService,
+              private readonly departmentService: DepartmentService,
+              private readonly groupService: GroupService,
               private readonly loadingService: LoadingService,
               private readonly confirmationService: ConfirmationService,
               private readonly messageService: MessageService) {}
@@ -63,17 +73,38 @@ export class UserListComponent implements OnInit {
 
   getDataDefault() {
     this.isCheckAll = false;
-    const pagination = {
-      page: this.page,
-      size: this.pageSize,
-      fields: 'MONEY,DATE,CONTENT',
-      searchValue: this.searchCriterial.freeText,
-      orderBy: '',
-      asc: false,
-      type: this.searchCriterial.type,
-      // fromDate: this.searchCriterial.fromDate ? this.searchCriterial.fromDate.toISOString() : null,
-      // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
-    };
+    // const pagination = {
+    //   page: this.page,
+    //   size: this.pageSize,
+    //   fields: 'MONEY,DATE,CONTENT',
+    //   searchValue: this.searchCriterial.freeText,
+    //   orderBy: '',
+    //   asc: false,
+    //   type: this.searchCriterial.type,
+    //   // fromDate: this.searchCriterial.fromDate ? this.searchCriterial.fromDate.toISOString() : null,
+    //   // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
+    // };
+    zip(this.userService.getUsers(),
+    this.groupService.getGroups(),
+    this.departmentService.getDepartments()).subscribe(res => {
+      console.log(res);
+      if (res[0].length > 0) {res[0].forEach(e => {
+        delete e.group;
+      }); }
+      this.listUser = res[0];
+      // this.collectionSize = res[0].totalElements;
+      // this.listCheckbox.length = res[0].length;
+      this.listCheckbox.fill(false);
+      // this.totalMoney = res[0].totalMoney;
+
+      res[1].forEach(e => {delete e.departments; });
+      this.listGroup = res[1];
+      this.listDepartOrigin = res[2];
+      this.loadingService.stopLoading();
+    }, err => {
+      this.loadingService.stopLoading();
+    });
+
     this.loadingService.startLoading();
     this.userService.getUsers().subscribe(res => {
       console.log(res);
@@ -88,8 +119,20 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  openModal(content, size, userId) {
+  chooseGroup() {
+    // this.loadingService.startLoading();
+    // this.groupService.getDepartByGroupId(this.groupSelected).subscribe(res => {
+    //   this.listDepartment = res;
+    //   this.loadingService.stopLoading();
+    // }, err => {
+    //   this.loadingService.stopLoading();
+    // });
+    this.listDepartment = this.listDepartOrigin.filter(e => e.groupId === this.groupSelected);
+  }
 
+  openModal(content, size, userId) {
+    this.listDepartment = this.listDepartOrigin.slice(0);
+    this.groupSelected = null;
     console.log(this.page);
     this.modalService.open(content, {size, centered: true });
     if (userId) {
@@ -120,7 +163,8 @@ export class UserListComponent implements OnInit {
       gender: null,
       phone: null,
       role: null,
-      passWord: ''
+      passWord: '',
+      userName: null,
     };
   }
 
@@ -141,11 +185,12 @@ export class UserListComponent implements OnInit {
       firstName: user.firstName,
       lastName: user.lastName,
       fullName: user.fullName,
-      email: user.email,
+      email: user.userName,
       // department: user.department,
       birthDate: this.birthDate.toISOString(),
       gender: user.gender,
       phone: user.phone,
+      userName: user.userName,
       role: user.role
 
     };
@@ -165,13 +210,14 @@ export class UserListComponent implements OnInit {
       firstName: user.firstName,
       lastName: user.lastName,
       fullName: user.fullName,
-      email: user.email,
+      email: user.userName,
       // group: user.group,
       // department: user.department,
       birthDate: this.birthDate.toISOString(),
       gender: user.gender,
       phone: user.phone,
       role: user.role,
+      userName: user.userName,
       passWord: user.passWord,
     };
     this.loadingService.startLoading();

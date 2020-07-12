@@ -97,8 +97,9 @@
               </div>
             </th>
             <th class="first-col" scope="col">STT</th>
+            <th scope="col">Mã Phòng Ban</th>
+            <th scope="col">Tên Phòng Ban</th>
             <th scope="col">Nhóm</th>
-            <th scope="col">Tên Nhóm</th>
             <th></th>
           </tr>
         </thead>
@@ -116,8 +117,9 @@
               </div>
             </td>
             <td class="first-col">{{ (page - 1) * pageSize + (i + 1) }}</td>
-            <td>{{ item.departmentId }}</td>
-            <td>{{ item.departmentName }}</td>
+            <td>{{ item.departId }}</td>
+            <td>{{ item.departName }}</td>
+            <td>{{ item.groupId }}</td>
             <td>
               <div class="flex-container">
                 <button
@@ -184,7 +186,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="form" (ngSubmit)="addDepartment(group, f)" #f="ngForm">
+  <form name="form" (ngSubmit)="addDepartment(department, f)" #f="ngForm">
     <div class="modal-body">
       <div class="row">
         <div class="col-6">
@@ -194,7 +196,7 @@
               type="text"
               class="form-control"
               name="lastName"
-              [(ngModel)]="group.departmentId"
+              [(ngModel)]="department.departId"
               [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
               #lastName="ngModel"
               required
@@ -202,12 +204,14 @@
             <div *ngIf="f.submitted && lastName.invalid" class="invalid-feedback">
               Vui lòng nhập Họ
             </div>
+          </div>
+          <div class="form-group">
             <label>Tên Phòng Ban:</label>
             <input
               type="text"
               class="form-control"
               name="firstName"
-              [(ngModel)]="group.departmentName"
+              [(ngModel)]="department.departName"
               [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }"
               #firstName="ngModel"
               required
@@ -215,6 +219,18 @@
             <div *ngIf="f.submitted && firstName.invalid" class="invalid-feedback">
               Vui lòng nhập Tên
             </div>
+          </div>
+          <div class="form-group">
+            <label>Nhóm:</label>
+            <select
+              class="form-control"
+              name="carType"
+              [(ngModel)]="department.groupId"
+              #carType="ngModel"
+              >
+              <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
+              <option *ngFor="let item of listGroup" [ngValue]="item.id">{{item.groupName}}</option>
+            </select>
           </div>
         </div>
       </div>

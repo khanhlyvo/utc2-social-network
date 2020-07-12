@@ -26,6 +26,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     
     @Override
     public Department insertDepartment(Department department) {
+//        Group group = new Group();
+//        group.addDeparment(department);
         return departmentRepository.save(department);
     }
 
@@ -35,7 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department getDepartmentById(String departmentId) {
+    public Department getDepartmentById(Integer departmentId) {
         return departmentRepository.findById(departmentId).get();
     }
 

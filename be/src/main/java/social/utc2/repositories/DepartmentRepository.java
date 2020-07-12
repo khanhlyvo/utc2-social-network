@@ -11,9 +11,11 @@ import java.util.Optional;
 public interface DepartmentRepository extends JpaRepository<Department, Integer> {
     Department findByDepartName(String departName);
 
-    Optional<Department> findById(String id);
+    Optional<Department> findById(Integer id);
 
     List<Department> findByIdIn(List<Integer> ids);
 
     List<Department> findAllByFlgDelFalse();
+
+    List<Department> findAllByGroupId(Integer id);
 }

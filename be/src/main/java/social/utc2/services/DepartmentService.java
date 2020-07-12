@@ -15,7 +15,7 @@ public interface DepartmentService {
 
     Department updateDepartment(Department department);
 
-    Department getDepartmentById(String id);
+    Department getDepartmentById(Integer id);
 
     boolean deleteDepartments(List<Integer> departments);
 
