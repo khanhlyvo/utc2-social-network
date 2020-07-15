@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService{
       currentUtc2User.setLastName(user.getLastName());
       currentUtc2User.setBirthDate(user.getBirthDate());
       currentUtc2User.setEmail(user.getEmail());
+      currentUtc2User.setUserName(user.getUserName());
 //      currentUtc2User.setDepartment(user.getDepartment());
       currentUtc2User.setGender(user.getGender());
       currentUtc2User.setPhone(user.getPhone());
@@ -54,6 +55,11 @@ public class UserServiceImpl implements UserService{
    @Override
    public User getUserById(Integer userId) {
       return userRepository.findById(userId).get();
+   }
+
+   @Override
+   public User getUserByUserName(String userName) {
+      return userRepository.findByUserName(userName);
    }
 
    @Override

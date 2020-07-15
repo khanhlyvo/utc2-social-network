@@ -1,7 +1,7 @@
 package social.utc2.entities;
 
 public enum Gender {
-    UNDEFINED(0), MALE(1), FEMALE(2);
+    UNDEFINED(0), Nam(1), Nữ(2);
 
     private int id;
 

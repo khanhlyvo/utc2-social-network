@@ -12,32 +12,40 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'profile',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
       }, {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard-default/dashboard-default.module').then(m => m.DashboardDefaultModule),
 
-        canActivate: [AuthGuard],
-        data: { roles: [Role.Admin] }
       }, {
+      //   path: 'basic',
+      //   loadChildren: () => import('./pages/ui-elements/basic/basic.module').then(m => m.BasicModule)
+      // },  {
         path: 'basic',
-        loadChildren: () => import('./pages/ui-elements/basic/basic.module').then(m => m.BasicModule)
+        loadChildren: () => import('./modules/user/message/profile.module').then(m => m.ProfileModule),
       },  {
         path: 'user',
         loadChildren: () => import('./modules/admin/user/user.module').then(m => m.UserModule),
       }, {
         path: 'group',
         loadChildren: () => import('./modules/admin/group/group.module').then(m => m.GroupModule),
+
+        canActivate: [AuthGuard],
+        data: { roles: [Role.Admin] }
       }, {
         path: 'department',
         loadChildren: () => import('./modules/admin/department/department.module').then(m => m.DepartmentModule),
+
+        canActivate: [AuthGuard],
+        data: { roles: [Role.Admin] }
       }, {
         path: 'notifications',
         loadChildren: () => import('./pages/ui-elements/advance/notifications/notifications.module').then(m => m.NotificationsModule)
       }, {
         path: 'bootstrap-table',
-        loadChildren: () => import('./pages/ui-elements/tables/bootstrap-table/basic-bootstrap/basic-bootstrap.module').then(m => m.BasicBootstrapModule),
+        loadChildren: () => import('./pages/ui-elements/tables/bootstrap-table/basic-bootstrap/basic-bootstrap.module').
+          then(m => m.BasicBootstrapModule),
       }, {
         path: 'map',
         loadChildren: () => import('./pages/map/google-map/google-map.module').then(m => m.GoogleMapModule),

@@ -17,6 +17,7 @@ import { CardService } from './services/card.service';
 import { ChatBoxService } from './services/chat-box.service';
 import { GroupService } from './services/group.service';
 import { DepartmentService } from './services/department.service';
+import { SocketService } from './services/socket.service';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { DepartmentService } from './services/department.service';
     DepartmentService,
     MessageService,
     ConfirmationService,
+    SocketService,
     { provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true

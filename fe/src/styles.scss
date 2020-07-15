@@ -15,6 +15,15 @@
 // }
 
 
+.chat-cont {
+  width: 260px;
+  overflow-wrap: break-word;
+}
+.chat-menu-reply::before,
+.chat-menu-content::before {
+  top: 35% !important;
+}
+
 body {
   background-color: #f3f3f3;
   font-size: 0.875em;

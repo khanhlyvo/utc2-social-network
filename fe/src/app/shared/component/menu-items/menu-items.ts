@@ -68,20 +68,27 @@ const MENUITEMS = [
       {
         state: 'basic',
         short_label: 'B',
-        name: 'Basic Components',
-        type: 'sub',
-        icon: 'ti-layout-grid2-alt',
-        children: [
-          {
-            state: 'button',
-            name: 'Button'
-          },
-          {
-            state: 'typography',
-            name: 'Typography'
-          }
-        ]
+        name: 'Basic',
+        type: 'link',
+        icon: 'ti-home'
       },
+      // {
+      //   state: 'basic',
+      //   short_label: 'B',
+      //   name: 'Basic Components',
+      //   type: 'sub',
+      //   icon: 'ti-layout-grid2-alt',
+      //   children: [
+      //     {
+      //       state: 'button',
+      //       name: 'Button'
+      //     },
+      //     {
+      //       state: 'typography',
+      //       name: 'Typography'
+      //     }
+      //   ]
+      // },
       {
         state: 'notifications',
         short_label: 'n',

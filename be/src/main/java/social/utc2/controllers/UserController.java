@@ -71,6 +71,16 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/username/{userName}", method = RequestMethod.GET)
+    public ResponseEntity<?> getGroupByUsername(@PathVariable("userName") String userName) {
+        try {
+            return new ResponseEntity<>(userService.getUserByUserName(userName), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/delete", method = RequestMethod.PUT)
     public ResponseEntity<?> deleteGroups(@RequestBody List<Integer> userIds) {
         try {

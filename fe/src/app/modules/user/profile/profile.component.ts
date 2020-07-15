@@ -1,6 +1,8 @@
 import { ChatBoxService } from './../../../core/services/chat-box.service';
 import { Component, OnInit } from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
+import { Router, ActivatedRoute } from '@angular/router';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,6 +22,8 @@ import {animate, style, transition, trigger} from '@angular/animations';
   ]
 })
 export class ProfileComponent implements OnInit {
+  username: string;
+
   editProfile = true;
   editProfileIcon = 'icofont-edit';
 
@@ -35,10 +39,18 @@ export class ProfileComponent implements OnInit {
   public sortOrder = 'desc';
   profitChartOption: any;
 
-  constructor(private readonly chatBoxService: ChatBoxService) {
+  constructor(private readonly chatBoxService: ChatBoxService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService) {
   }
 
   ngOnInit() {
+    this.username = this.route.snapshot.params['username'];
+    console.log("username", this.username);
+    if (this.username) {
+      this.getProfile();
+    }
   }
 
   toggleEditProfile() {
@@ -53,5 +65,11 @@ export class ProfileComponent implements OnInit {
 
   doChat() {
     this.chatBoxService.display = true;
+    this.chatBoxService.friend = this.username;
+  }
+
+  getProfile() {
+    console.log("hi~~~~~~~~~~~~~~~~");
+    this.userService.getUserByUsername(this.username).subscribe();
   }
 }

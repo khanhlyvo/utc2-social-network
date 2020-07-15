@@ -4,10 +4,10 @@ import {ProfileComponent} from './profile.component';
 
 const routes: Routes = [
   {
-    path: ':username',
+    path: '',
     component: ProfileComponent,
     data: {
-      breadcrumb: 'Trang Cá Nhân',
+      breadcrumb: 'About Us',
       icon: 'icofont-justify-all bg-c-green',
       breadcrumb_caption: 'Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit - About Us',
       status: true
