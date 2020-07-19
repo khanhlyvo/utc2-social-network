@@ -18102,7 +18102,7 @@ table {
 }
 
 .chat-menu-reply {
-  .chat-cont, .chat-time {
+  .chat-cont, .chat-time, .chat-file-name {
     color: #fff;
   }
   background: #4680ff;
@@ -18237,6 +18237,26 @@ table {
   margin-bottom: 0;
 }
 
+.chat-menu-reply {
+  .chat-img, .chat-file {
+    text-align: right;
+  }
+}
+
+.media-chat {
+  width: fit-content;
+  max-width: 100%;
+  word-break: break-word;
+  &.chat-menu-reply {
+    margin-left: auto;
+  }
+  &.chat-menu-reply::before, .chat-menu-content::before{
+    display: none;
+  }
+}
+.chat-menu-content:before {
+  display: none;
+}
 /**====== Chatting css end ======**/
 @media only screen and (min-width: 1367px) and (max-width: 1700px) {
   .timeline-dot {

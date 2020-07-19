@@ -9,6 +9,7 @@ import { SocketService } from './core/services/socket.service';
 import { Constants } from './constants-config';
 import { Message } from './core/models/message';
 import { ChatBoxService } from './core/services/chat-box.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -73,7 +74,7 @@ export class AppComponent implements OnInit {
       // this.toastr.success("new message recieved", null, {
       //   'timeOut': 3000
       // });
-      if (!this.chatboxService.isDisplay) {
+      if (!this.chatboxService.display) {
         this.chatboxService.display = true;
         this.chatboxService.friend = messageResult.fromId;
       }

@@ -7,20 +7,30 @@
   </div>
   <perfect-scrollbar
     [style.max-width]="'100%'"
-    [style.max-height]="'250px'"
+    [style.max-height]="'180px'"
+    [perfectScrollbar]="scrollConfig"
+    (psYReachStart)="onScrollUp()"
   >
 
-    <!-- <div class="media chat-messages" *ngFor="let messages of chatMessage.chat">
-      <a *ngIf="messages.type" class="media-left photo-table" href="javascript:">
+    <div class="media chat-messages" *ngFor="let item of messages">
+      <!-- <a *ngIf="messages.type" class="media-left photo-table" href="javascript:">
         <img class="media-object img-radius img-radius m-t-5" src="{{ chatMessage.photo }}" alt="{{ chatMessage.name }}">
-      </a>
-      <div class="media-body" [ngClass]="{'chat-menu-content' : messages.type, 'chat-menu-reply': !messages.type}">
-        <div class="">
-          <p class="chat-cont">{{ messages.msg }}</p>
+      </a> -->
+      <div class="media-chat" [ngClass]="{'chat-menu-reply' : item.fromId === currentUtc2User.username, 'chat-menu-content': item .fromId !== currentUtc2User.username}">
+        <div class="p-2">
+
+          <img class="chat-img" src={{item.image}} *ngIf="item.image && item.type==='image'" height="60px" width="auto" alt="img" (click)="doClickImg(item.image)">
+          <div class="chat-file" *ngIf="item.image && item.type==='file'" class="row mx-0">
+            <button class="btn button-file" (click)="doClickImg(item.image, item.fileName)"><i class="ti-file mr-0"></i></button>
+            <span class="chat-file-name text-truncate">{{item.fileName}}</span>
+          </div>
+
+          <span class="chat-cont mb-1" *ngIf="item.message" >{{ item.message }}</span>
+
+          <!-- <p class="chat-time my-0">{{ item.date | date :'dd/MM/yyyy hh:mm a'}}</p> -->
         </div>
-        <p class="chat-time">{{ messages.time }}</p>
       </div>
-    </div> -->
+    </div>
 
     <!-- <div class="media chat-messages">
       <a class="media-left photo-table" href="javascript:;">
@@ -62,7 +72,36 @@
     </div> -->
   </perfect-scrollbar>
   <div class="chat-reply-box p-b-20">
-    <div class="right-icon-control">
+
+
+  <div class="d-flex flex-column" (focusout)="this.message_error = false;">
+    <div class="position-relative image-container py-2" *ngIf="image">
+      <div class="">
+        <button class="delete-image" (click)="deleteImg()">
+          <i class="ti-close" style="font-size: 13px;"></i>
+        </button>
+        <div class="chat-file" *ngIf="!image.includes('data:image')" class="row mx-0">
+          <button class="btn button-file"><i class="ti-file mr-0"></i></button>
+          <span class="chat-file-name text-truncate">{{fileName}}</span>
+        </div>
+        <img  *ngIf="image.includes('data:image')" src={{image}} height="40px" width="auto" alt="img">
+      </div>
+    </div>
+    <div class="input-group mb-0">
+      <label for="attach-file" class="mb-0">
+        <input type="file" id="attach-file" class="chat-attach" style="display: none;" (change)="handleFileInput($event.target.files)">
+        <!-- <a (click)="doAttach()"  class="input-group-prepend btn btn-success btn-attach" [ngClass]="{'btn-danger': message_error === true}"> -->
+          <i class="ti-clip" style="font-size: 20px; line-height: 35px"></i>
+        <!-- </a> -->
+      </label>
+      <input type="text" [(ngModel)]="message" name="h-chat-text" class="form-control h-send-chat" placeholder="Aa" (keyup)="sentMsg(1)" (keyup.enter)="sentMsg(0)">
+      <button type="submit" class="input-group-append btn-send btn btn-primary" style="border: none;" [ngClass]="{'btn-danger': message_error === true}" (click)="sentMsg(0)">
+        <i class="icofont icofont-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+    <!-- <div class="right-icon-control">
       <input
         type="text"
         [(ngModel)]="message"
@@ -72,9 +111,8 @@
       />
       <div class="form-icon">
         <i class="icofont icofont-paper-plane"></i>
-        <!-- (click)="sentMsg(0)" -->
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 

@@ -19,11 +19,8 @@ const routes: Routes = [
         loadChildren: () => import('./pages/dashboard/dashboard-default/dashboard-default.module').then(m => m.DashboardDefaultModule),
 
       }, {
-      //   path: 'basic',
-      //   loadChildren: () => import('./pages/ui-elements/basic/basic.module').then(m => m.BasicModule)
-      // },  {
         path: 'basic',
-        loadChildren: () => import('./modules/user/message/profile.module').then(m => m.ProfileModule),
+        loadChildren: () => import('./pages/ui-elements/basic/basic.module').then(m => m.BasicModule)
       },  {
         path: 'user',
         loadChildren: () => import('./modules/admin/user/user.module').then(m => m.UserModule),

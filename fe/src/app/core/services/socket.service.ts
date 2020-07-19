@@ -5,19 +5,20 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Message } from '../models/message';
 import { Constants } from '../../constants-config';
+import { ApiService } from './api.service';
 
 @Injectable()
 export class SocketService {
-  baseUrl =  Constants.CONTEXT_PATH + 'api/socket';
+  baseUrl =  Constants.CONTEXT_PATH + 'api/message';
 
-  constructor(private http: HttpClient) { }
+  constructor(private apiService: ApiService) {
+  }
 
-  post(data: Message) {
-    return this.http.post(this.baseUrl, data)
-      .map((data: Message) => data)
-      .catch(error => {
-        return new ErrorObservable(error);
-      })
-      ;
+  sendMessage(data) {
+    return this.apiService.post(this.baseUrl, data);
+  }
+
+  getMessage(toId, fromId, pageNo, pageSize) {
+    return this.apiService.get(this.baseUrl + '/' + toId + '/' + fromId + '/' + pageNo + '/' + pageSize);
   }
 }

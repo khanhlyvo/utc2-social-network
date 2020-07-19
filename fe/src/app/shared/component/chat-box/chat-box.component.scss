@@ -21,3 +21,34 @@
     cursor: pointer;
   }
 }
+
+.chat-time {
+  text-align: right;
+  font-size: 11px;
+}
+
+.delete-image {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: black;
+  border-radius: 25px;
+  border: none;
+
+  i {
+    color: white;
+  }
+}
+.image-container {
+  width: fit-content;
+}
+
+.button-file {
+  padding: 3px;
+  color: white;
+  background: rgb(36, 37, 38);
+  border-radius: 20px;
+  height: 30px;
+  width: 30px;
+  font-size: 16px;
+}

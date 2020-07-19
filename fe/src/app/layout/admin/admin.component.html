@@ -26,7 +26,14 @@
         </div>
 
         <div class="navbar-container">
-          <div>
+          <div class="d-flex flex-align-between">
+              <div class="pcoded-search" style="width: 350px; position: relative; height: 35px; align-self: center; margin-left: 8px;">
+                <span class="searchbar-toggle">  </span>
+                <div class="pcoded-search-box ">
+                  <input type="text" placeholder="Search">
+                  <span class="search-icon"><i class="ti-search" aria-hidden="true"></i></span>
+                </div>
+              </div>
             <!-- <ul class="nav-left">
               <li>
                 <div class="sidebar_toggle"><a href="javascript:;" (click)="toggleOpened()"><i class="ti-menu f-18"></i></a></div>
@@ -155,7 +162,7 @@
                 </ul>
               </li>
             </ul> -->
-            <ul [@mobileMenuTop]="isCollapsedMobile" class="nav-right" [ngClass]="isCollapsedMobile">
+            <ul [@mobileMenuTop]="isCollapsedMobile" class="nav-right ml-auto" [ngClass]="isCollapsedMobile">
               <li class="header-notification lng-dropdown">
                 <a href="javascript:;" id="dropdown-active-item">
                   <img src="assets/images/flags/ENGLISH.jpg" alt=""> English
@@ -197,7 +204,7 @@
                     <div class="media">
                       <img class="d-flex align-self-center img-radius" src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
                       <div class="media-body">
-                        <h5 class="notification-user">John Doe</h5>
+                        <h5 class="notification-user">{{currentUtc2User.username}}</h5>
                         <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
                         <span class="notification-time">30 minutes ago</span>
                       </div>
@@ -234,7 +241,7 @@
               <li class="user-profile header-notification">
                 <a [routerLink]="['/']">
                   <img src="assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
-                  <span>John Doe</span>
+                  <span>{{currentUtc2User.username}}</span>
                   <i class="ti-angle-down"></i>
                 </a>
                 <ul class="show-notification profile-notification">
@@ -411,13 +418,6 @@
                     <a [routerLink]="['/authentication/login/with-bg-image']"><i class="ti-layout-sidebar-left"></i>Logout</a>
                   </li>
                 </ul>
-              </div>
-            </div>
-            <div class="pcoded-search">
-              <span class="searchbar-toggle">  </span>
-              <div class="pcoded-search-box ">
-                <input type="text" placeholder="Search">
-                <span class="search-icon"><i class="ti-search" aria-hidden="true"></i></span>
               </div>
             </div>
             <perfect-scrollbar [style.max-width]="'100%'" [style.max-height]="'calc(100vh - 230px)'" [config]="config">
