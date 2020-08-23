@@ -6,6 +6,7 @@ import { ProfileComponent } from './profile.component';
 import {SharedModule} from '../../../shared/shared.module';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import {HttpClientModule} from '@angular/common/http';
     ProfileRoutingModule,
     SharedModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   declarations: [ProfileComponent]
 })

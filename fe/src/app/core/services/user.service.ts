@@ -40,4 +40,9 @@ export class UserService {
   getExport(): Observable<any> {
     return this.apiService.post(this.baseUrl + '/download', {});
   }
+
+  getUserByIdOrName(name: string): Observable<any> {
+    return this.apiService.get(this.baseUrl + '/search-name/' + name);
+  }
+
 }

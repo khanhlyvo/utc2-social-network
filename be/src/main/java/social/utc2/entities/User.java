@@ -70,5 +70,13 @@ public class User {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column
+    private String avatar;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column
+    private String background;
 }

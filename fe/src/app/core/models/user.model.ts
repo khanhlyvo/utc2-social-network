@@ -8,6 +8,7 @@ export class User {
   userMobileNumber: string;
   note: string;
   role: string;
+  avatar: string;
   fgDel: string;
   constructor() {}
 }

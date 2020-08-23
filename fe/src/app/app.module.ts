@@ -18,7 +18,7 @@ import { CoreModule } from './core';
     AdminComponent,
     BreadcrumbsComponent,
     TitleComponent,
-    AuthComponent
+    AuthComponent,
   ],
   imports: [
     BrowserModule,

@@ -30,9 +30,13 @@
               <div class="pcoded-search" style="width: 350px; position: relative; height: 35px; align-self: center; margin-left: 8px;">
                 <span class="searchbar-toggle">  </span>
                 <div class="pcoded-search-box ">
-                  <input type="text" placeholder="Search">
+                  <input type="text" placeholder="Search" [(ngModel)]="searchItem" (change)="doSearch()">
                   <span class="search-icon"><i class="ti-search" aria-hidden="true"></i></span>
                 </div>
+                <ul *ngIf="listSearch.length>0" class="search-ul">
+                  <li *ngFor="let item of listSearch" class="search-menu">
+                    <a [routerLink]="'/profile/' + item.userName"  href="javascript:;">{{item.fullName}}</a></li>
+                </ul>
               </div>
             <!-- <ul class="nav-left">
               <li>
@@ -239,8 +243,8 @@
                 </a>
               </li>
               <li class="user-profile header-notification">
-                <a [routerLink]="['/']">
-                  <img src="assets/images/avatar-4.jpg" class="img-radius" alt="User-Profile-Image">
+                <a routerLink="/profile/{{currentUtc2User.username}}">
+                  <img src={{userProfile.avatar}} class="img-radius" alt="User-Profile-Image">
                   <span>{{currentUtc2User.username}}</span>
                   <i class="ti-angle-down"></i>
                 </a>
@@ -404,10 +408,10 @@
           <div class="pcoded-inner-navbar main-menu" appAccordion>
             <div class="">
               <div class="main-menu-header">
-                <img class="img-40 img-radius" src="assets/images/avatar-4.jpg" alt="User-Profile-Image">
+                <img class="img-40 img-radius" src={{userProfile.avatar}} alt="User-Profile-Image">
                 <div class="user-details">
-                  <span>John Doe</span>
-                  <span id="more-details" (click)="toggleOpenedSidebar()">UX Designer<i class="ti-angle-down"></i></span>
+                  <span>{{userProfile.fullName}}</span>
+                  <span id="more-details" (click)="toggleOpenedSidebar()">{{userProfile.department}}<i class="ti-angle-down"></i></span>
                 </div>
               </div>
               <div class="main-menu-content">

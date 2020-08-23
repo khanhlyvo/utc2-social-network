@@ -1,3 +1,4 @@
+import { UserService } from './../../core/services/user.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {animate, AUTO_STYLE, state, style, transition, trigger} from '@angular/animations';
 import {MenuItems} from '../../shared/component/menu-items/menu-items';
@@ -104,9 +105,13 @@ export class AdminComponent implements OnInit {
   public config: any;
   currentUtc2User: any;
   username;
+  searchItem;
+  listSearch = [];
+  userProfile: any = [];
 
   constructor(public menuItems: MenuItems,
     private router: Router,
+    private userService: UserService,
     private authenticationService: AuthenticationService) {
     this.authenticationService.currentUtc2User.subscribe(x => this.currentUtc2User = x);
     this.navType = 'st5';
@@ -168,6 +173,25 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.setBackgroundPattern('pattern2');
+    console.log('hi~~~~~~~~~~~~~~~~');
+    if(this.currentUtc2User.username) {
+      this.userService.getUserByUsername(this.currentUtc2User.username).subscribe(res => {
+        this.userProfile = res;
+        if (!this.userProfile.avatar) {
+          this.userProfile.avatar = 'assets/images/user-profile/user-img.jpg';
+        }
+        if (!this.userProfile.background) {
+          this.userProfile.background = 'assets/images/user-profile/bg-img1.jpg';
+        }
+      });
+    }
+  }
+
+  doSearch() {
+    console.log(this.searchItem);
+    this.userService.getUserByIdOrName(this.searchItem).subscribe(res => {
+      this.listSearch = res;
+    });
   }
 
   onResize(event) {

@@ -1,0 +1,22 @@
+.pcoded-search {
+  position: relative;
+  .search-ul {
+    position: absolute;
+    box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);
+    background-color: white;
+    width: 100%;
+    .search-menu {
+      width: 100%;
+      padding: 10px;
+    }
+    &:hover{
+      background-color: #FBFCFE;
+    }
+  }
+
+}
+.img-radius {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}

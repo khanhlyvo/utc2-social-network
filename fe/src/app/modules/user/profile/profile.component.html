@@ -3,23 +3,45 @@
   <div class="col-lg-12">
     <div class="cover-profile">
       <div class="profile-bg-img">
-        <img class="profile-bg-img img-fluid" src="assets/images/user-profile/bg-img1.jpg" alt="bg-img">
+        <div class="button-avatar" *ngIf="background">
+          <button (click)="changeImage(true)" class="btn btn-primary mr-2">Đổi</button>
+          <button (click)="deleteImage(true)" class="btn btn-secondary">Xóa</button>
+        </div>
+        <label for="fileBackground" class="label-background" *ngIf="userProfile?.userName===currentUtc2User.username">
+          <i class="icofont btn-change-background icofont-camera"></i>
+        </label>
+
+        <input id="fileBackground" accept="image/*" type='file' (change)="onSelectFile($event, true)" *ngIf="userProfile?.userName===currentUtc2User.username">
+        <img class="profile-bg-img img-fluid" [src]="background ? background : userProfile?.background" alt="bg-img">
         <div class="card-body user-info">
           <div class="col-md-12">
             <div class="media-left">
               <a href="javascript:;" class="profile-image">
-                <img class="user-img img-radius" src="assets/images/user-profile/user-img.jpg" alt="user-img">
+                <!-- <img class="user-img img-radius" src="assets/images/user-profile/user-img.jpg" alt="user-img"> -->
+
+                <label class="hoverable" for="fileInput">
+                  <img class="user-img img-radius" [src]="avatar ? avatar : userProfile?.avatar">
+                  <div class="hover-text" *ngIf="userProfile?.userName===currentUtc2User.username">Đổi Avatar</div>
+                  <div class="background" *ngIf="userProfile?.userName===currentUtc2User.username"></div>
+                </label>
+                <br/>
+                <input id="fileInput" accept="image/*" type='file' (change)="onSelectFile($event)" *ngIf="userProfile?.userName===currentUtc2User.username">
+
+                <div class="button-avatar" *ngIf="avatar">
+                  <button (click)="changeImage()" class="btn btn-primary mr-2">Đổi</button>
+                  <button (click)="deleteImage()" class="btn btn-secondary">Xóa</button>
+                </div>
               </a>
             </div>
             <div class="media-body row">
               <div class="col-lg-12">
                 <div class="user-title">
-                  <h2>Josephin Villa</h2>
-                  <span class="text-white">Web designer</span>
+                  <h2>{{userProfile?.fullName}}</h2>
+                  <span class="text-white">{{userProfile?.department}}</span>
                 </div>
               </div>
               <div>
-                <div class="pull-right cover-btn">
+                <div class="pull-right cover-btn" *ngIf="userProfile?.userName!==currentUtc2User.username" >
                   <button type="button" class="btn btn-primary m-b-10 m-r-10"><i class="icofont icofont-plus"></i> Follow</button>
                   <button type="button" class="btn btn-primary m-b-10" (click)="doChat()"><i class="icofont icofont-ui-messaging"></i> Message</button>
                 </div>
@@ -36,14 +58,14 @@
   <div class="col-lg-12">
     <div class="md-tabs">
       <ngb-tabset>
-        <ngb-tab title="Personal Info">
+        <ngb-tab title="Thông Tin Cá Nhân">
           <ng-template ngbTabContent>
             <div [@fadeInOutTranslate] class="m-t-15">
               <!-- personal card start -->
               <div class="card">
                 <div class="card-header">
-                  <h5 class="card-header-text">About Me</h5>
-                  <button id="edit-btn" type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right" (click)="toggleEditProfile()">
+                  <!-- <h5 class="card-header-text">About Me</h5> -->
+                  <button id="edit-btn" *ngIf="userProfile?.userName===currentUtc2User.username" type="button" class="btn btn-sm btn-primary waves-effect waves-light f-right" (click)="toggleEditProfile()">
                     <i class="icofont {{ editProfileIcon }}"></i>
                   </button>
                 </div>
@@ -58,24 +80,16 @@
                                 <table class="table m-0">
                                   <tbody>
                                   <tr>
-                                    <th scope="row">Full Name</th>
-                                    <td>Josephine Villa</td>
+                                    <th scope="row">Tên</th>
+                                    <td>{{userProfile?.fullName}}</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Gender</th>
-                                    <td>Female</td>
+                                    <th scope="row">Giới Tính</th>
+                                    <td>{{userProfile?.gender}}</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Birth Date</th>
-                                    <td>October 25th, 1990</td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">Marital Status</th>
-                                    <td>Single</td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">Location</th>
-                                    <td>New York, USA</td>
+                                    <th scope="row">Ngày Sinh</th>
+                                    <td>{{userProfile?.birthDate}}</td>
                                   </tr>
                                   </tbody>
                                 </table>
@@ -88,23 +102,15 @@
                                   <tbody>
                                   <tr>
                                     <th scope="row">Email</th>
-                                    <td><a href="javascript:;">Demo@phenix.com</a></td>
+                                    <td><a href="javascript:;">{{userProfile?.email}}</a></td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Mobile Number</th>
-                                    <td>(0123) - 4567891</td>
+                                    <th scope="row">Số Điện Thoại</th>
+                                    <td>{{userProfile?.phone}}</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Twitter</th>
-                                    <td>@codedthemes</td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">Skype</th>
-                                    <td>codedthemes.demo</td>
-                                  </tr>
-                                  <tr>
-                                    <th scope="row">Website</th>
-                                    <td><a href="javascript:;">www.demo.com</a></td>
+                                    <th scope="row">Khoa</th>
+                                    <td>{{userProfile?.department}}</td>
                                   </tr>
                                   </tbody>
                                 </table>
@@ -144,12 +150,12 @@
                                         <div class="group-add-on">
                                           <div class="radio radiofill radio-inline">
                                             <label>
-                                              <input type="radio" name="radio"><i class="helper"></i> Male
+                                              <input type="radio" name="radio"><i class="helper"></i> Nam
                                             </label>
                                           </div>
                                           <div class="radio radiofill radio-inline">
                                             <label>
-                                              <input type="radio" name="radio" checked><i class="helper"></i> Female
+                                              <input type="radio" name="radio" checked><i class="helper"></i> Nữ
                                             </label>
                                           </div>
                                         </div>
@@ -246,10 +252,11 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="User's Services">
+
+        <!-- <ngb-tab title="User's Services">
           <ng-template ngbTabContent>
             <div [@fadeInOutTranslate] class="m-t-15">
-              <!-- info card start -->
+
               <div class="card">
                 <div class="card-header">
                   <h5 class="card-header-text">User Services</h5>
@@ -275,11 +282,8 @@
                             <div class="col-sm-12">
                               <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
                             </div>
-                            <!-- end of col-sm-8 -->
                           </div>
-                          <!-- end of row -->
                         </div>
-                        <!-- end of card-body -->
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -301,11 +305,8 @@
                             <div class="col-sm-12">
                               <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
                             </div>
-                            <!-- end of col-sm-8 -->
                           </div>
-                          <!-- end of row -->
                         </div>
-                        <!-- end of card-body -->
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -327,11 +328,8 @@
                             <div class="col-sm-12">
                               <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
                             </div>
-                            <!-- end of col-sm-8 -->
                           </div>
-                          <!-- end of row -->
                         </div>
-                        <!-- end of card-body -->
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -353,11 +351,8 @@
                             <div class="col-sm-12">
                               <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
                             </div>
-                            <!-- end of col-sm-8 -->
                           </div>
-                          <!-- end of row -->
                         </div>
-                        <!-- end of card-body -->
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -379,11 +374,8 @@
                             <div class="col-sm-12">
                               <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
                             </div>
-                            <!-- end of col-sm-8 -->
                           </div>
-                          <!-- end of row -->
                         </div>
-                        <!-- end of card-body -->
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -405,17 +397,13 @@
                             <div class="col-sm-12">
                               <p class="task-detail">Lorem ipsum dolor sit amet, consectet ur adipisicing elit, sed do eiusmod temp or incidi dunt ut labore et.Lorem ipsum dolor sit amet, consecte.</p>
                             </div>
-                            <!-- end of col-sm-8 -->
                           </div>
-                          <!-- end of row -->
                         </div>
-                        <!-- end of card-body -->
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- info card end -->
             </div>
           </ng-template>
         </ngb-tab>
@@ -448,7 +436,7 @@
                           <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
                         </div>
                         <hr>
-                        <!-- Nested media object -->
+
                         <div class="media mt-2">
                           <a class="media-left" href="javascript:;">
                             <img class="media-object img-radius comment-img" src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
@@ -473,7 +461,7 @@
 
                       </div>
                     </li>
-                    <!-- Nested media object -->
+
                     <div class="media mt-2">
                       <div class="media-left">
                         <a href="javascript:;">
@@ -514,7 +502,7 @@
                           <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
                         </div>
                         <hr>
-                        <!-- Nested media object -->
+
                         <div class="media mt-2">
                           <div class="media-left">
                             <a href="javascript:;">
@@ -577,7 +565,7 @@
               </div>
             </div>
           </ng-template>
-        </ngb-tab>
+        </ngb-tab> -->
       </ngb-tabset>
     </div>
   </div>
