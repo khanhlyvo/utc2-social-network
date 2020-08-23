@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import social.utc2.entities.Group;
+import social.utc2.request.Pagination;
 import social.utc2.services.GroupService;
 
 import java.util.List;
@@ -75,9 +76,9 @@ public class GroupController {
 //    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllGroup() {
+    public ResponseEntity<?> getAllGroup(Pagination pagination) {
         try {
-            return new ResponseEntity<>(groupService.getAllGroup(), HttpStatus.OK);
+            return new ResponseEntity<>(groupService.getAllGroup(pagination), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

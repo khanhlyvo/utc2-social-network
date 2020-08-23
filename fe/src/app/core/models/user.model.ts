@@ -12,3 +12,11 @@ export class User {
   fgDel: string;
   constructor() {}
 }
+export class ImportUser {
+  userName: string;
+  fullName: string;
+  birtDate: number;
+  place: string;
+  depart: string;
+  constructor() {}
+}

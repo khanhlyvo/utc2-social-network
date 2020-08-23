@@ -13,8 +13,8 @@ export class DepartmentService {
   constructor(private apiService: ApiService) {
   }
 
-  getDepartments(): Observable<any> {
-    return this.apiService.get(this.baseUrl);
+  getDepartments(pagination): Observable<any> {
+    return this.apiService.get(`${this.baseUrl}`, pagination);
   }
 
   addDepartment(department: any): Observable<boolean> {

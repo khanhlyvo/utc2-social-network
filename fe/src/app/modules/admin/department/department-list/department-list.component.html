@@ -17,6 +17,7 @@
           [(ngModel)]="searchCriterial.freeText"
           placeholder="Nhập Nội Dung Tìm Kiếm..."
           style="width: 400px;"
+          (keyup.enter)="doSearch()"
         />
       </div>
       <!-- <div class="form-group mr-3">
@@ -48,7 +49,7 @@
       <button
         type="button"
         class="btn btn-primary mt-auto mb-3"
-        style="height: calc(1.5em + 0.75rem + 2px);"
+        style="height: calc(1.5em + 0.75rem + 2px); padding: 6px 18px;"
         (click)="doSearch()"
       >
         Tìm Kiếm
@@ -97,8 +98,8 @@
               </div>
             </th>
             <th class="first-col" scope="col">STT</th>
-            <th scope="col">Mã Phòng Ban</th>
-            <th scope="col">Tên Phòng Ban</th>
+            <th scope="col">Mã Đơn Vị</th>
+            <th scope="col">Tên Đơn Vị</th>
             <th scope="col">Nhóm</th>
             <th></th>
           </tr>
@@ -175,8 +176,8 @@
 <!-- createModal Modal -->
 <ng-template #createModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Phòng Ban</h4>
-    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Phòng Ban</h4>
+    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Đơn Vị</h4>
+    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Đơn Vị</h4>
     <button
       type="button"
       class="close btn"
@@ -189,9 +190,9 @@
   <form name="form" (ngSubmit)="addDepartment(department, f)" #f="ngForm">
     <div class="modal-body">
       <div class="row">
-        <div class="col-6">
+        <div class="col-8 mx-auto">
           <div class="form-group">
-            <label>ID Phòng Ban:</label>
+            <label>ID Đơn Vị:</label>
             <input
               type="text"
               class="form-control"
@@ -202,11 +203,11 @@
               required
             />
             <div *ngIf="f.submitted && lastName.invalid" class="invalid-feedback">
-              Vui lòng nhập Họ
+              Vui lòng nhập ID
             </div>
           </div>
           <div class="form-group">
-            <label>Tên Phòng Ban:</label>
+            <label>Tên Đơn Vị:</label>
             <input
               type="text"
               class="form-control"
@@ -221,16 +222,21 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Nhóm:</label>
+            <label>Nhóm Tổ Chức:</label>
             <select
               class="form-control"
               name="carType"
               [(ngModel)]="department.groupId"
+              [ngClass]="{ 'is-invalid': f.submitted && carType.invalid }"
               #carType="ngModel"
+              required
               >
               <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
               <option *ngFor="let item of listGroup" [ngValue]="item.id">{{item.groupName}}</option>
             </select>
+            <div *ngIf="f.submitted && carType.invalid" class="invalid-feedback">
+              Vui lòng chọn Nhóm Tổ Chức
+            </div>
           </div>
         </div>
       </div>

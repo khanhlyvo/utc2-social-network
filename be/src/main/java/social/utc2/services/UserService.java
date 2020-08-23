@@ -1,10 +1,14 @@
 package social.utc2.services;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.stereotype.Service;
 import social.utc2.entities.User;
+import social.utc2.request.Pagination;
+import social.utc2.responses.PageResponse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +25,7 @@ public interface UserService {
 
     boolean deleteUsers(List<Integer> userIds);
 
-    List<User> getAllUser();
+    PageResponse getAllUser(Pagination pagination);
 
     List<User> getUserByIdOrName(String name, Integer pageNo, Integer pageSize);
 
@@ -29,5 +33,5 @@ public interface UserService {
 
 //    ByteArrayInputStream exportExcelFile(String fileName) throws Exception;
 
-
+    void importFile(InputStream is) throws IOException, InvalidFormatException;
 }

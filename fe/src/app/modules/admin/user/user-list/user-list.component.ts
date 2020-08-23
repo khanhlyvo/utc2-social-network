@@ -10,6 +10,8 @@ import { GroupService } from '../../../../core/services/group.service';
 import { DepartmentService } from '../../../../core/services/department.service';
 import { zip } from 'rxjs';
 // import { saveAs } from 'file-saver';
+import { ImportUser } from '../../../../core/models/user.model';
+import { ExcelService } from '../../../../core/services/excel.service';
 
 @Component({
   selector: 'app-user-list',
@@ -41,7 +43,6 @@ export class UserListComponent implements OnInit {
   pageSize = Constants.PAGE_SIZE;
   pageSizeList = Constants.SIZE_LIST;
   collectionSize = 0;
-  totalMoney = 0;
   lifeToast = 3000;
   searchCriterial = {
     fromDate: null,
@@ -55,8 +56,12 @@ export class UserListComponent implements OnInit {
   fileName: 'thu_chi.xlsx';
   listDepartment;
   listDepartOrigin;
-  listGroup: [];
-  groupSelected: null;
+  listGroup = [];
+  groupSelected = null;
+  selectedDepartment = null;
+  // importUsers  = [];
+  // exportUsers = [];
+  file: File;
 
   constructor(private modalService: NgbModal,
               private readonly userService: UserService,
@@ -64,7 +69,8 @@ export class UserListComponent implements OnInit {
               private readonly groupService: GroupService,
               private readonly loadingService: LoadingService,
               private readonly confirmationService: ConfirmationService,
-              private readonly messageService: MessageService) {}
+              private readonly messageService: MessageService,
+              private excelSrv: ExcelService) {}
 
   ngOnInit() {
     this.getDataDefault();
@@ -73,46 +79,67 @@ export class UserListComponent implements OnInit {
 
   getDataDefault() {
     this.isCheckAll = false;
-    // const pagination = {
-    //   page: this.page,
-    //   size: this.pageSize,
-    //   fields: 'MONEY,DATE,CONTENT',
-    //   searchValue: this.searchCriterial.freeText,
-    //   orderBy: '',
-    //   asc: false,
-    //   type: this.searchCriterial.type,
-    //   // fromDate: this.searchCriterial.fromDate ? this.searchCriterial.fromDate.toISOString() : null,
-    //   // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
-    // };
-    zip(this.userService.getUsers(),
-    this.groupService.getGroups(),
-    this.departmentService.getDepartments()).subscribe(res => {
+    const pagination = {
+      page: this.page,
+      size: this.pageSize,
+      fields: '',
+      searchValue: this.searchCriterial.freeText,
+      orderBy: 'asc',
+      asc: false,
+      type: this.searchCriterial.type,
+    };
+    zip(this.userService.getUsers(pagination),
+    this.groupService.getGroups({...pagination, page: 0, size: 0, searchValue: ''}),
+    this.departmentService.getDepartments({...pagination, page: 0, size: 0, searchValue: ''})).subscribe(res => {
       console.log(res);
-      if (res[0].length > 0) {res[0].forEach(e => {
-        delete e.group;
-      }); }
-      this.listUser = res[0];
-      // this.collectionSize = res[0].totalElements;
-      // this.listCheckbox.length = res[0].length;
+      // if (res[0].length > 0) {res[0].forEach(e => {
+      //   delete e.group;
+      // }); }
+      this.listUser = res[0].content;
+      this.collectionSize = res[0].totalElements;
+      this.listCheckbox.length = res[0].content.length;
       this.listCheckbox.fill(false);
-      // this.totalMoney = res[0].totalMoney;
 
-      res[1].forEach(e => {delete e.departments; });
-      this.listGroup = res[1];
-      this.listDepartOrigin = res[2];
+      res[1].content.forEach(e => {delete e.users; });
+      res[2].content.forEach(e => {delete e.users; });
+      this.listGroup = res[1].content;
+      this.listDepartOrigin = res[2].content;
       this.loadingService.stopLoading();
     }, err => {
       this.loadingService.stopLoading();
     });
 
-    this.loadingService.startLoading();
-    this.userService.getUsers().subscribe(res => {
+    // this.loadingService.startLoading();
+    // this.userService.getUsers().subscribe(res => {
+    //   console.log(res);
+    //   this.listUser = res;
+    //   this.collectionSize = res.totalElements;
+    //   this.listCheckbox.length = res.length;
+    //   this.listCheckbox.fill(false);
+    //   this.totalMoney = res.totalMoney;
+    //   this.loadingService.stopLoading();
+    // }, err => {
+    //   this.loadingService.stopLoading();
+    // });
+  }
+
+  getUsers() {
+    const pagination = {
+      page: this.page,
+      size: this.pageSize,
+      fields: '',
+      searchValue: this.searchCriterial.freeText,
+      orderBy: 'asc',
+      asc: false,
+      type: this.searchCriterial.type,
+    };
+     this.loadingService.startLoading();
+    this.userService.getUsers(pagination).subscribe(res => {
       console.log(res);
-      this.listUser = res;
+      this.listUser = res.content;
       this.collectionSize = res.totalElements;
-      this.listCheckbox.length = res.length;
+      this.listCheckbox.length = res.content.length;
       this.listCheckbox.fill(false);
-      this.totalMoney = res.totalMoney;
       this.loadingService.stopLoading();
     }, err => {
       this.loadingService.stopLoading();
@@ -127,11 +154,13 @@ export class UserListComponent implements OnInit {
     // }, err => {
     //   this.loadingService.stopLoading();
     // });
-    this.listDepartment = this.listDepartOrigin.filter(e => e.groupId === this.groupSelected);
+    this.listDepartment = this.listDepartOrigin.filter(e => e.groupId === this.groupSelected.id);
+
   }
 
   openModal(content, size, userId) {
     this.listDepartment = this.listDepartOrigin.slice(0);
+    console.log("listDepartment", this.listDepartment);
     this.groupSelected = null;
     console.log(this.page);
     this.modalService.open(content, {size, centered: true });
@@ -140,7 +169,11 @@ export class UserListComponent implements OnInit {
       this.loadingService.startLoading();
       this.userService.getUserById(userId).subscribe(res => {
         this.user = res;
-        console.log("user", res , this.user);
+        delete res.department.users;
+        this.selectedDepartment = res.department;
+        this.groupSelected = this.listGroup.find(e => e.id === res.department.groupId);
+        console.log("groupSelected", this.groupSelected);
+        console.log("user", res);
         this.loadingService.stopLoading();
       }, err => {
         this.loadingService.stopLoading();
@@ -166,6 +199,46 @@ export class UserListComponent implements OnInit {
       passWord: '',
       userName: null,
     };
+    this.selectedDepartment = null;
+    this.groupSelected = null;
+  }
+
+  doImport(evt) {
+    console.log(evt);
+    const file = evt.target.files[0];
+    let input = new FormData();
+  // Add your values in here
+  input.append('file', file);
+  // etc, etc
+    this.userService.addListUser(input).subscribe(() => {
+      console.log(1);
+      this.getUsers();
+    });
+// Add your values in here
+    // const target: DataTransfer = <DataTransfer>(evt.target);
+    // if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+
+    // const reader: FileReader = new FileReader();
+    // reader.onload = (e: any) => {
+
+    //   const bstr: string = e.target.result;
+    //   const data = <any[]>this.excelSrv.importFromFile(bstr);
+
+    //   const header: string[] = Object.getOwnPropertyNames(new ImportUser());
+    //   const importedData = data.slice(1, -1);
+
+    //   this.importUsers = importedData.map(arr => {
+    //     const obj = {};
+    //     for (let i = 0; i < header.length; i++) {
+    //       const k = header[i];
+    //       obj[k] = arr[i];
+    //     }
+    //     return <ImportUser>obj;
+    //   });
+    //   console.log(this.importUsers);
+
+    // };
+    // reader.readAsBinaryString(target.files[0]);
   }
 
   addUser(user, form): void {
@@ -186,7 +259,7 @@ export class UserListComponent implements OnInit {
       lastName: user.lastName,
       fullName: user.fullName,
       email: user.userName,
-      // department: user.department,
+      department: this.selectedDepartment,
       birthDate: this.birthDate.toISOString(),
       gender: user.gender,
       phone: user.phone,
@@ -196,13 +269,17 @@ export class UserListComponent implements OnInit {
     };
     this.loadingService.startLoading();
     this.userService.updateUser(userModel).subscribe(() => {
-      this.getDataDefault();
+      this.getUsers();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
     }, err => {
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
     });
+  }
+
+  compareFn(c1, c2): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
   createUser(user) {
@@ -212,7 +289,7 @@ export class UserListComponent implements OnInit {
       fullName: user.fullName,
       email: user.userName,
       // group: user.group,
-      // department: user.department,
+      department: this.selectedDepartment,
       birthDate: this.birthDate.toISOString(),
       gender: user.gender,
       phone: user.phone,
@@ -222,7 +299,7 @@ export class UserListComponent implements OnInit {
     };
     this.loadingService.startLoading();
     this.userService.addUser(userModel).subscribe(() => {
-      this.getDataDefault();
+      this.getUsers();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
     }, err => {
@@ -239,7 +316,7 @@ export class UserListComponent implements OnInit {
   pageChange(event: any): void {
     this.page = event.page;
     this.pageSize = event.size;
-    this.getDataDefault();
+    this.getUsers();
   }
 
   // changePageSize(pageSize) {
@@ -284,7 +361,7 @@ export class UserListComponent implements OnInit {
             life: this.lifeToast
           });
           this.modalService.dismissAll();
-          this.getDataDefault();
+          this.getUsers();
           this.loadingService.stopLoading();
           this.listDelete.length = 0;
         }, err => {
@@ -302,7 +379,7 @@ export class UserListComponent implements OnInit {
   }
 
   doSearch() {
-    this.getDataDefault();
+    this.getUsers();
   }
 
   doExport() {

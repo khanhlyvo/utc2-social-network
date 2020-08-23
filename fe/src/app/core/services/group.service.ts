@@ -13,8 +13,8 @@ export class GroupService {
   constructor(private apiService: ApiService) {
   }
 
-  getGroups(): Observable<any> {
-    return this.apiService.get(this.baseUrl);
+  getGroups(pagination): Observable<any> {
+    return this.apiService.get(`${this.baseUrl}`, pagination);
   }
 
   addGroup(group: any): Observable<boolean> {

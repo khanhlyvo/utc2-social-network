@@ -57,20 +57,18 @@ export class GroupListComponent implements OnInit {
     const pagination = {
       page: this.page,
       size: this.pageSize,
-      fields: 'MONEY,DATE,CONTENT',
+      fields: '',
       searchValue: this.searchCriterial.freeText,
       orderBy: '',
       asc: false,
       type: this.searchCriterial.type,
-      // fromDate: this.searchCriterial.fromDate ? this.searchCriterial.fromDate.toISOString() : null,
-      // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
     };
     this.loadingService.startLoading();
-    this.groupService.getGroups().subscribe(res => {
+    this.groupService.getGroups(pagination).subscribe(res => {
       console.log(res);
-      this.listGroup = res;
+      this.listGroup = res.content;
       this.collectionSize = res.totalElements;
-      this.listCheckbox.length = res.length;
+      this.listCheckbox.length = res.content.length;
       this.listCheckbox.fill(false);
       this.totalMoney = res.totalMoney;
       this.loadingService.stopLoading();

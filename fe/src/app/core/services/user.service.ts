@@ -13,12 +13,16 @@ export class UserService {
   constructor(private apiService: ApiService) {
   }
 
-  getUsers(): Observable<any> {
-    return this.apiService.get(this.baseUrl);
+  getUsers(pagination): Observable<any> {
+    return this.apiService.get(`${this.baseUrl}`, pagination);
   }
 
   addUser(user: any): Observable<boolean> {
     return this.apiService.post(this.baseUrl, user);
+  }
+
+  addListUser(file): Observable<boolean> {
+    return this.apiService.post(`${this.baseUrl}/import`, file);
   }
 
   updateUser(user: any): Observable<boolean> {

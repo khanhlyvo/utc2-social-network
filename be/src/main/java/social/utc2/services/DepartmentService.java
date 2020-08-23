@@ -19,6 +19,6 @@ public interface DepartmentService {
 
     boolean deleteDepartments(List<Integer> departments);
 
-    List<Department> getAllDepartment();
+    PageResponse getAllDepartment(Pagination pagination);
 
 }

@@ -1,6 +1,7 @@
 package social.utc2.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class User {
     private String userName;
 
     @Column
+//    @JsonIgnore
 //            (length = 60, nullable = false)
     private String passWord;
 

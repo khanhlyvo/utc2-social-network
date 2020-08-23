@@ -11,6 +11,8 @@ public class PageResponse {
 
     private List<?> content;
 
+    public PageResponse() {}
+
     public PageResponse(int totalElements, List<?> content) {
         this.totalElements = totalElements;
         this.content = content;

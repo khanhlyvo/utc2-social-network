@@ -3,6 +3,8 @@ package social.utc2.services;
 import org.springframework.stereotype.Service;
 import social.utc2.entities.Department;
 import social.utc2.entities.Group;
+import social.utc2.request.Pagination;
+import social.utc2.responses.PageResponse;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public interface GroupService {
 
     boolean deleteGroups(List<Integer> groups);
 
-    List<Group> getAllGroup();
+    PageResponse getAllGroup(Pagination pagination);
 
     List<Department> getDepartByGroupId(Integer id);
 }

@@ -17,6 +17,7 @@
           [(ngModel)]="searchCriterial.freeText"
           placeholder="Nhập Nội Dung Tìm Kiếm..."
           style="width: 400px;"
+          (keyup.enter)="doSearch()"
         />
       </div>
       <!-- <div class="form-group mr-3">
@@ -48,7 +49,7 @@
       <button
         type="button"
         class="btn btn-primary mt-auto mb-3"
-        style="height: calc(1.5em + 0.75rem + 2px);"
+        style="height: calc(1.5em + 0.75rem + 2px); padding: 6px 18px;"
         (click)="doSearch()"
       >
         Tìm Kiếm
@@ -99,7 +100,7 @@
             <th class="first-col" scope="col">STT</th>
             <th scope="col">Nhóm</th>
             <th scope="col">Tên Nhóm</th>
-            <th></th>
+            <th style="width: 5px;"></th>
           </tr>
         </thead>
         <tbody>
@@ -118,7 +119,7 @@
             <td class="first-col">{{ (page - 1) * pageSize + (i + 1) }}</td>
             <td>{{ item.groupId }}</td>
             <td>{{ item.groupName }}</td>
-            <td>
+            <td style="with: 5px;">
               <div class="flex-container">
                 <button
                   (click)="openModal(createModal, 'lg', item.id)"
@@ -137,27 +138,6 @@
           </tr>
         </tbody>
       </table>
-
-      <!-- <div class="d-flex justify-content-between p-2">
-        <ngb-pagination
-          (pageChange)="clickPagination($event)"
-          [collectionSize]="collectionSize"
-          [(page)]="page"
-          [pageSize]="pageSize"
-        >
-        </ngb-pagination>
-
-        <select
-          class="custom-select"
-          style="width: auto;"
-          [(ngModel)]="pageSize"
-          (ngModelChange)="changePageSize($event)"
-        >
-          <option *ngFor="let item of pageSizeList" [ngValue]="item"
-            >{{ item }} items per page</option
-          >
-        </select>
-      </div> -->
     </div>
 
     <app-pagination
@@ -173,8 +153,8 @@
 <!-- createModal Modal -->
 <ng-template #createModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Nhóm</h4>
-    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Nhóm</h4>
+    <h4 class="modal-title" *ngIf="!isEdit">Tạo Mới Nhóm Tổ Chức</h4>
+    <h4 class="modal-title" *ngIf="isEdit">Cập Nhật Nhóm Tổ Chức</h4>
     <button
       type="button"
       class="close btn"
@@ -187,7 +167,7 @@
   <form name="form" (ngSubmit)="addGroup(group, f)" #f="ngForm">
     <div class="modal-body">
       <div class="row">
-        <div class="col-6">
+        <div class="col-6 mx-auto">
           <div class="form-group">
             <label>ID Nhóm:</label>
             <input
@@ -200,8 +180,10 @@
               required
             />
             <div *ngIf="f.submitted && lastName.invalid" class="invalid-feedback">
-              Vui lòng nhập Họ
+              Vui lòng nhập ID Nhóm tổ chức
             </div>
+          </div>
+          <div class="form-group">
             <label>Tên Nhóm:</label>
             <input
               type="text"
@@ -213,7 +195,7 @@
               required
             />
             <div *ngIf="f.submitted && firstName.invalid" class="invalid-feedback">
-              Vui lòng nhập Tên
+              Vui lòng nhập Tên Nhóm tổ chức
             </div>
           </div>
         </div>

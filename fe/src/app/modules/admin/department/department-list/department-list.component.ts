@@ -62,32 +62,54 @@ export class DepartmentListComponent implements OnInit {
     const pagination = {
       page: this.page,
       size: this.pageSize,
-      fields: 'MONEY,DATE,CONTENT',
+      fields: '',
       searchValue: this.searchCriterial.freeText,
-      orderBy: '',
+      orderBy: 'asc',
       asc: false,
       type: this.searchCriterial.type,
       // fromDate: this.searchCriterial.fromDate ? this.searchCriterial.fromDate.toISOString() : null,
       // toDate: this.searchCriterial.toDate ? this.searchCriterial.toDate.toISOString() : null
     };
     this.loadingService.startLoading();
-    zip(this.departmentService.getDepartments(),
-    this.groupService.getGroups()).subscribe(res => {
+    zip(this.departmentService.getDepartments(pagination),
+    this.groupService.getGroups(pagination)).subscribe(res => {
       console.log(res);
-      if (res[0].length > 0) {res[0].forEach(e => {
-        delete e.group;
-      }); }
-      this.listDepartment = res[0];
-      // this.collectionSize = res[0].totalElements;
-      // this.listCheckbox.length = res[0].length;
+      // if (res[0].length > 0) {res[0].forEach(e => {
+      //   delete e.group;
+      // }); }
+      this.listDepartment = res[0].content;
+      this.collectionSize = res[0].totalElements;
+      this.listCheckbox.length = res[0].content.length;
       this.listCheckbox.fill(false);
-      // this.totalMoney = res[0].totalMoney;
 
-      res[1].forEach(e => {delete e.departments; });
-      this.listGroup = res[1];
+      // res[1].forEach(e => {delete e.departments; });
+      this.listGroup = res[1].content;
+      this.listDepartment.forEach(e => e.groupId = this.getGroupName(e.groupId));
       this.loadingService.stopLoading();
     }, err => {
       this.loadingService.stopLoading();
+    });
+  }
+
+  getGroupName(id) {
+    return this.listGroup.find(e => e.id === id).groupName;
+  }
+
+  getDepartList() {
+    const pagination = {
+      page: this.page,
+      size: this.pageSize,
+      fields: '',
+      searchValue: this.searchCriterial.freeText,
+      orderBy: 'asc',
+      asc: false,
+      type: this.searchCriterial.type,
+    };
+    this.departmentService.getDepartments(pagination).subscribe(res => {
+      this.listDepartment = res.content;
+      this.collectionSize = res.totalElements;
+      this.listCheckbox.length = res.content.length;
+      this.listCheckbox.fill(false);
     });
   }
 
@@ -139,7 +161,7 @@ export class DepartmentListComponent implements OnInit {
     };
     this.loadingService.startLoading();
     this.departmentService.updateDepartment(departmentModel).subscribe(() => {
-      this.getDataDefault();
+      this.getDepartList();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
     }, err => {
@@ -156,7 +178,7 @@ export class DepartmentListComponent implements OnInit {
     };
     this.loadingService.startLoading();
     this.departmentService.addDepartment(departmentModel).subscribe(() => {
-      this.getDataDefault();
+      this.getDepartList();
       this.modalService.dismissAll();
       this.loadingService.stopLoading();
     }, err => {
@@ -238,7 +260,7 @@ export class DepartmentListComponent implements OnInit {
   }
 
   doSearch() {
-    this.getDataDefault();
+    this.getDepartList();
   }
 
   doExport() {

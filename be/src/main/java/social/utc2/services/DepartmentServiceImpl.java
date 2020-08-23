@@ -3,6 +3,10 @@ package social.utc2.services;
 import org.hibernate.Criteria;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -16,6 +20,7 @@ import social.utc2.responses.PageResponse;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,8 +63,21 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public List<Department> getAllDepartment() {
-        return departmentRepository.findAllByFlgDelFalse();
+    public PageResponse getAllDepartment(Pagination pagination) {
+        Pageable paging = null;
+        if (Optional.of(pagination.getSize()).isPresent() && pagination.getSize() > 0) {
+            paging = PageRequest.of(pagination.getPage() - 1, pagination.getSize());
+        }
+        PageResponse pageResponse = new PageResponse();
+        Page<Department> page = null;
+        if (StringUtils.isEmpty(pagination.getSearchValue())) {
+            page = departmentRepository.findAllByFlgDelFalse(paging);
+        } else {
+            page = departmentRepository.search(paging, pagination.getSearchValue());
+        }
+        pageResponse.setContent(page.getContent());
+        pageResponse.setTotalElements((int) page.getTotalElements());
+        return pageResponse;
     }
 
 }

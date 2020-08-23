@@ -67,9 +67,9 @@ public class DepartmentController {
 //    }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllDepartment() {
+    public ResponseEntity<?> getAllDepartment(Pagination pagination) {
         try {
-            return new ResponseEntity<>(departmentService.getAllDepartment(), HttpStatus.OK);
+            return new ResponseEntity<>(departmentService.getAllDepartment(pagination), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

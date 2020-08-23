@@ -6,12 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import social.utc2.entities.Group;
 import social.utc2.entities.User;
+import social.utc2.request.Pagination;
+import social.utc2.responses.PageResponse;
 import social.utc2.responses.ProfileResponse;
 import social.utc2.securities.Utc2UserDetail;
 import social.utc2.services.UserService;
@@ -56,16 +56,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity getAllUser() {
+    public ResponseEntity getAllUser(Pagination pagination) {
         try {
 
-            List<User> users = userService.getAllUser();
-            List<ProfileResponse> profiles = users.stream().map(user -> {
-                ProfileResponse profile = new ProfileResponse(user);
+            PageResponse users = userService.getAllUser(pagination);
+            List<ProfileResponse> profiles = users.getContent().stream().map(user -> {
+                ProfileResponse profile = new ProfileResponse((User) user);
                 return profile;
             }).collect(Collectors.toList());
-
-            return new ResponseEntity<>(profiles, HttpStatus.OK);
+            users.setContent(profiles);
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -124,7 +124,14 @@ public class UserController {
         }
     }
 
-
-
-
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    public ResponseEntity<?> importUser(@RequestParam("file") MultipartFile file) {
+        try {
+            userService.importFile(file.getInputStream());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

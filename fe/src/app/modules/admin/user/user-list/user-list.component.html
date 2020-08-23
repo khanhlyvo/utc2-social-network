@@ -17,6 +17,7 @@
           [(ngModel)]="searchCriterial.freeText"
           placeholder="Nhập Nội Dung Tìm Kiếm..."
           style="width: 400px;"
+          (keyup.enter)="doSearch()"
         />
       </div>
       <!-- <div class="form-group mr-3">
@@ -48,11 +49,21 @@
       <button
         type="button"
         class="btn btn-primary mt-auto mb-3"
-        style="height: calc(1.5em + 0.75rem + 2px);"
+        style="height: calc(1.5em + 0.75rem + 2px); padding: 6px 18px;"
         (click)="doSearch()"
       >
         Tìm Kiếm
       </button>
+
+
+      <button
+      type="button"
+      class="btn btn-info mb-3 ml-auto"
+      style="height: calc(1.5em + 0.75rem + 2px); padding: 6px 18px;"
+      (click)="doExport()"
+    >
+      Xuất Excel
+    </button>
     </div>
     <div class="row mx-0">
       <button
@@ -64,11 +75,11 @@
       </button>
       <div class="ml-auto">
         <button
-          type="button"
-          class="btn btn-info mb-3 mr-3"
-          (click)="doExport()"
         >
-          Xuất Excel
+          <label>
+            <small>Import Excel</small>
+            <input hidden type="file" (change)="doImport($event)" multiple="false">
+          </label>
         </button>
         <button
           type="button"
@@ -98,12 +109,12 @@
             </th>
             <th class="first-col" scope="col">STT</th>
             <th scope="col">Họ Và Tên</th>
-            <th scope="col">Account</th>
-            <th scope="col">Khoa</th>
+            <th scope="col">Tên Đăng Nhập</th>
+            <th scope="col">Đơn Vị</th>
             <th>Ngày Sinh</th>
             <th>Giới Tính</th>
             <th>Số Điện Thoại</th>
-            <th>Role</th>
+            <th>Phân Quyền</th>
             <th></th>
           </tr>
         </thead>
@@ -123,7 +134,7 @@
             <td class="first-col">{{ (page - 1) * pageSize + (i + 1) }}</td>
             <td>{{ item.fullName }}</td>
             <td>{{ item.userName }}</td>
-            <td>{{ item.department }}</td>
+            <td>{{ item.department.departName }}</td>
             <td>{{ item.birthDate }}</td>
             <td>{{ item.gender }}</td>
             <td>{{ item.phone }}</td>
@@ -199,7 +210,7 @@
   <form name="form" (ngSubmit)="addUser(user, f)" #f="ngForm">
     <div class="modal-body">
       <div class="row">
-        <div class="col-6">
+        <div class="col-8 mx-auto">
           <div class="form-group">
             <label>Họ:</label>
             <input
@@ -300,7 +311,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Account:</label>
+            <label>Tên Đăng Nhập:</label>
             <input
               type="text"
               class="form-control"
@@ -332,6 +343,7 @@
           <div class="form-group">
             <label>Nhóm:</label>
             <select
+              [compareWith]="compareFn"
               class="form-control"
               name="groupSelected"
               [(ngModel)]="groupSelected"
@@ -339,19 +351,20 @@
               (change)="chooseGroup()"
               >
               <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
-              <option *ngFor="let item of listGroup" [ngValue]="item.id">{{item.groupName}}</option>
+              <option *ngFor="let item of listGroup" [ngValue]="item">{{item.groupName}}</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Khoa:</label>
+            <label>Đơn Vị:</label>
             <select
+              [compareWith]="compareFn"
               class="form-control"
               name="department"
-              [(ngModel)]="user.department"
+              [(ngModel)]="selectedDepartment"
               #department="ngModel"
               >
               <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
-              <option *ngFor="let item of listDepartment" [ngValue]="item.id">{{item.departName}}</option>
+              <option *ngFor="let item of listDepartment" [ngValue]="item">{{item.departName}}</option>
             </select>
           </div>
           <div class="form-group">
@@ -365,7 +378,7 @@
             />
           </div>
           <div class="form-group">
-            <label>Role:</label>
+            <label>Phân Quyền:</label>
             <select
               class="form-control"
               name="carType"
@@ -398,3 +411,37 @@
     </div>
   </form>
 </ng-template>
+
+<!-- <ng-template #ImportModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" >Import Người Dùng</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form name="form" (ngSubmit)="addUser(user, f)" #f="ngForm">
+    <div class="table-responsive">
+      <table id="contactJs" class="table-contact">
+        <tr class="thead">
+          <th>Tên Đăng Nhập</th>
+          <th>Họ Tên</th>
+          <th>Ngày Sinh</th>
+          <th>Quê Quán</th>
+          <th></th>
+        </tr>
+        <tr class="tbody" *ngFor="let user of importUsers; let odd = odd" [ngClass]="{'odd': odd}">
+          <td>{{user?.userName}}</td>
+          <td>{{user?.fullName}}</td>
+          <td>{{user?.birtDate}}</td>
+          <td>{{user?.place}}</td>
+          <td>{{user?.depart}}</td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</ng-template> -->

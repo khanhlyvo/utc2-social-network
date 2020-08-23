@@ -1,4 +1,6 @@
 export const Constants = {
+
+  // CONTEXT_PATH: 'http://192.168.0.102:8090/',
   CONTEXT_PATH: 'http://localhost:8090/',
 
   // CONFIG MESSAGE**//
@@ -23,11 +25,11 @@ export const Constants = {
   MSG_ERROR: 'error',
   MSG_SERVER_ERROR: 'There is problem with server. Please try again.',
   MSG_CONFIRM_DELETE: 'Are you sure you want to delete this item?',
-  PAGE_SIZE: 5,
+  PAGE_SIZE: 1,
   LIFE_TOAST: 3000,
   LIMIT_SIZE: 1000,
   TIME_CALL_API: 30000,
-  SIZE_LIST: [5, 20, 50, 100, 200],
+  SIZE_LIST: [1, 5, 20, 50, 100, 200],
   PAGE_DEFAULT: 1,
   TRUE: 1,
   FALSE: 0,
