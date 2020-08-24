@@ -35,7 +35,7 @@
                 </div>
                 <ul *ngIf="listSearch.length>0" class="search-ul">
                   <li *ngFor="let item of listSearch" class="search-menu">
-                    <a [routerLink]="'/profile/' + item.userName"  href="javascript:;">{{item.fullName}}</a></li>
+                    <a [routerLink]="'/profile/' + item.userName"  href="javascript:;">{{item.fullName}} ({{item.department?.departId}})</a></li>
                 </ul>
               </div>
             <!-- <ul class="nav-left">
@@ -194,7 +194,7 @@
                   </li>
                 </ul>
               </li> -->
-              <li class="header-notification">
+              <!-- <li class="header-notification">
                 <a href="javascript:;">
                   <i class="ti-bell"></i>
                   <span class="badge bg-c-pink"></span>
@@ -235,40 +235,40 @@
                     </div>
                   </li>
                 </ul>
-              </li>
+              </li> -->
               <li class="header-notification">
                 <a href="javascript:;" (click)="toggleChat()" class="displayChatbox">
                   <i class="ti-comments"></i>
-                  <span class="badge bg-c-green"></span>
+                  <!-- <span class="badge bg-c-green"></span> -->
                 </a>
               </li>
               <li class="user-profile header-notification">
-                <a routerLink="/profile/{{currentUtc2User.username}}">
+                <a routerLink="/profile/{{currentUtc2User?.username}}">
                   <img src={{userProfile.avatar}} class="img-radius" alt="User-Profile-Image">
-                  <span>{{currentUtc2User.username}}</span>
+                  <span>{{currentUtc2User?.username}}</span>
                   <i class="ti-angle-down"></i>
                 </a>
                 <ul class="show-notification profile-notification">
-                  <li>
+                  <!-- <li>
                     <a [routerLink]="['/crm-contact']">
                       <i class="ti-settings"></i> Settings
                     </a>
-                  </li>
+                  </li> -->
                   <li>
-                    <a routerLink="profile/{{ currentUtc2User.username }}">
+                    <a routerLink="profile/{{ currentUtc2User?.username }}">
                       <i class="ti-user"></i> Profile
                     </a>
                   </li>
-                  <li>
+                  <!-- <li>
                     <a [routerLink]="['/advance/notifications']">
                       <i class="ti-email"></i> My Messages
                     </a>
-                  </li>
-                  <li>
+                  </li> -->
+                  <!-- <li>
                     <a [routerLink]="['/authentication/lock-screen']" target="_blank">
                       <i class="ti-lock"></i> Lock Screen
                     </a>
-                  </li>
+                  </li> -->
                   <li>
                     <a (click)="logout()">
                       <i class="ti-layout-sidebar-left"></i> Logout
@@ -297,7 +297,20 @@
             </div>
             <div class="main-friend-list scroll-window">
               <perfect-scrollbar [style.max-width]="'100%'" [config]="config">
-                <div (click)="toggleChatInner()" class="media userlist-box" data-id="1" placement="left" ngbTooltip="Josephin Doe">
+                <div *ngFor="let item of followList">
+                  <div (click)="doChat(item)" class="media userlist-box" placement="left">
+                    <a class="media-left" href="javascript:;">
+                      <img class="media-object " *ngIf="item.avatar"  [src]="item.avatar" alt="Generic placeholder image">
+                      <img class="media-object " *ngIf="!item.avatar"  src="assets/images/user-profile/user-img.jpg" alt="Generic placeholder image">
+                      <div class="live-status bg-success" *ngIf="isLive(item.userName)"></div>
+                    </a>
+                    <div class="media-body">
+                      <div class="f-13 chat-header">{{item.fullName}}</div>
+                      <div class="f-13">({{item.department?.departId}})</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div (click)="toggleChatInner()" class="media userlist-box" data-id="1" placement="left" ngbTooltip="Josephin Doe">
                   <a class="media-left" href="javascript:;">
                     <img class="media-object " src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
                     <div class="live-status bg-success"></div>
@@ -305,8 +318,8 @@
                   <div class="media-body">
                     <div class="f-13 chat-header">Josephin Doe</div>
                   </div>
-                </div>
-                <div (click)="toggleChatInner()" class="media userlist-box" data-id="2" data-status="online" data-username="Lary Doe" placement="left" ngbTooltip="Lary Doe">
+                </div> -->
+                <!-- <div (click)="toggleChatInner()" class="media userlist-box" data-id="2" data-status="online" data-username="Lary Doe" placement="left" ngbTooltip="Lary Doe">
                   <a class="media-left" href="javascript:;">
                     <img class="media-object " src="assets/images/avatar-3.jpg" alt="Generic placeholder image">
                     <div class="live-status bg-success"></div>
@@ -350,7 +363,7 @@
                 <div class="media-body">
                   <div class="f-13 chat-header">Michael Scofield</div>
                 </div>
-              </div>
+              </div> -->
               </perfect-scrollbar>
             </div>
           </div>
@@ -359,11 +372,11 @@
     </div>
 
     <div [@slideOnOff]="verticalPlacement === 'right' ? chatInnerToggleInverse : chatInnerToggle" class="card card_main showChat_inner">
-      <div class="media chat-inner-header">
+      <!-- <div class="media chat-inner-header">
         <a class="back_chatBox" (click)="toggleChatInner()">
           <i class="icofont icofont-rounded-left"></i> Josephin Doe
         </a>
-      </div>
+      </div> -->
         <perfect-scrollbar [style.max-width]="'100%'" [style.max-height]="'calc(100vh - 230px)'" [config]="config">
           <div class="media chat-messages">
             <a class="media-left photo-table" href="javascript:;">
@@ -411,20 +424,20 @@
                 <img class="img-40 img-radius" src={{userProfile.avatar}} alt="User-Profile-Image">
                 <div class="user-details">
                   <span>{{userProfile.fullName}}</span>
-                  <span id="more-details" (click)="toggleOpenedSidebar()">{{userProfile.department}}<i class="ti-angle-down"></i></span>
+                  <span id="more-details" (click)="toggleOpenedSidebar()">{{userProfile?.department?.departId}}<i class="ti-angle-down"></i></span>
                 </div>
               </div>
               <div class="main-menu-content">
                 <ul>
                   <li [@mobileMenuTop]="isCollapsedSideBar" class="more-details" [ngClass]="isCollapsedSideBar">
-                    <a routerLink="/profile/{{currentUtc2User.username}}"><i class="ti-user"></i>View Profile</a>
-                    <a [routerLink]="['/crm-contact']"><i class="ti-settings"></i>Settings</a>
+                    <a routerLink="/profile/{{currentUtc2User?.username}}"><i class="ti-user"></i>View Profile</a>
+                    <!-- <a [routerLink]="['/crm-contact']"><i class="ti-settings"></i>Settings</a> -->
                     <a [routerLink]="['/authentication/login/with-bg-image']"><i class="ti-layout-sidebar-left"></i>Logout</a>
                   </li>
                 </ul>
               </div>
             </div>
-            <perfect-scrollbar [style.max-width]="'100%'" [style.max-height]="'calc(100vh - 230px)'" [config]="config">
+            <perfect-scrollbar [style.max-width]="'100%'" [style.max-height]="'calc(100vh - 230px)'" [config]="config" *ngIf="currentUtc2User?.role === 'Admin'" >
               <div *ngFor="let asideItems of menuItems.getAll()" class="d-color">
                 <div class="pcoded-navigatio-lavel" [attr.menu-title-theme]="menuTitleTheme">{{asideItems.label}}</div>
                 <ul class="pcoded-item pcoded-left-item" [attr.item-border]="itemBorder" [attr.item-border-style]="itemBorderStyle" [attr.subitem-border]="subItemBorder" *ngFor="let asideItem of asideItems.main" appAccordionLink group="{{asideItem.state}}">

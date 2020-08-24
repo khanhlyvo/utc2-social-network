@@ -28,7 +28,6 @@ export class GroupListComponent implements OnInit {
   pageSize = Constants.PAGE_SIZE;
   pageSizeList = Constants.SIZE_LIST;
   collectionSize = 0;
-  totalMoney = 0;
   lifeToast = 3000;
   searchCriterial = {
     fromDate: null,
@@ -70,7 +69,7 @@ export class GroupListComponent implements OnInit {
       this.collectionSize = res.totalElements;
       this.listCheckbox.length = res.content.length;
       this.listCheckbox.fill(false);
-      this.totalMoney = res.totalMoney;
+      this.isCheckAll = false;
       this.loadingService.stopLoading();
     }, err => {
       this.loadingService.stopLoading();

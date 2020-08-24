@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'profile',
         pathMatch: 'full'
       }, {
         path: 'dashboard',
@@ -24,6 +24,8 @@ const routes: Routes = [
       },  {
         path: 'user',
         loadChildren: () => import('./modules/admin/user/user.module').then(m => m.UserModule),
+        canActivate: [AuthGuard],
+        data: { roles: [Role.Admin] }
       }, {
         path: 'group',
         loadChildren: () => import('./modules/admin/group/group.module').then(m => m.GroupModule),
@@ -33,7 +35,6 @@ const routes: Routes = [
       }, {
         path: 'department',
         loadChildren: () => import('./modules/admin/department/department.module').then(m => m.DepartmentModule),
-
         canActivate: [AuthGuard],
         data: { roles: [Role.Admin] }
       }, {

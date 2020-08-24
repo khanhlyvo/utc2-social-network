@@ -74,13 +74,13 @@
         Xóa
       </button>
       <div class="ml-auto">
-        <button
+        <!-- <button
         >
           <label>
             <small>Import Excel</small>
             <input hidden type="file" (change)="doImport($event)" multiple="false">
           </label>
-        </button>
+        </button> -->
         <button
           type="button"
           class="btn btn-primary mb-3"
@@ -134,13 +134,20 @@
             <td class="first-col">{{ (page - 1) * pageSize + (i + 1) }}</td>
             <td>{{ item.fullName }}</td>
             <td>{{ item.userName }}</td>
-            <td>{{ item.department.departName }}</td>
-            <td>{{ item.birthDate }}</td>
+            <td>{{ item.department?.departName }}</td>
+            <td>{{ item.birthDate | date :'dd/MM/yyyy' }}</td>
             <td>{{ item.gender }}</td>
             <td>{{ item.phone }}</td>
             <td>{{ item.role }}</td>
             <td>
               <div class="flex-container">
+                <button
+                  (click)="openModal(changePwdModal, 'sm', item.id)"
+                  type="button"
+                  class="btn btn-icon btn-primary mr-1"
+                >
+                  <i class="feather icon-edit-2 mr-1"></i> Đổi Mật Khẩu
+                </button>
                 <button
                   (click)="openModal(createModal, 'lg', item.id)"
                   type="button"
@@ -249,6 +256,8 @@
                 [readonlyInput]="true"
                 dateFormat="dd/mm/yy"
                 hourFormat="24"
+                [yearNavigator]="true" yearRange="1920:2020"
+                [monthNavigator]="true"
               ></p-calendar>
             </div>
           </div>
@@ -322,7 +331,7 @@
               required
             />
             <div *ngIf="f.submitted && userName.invalid" class="invalid-feedback">
-              Vui lòng nhập Account
+              Vui lòng nhập Tên đăng nhập
             </div>
           </div>
           <div class="form-group" *ngIf="!isEdit" >
@@ -412,9 +421,9 @@
   </form>
 </ng-template>
 
-<!-- <ng-template #ImportModal let-modal>
+<ng-template #changePwdModal let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" >Import Người Dùng</h4>
+    <h4 class="modal-title" >Đổi Mật Khẩu</h4>
     <button
       type="button"
       class="close btn"
@@ -424,24 +433,50 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form name="form" (ngSubmit)="addUser(user, f)" #f="ngForm">
-    <div class="table-responsive">
-      <table id="contactJs" class="table-contact">
-        <tr class="thead">
-          <th>Tên Đăng Nhập</th>
-          <th>Họ Tên</th>
-          <th>Ngày Sinh</th>
-          <th>Quê Quán</th>
-          <th></th>
-        </tr>
-        <tr class="tbody" *ngFor="let user of importUsers; let odd = odd" [ngClass]="{'odd': odd}">
-          <td>{{user?.userName}}</td>
-          <td>{{user?.fullName}}</td>
-          <td>{{user?.birtDate}}</td>
-          <td>{{user?.place}}</td>
-          <td>{{user?.depart}}</td>
-        </tr>
-      </table>
+  <form name="form1" (ngSubmit)="resetPwd(passWord, f1)" #f1="ngForm">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-8 mx-auto">
+          <div class="form-group">
+            <label>Mật Khẩu:</label>
+            <input
+              type="password"
+              class="form-control"
+              name="passWordModel"
+              [(ngModel)]="passWord"
+              #passWordModel="ngModel"
+              [ngClass]="{ 'is-invalid': f1.submitted && passWordModel.invalid }"
+              required
+            />
+            <div *ngIf="f1.submitted && passWordModel.invalid" class="invalid-feedback">
+              Vui lòng nhập Mật khẩu
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nhập Lại Mật Khẩu:</label>
+            <input
+              type="password"
+              class="form-control"
+              name="passWord2Model"
+              [(ngModel)]="passWord2"
+              #passWord2Model="ngModel"
+              [ngClass]="{ 'is-invalid': f1.submitted && !isEqualPwd(passWord, passWord2)}"
+            />
+            <div *ngIf="f1.submitted && !isEqualPwd(passWord, passWord2)" class="invalid-feedback">
+              Vui lòng nhập lại giống với Mật khẩu
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="submit"
+        class="btn btn-primary mx-auto"
+      >
+        Đổi Mật Khẩu
+      </button>
     </div>
   </form>
-</ng-template> -->
+</ng-template>

@@ -1,11 +1,13 @@
 package social.utc2.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Date;
 
@@ -14,13 +16,10 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
-
-    @Column
-    private Integer roomId;
 
     @Column
     private String fromId;
@@ -46,4 +45,8 @@ public class Message {
     @Column
     Date date = new Date();
 
+//    @JsonBackReference
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "fromId", referencedColumnName = "userName")
+//    private User user;
 }

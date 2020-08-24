@@ -1,9 +1,11 @@
+import { FollowService } from './../../../core/services/follow.service';
 import { ChatBoxService } from './../../../core/services/chat-box.service';
 import { Component, OnInit } from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { AuthenticationService } from '../../../core/services/authenticate.service';
+import { User } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -35,13 +37,16 @@ export class ProfileComponent implements OnInit {
   public sortBy = '';
   public sortOrder = 'desc';
   profitChartOption: any;
+  birthDate = null;
 
   userProfile;
+  userProfileEdit;
   currentUtc2User: any;
   avatar;
   background;
 
   constructor(private readonly chatBoxService: ChatBoxService,
+    private readonly followService: FollowService,
     private router: Router,
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
@@ -65,7 +70,7 @@ export class ProfileComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       reader.onloadend = (e) => { // called once readAsDataURL is completed
-        if(background) {
+        if (background) {
           this.background = reader.result;
         } else {
           this.avatar = reader.result;
@@ -76,19 +81,38 @@ export class ProfileComponent implements OnInit {
 
   changeImage(background) {
     const params = {...this.userProfile};
-    console.log(params);
-    if(background) {
+    if (background) {
       params.background = this.background;
       delete params.avatar;
     } else {
       params.avatar = this.avatar;
       delete params.background;
     }
-    this.userService.updateUser(params).subscribe ( () => {
+    this.userService.updateUser(params).subscribe(() => {
       this.getProfile();
       this.avatar = null;
       this.background = null;
     });
+  }
+
+  get srcBackground() {
+    let src = 'assets/images/user-profile/bg-img1.jpg';
+    if (this.background) {
+      src = this.background;
+    } else {
+      src = this.userProfile ? this.userProfile.background : 'assets/images/user-profile/bg-img1.jpg';
+    }
+    return src;
+  }
+
+  get srcAvatar() {
+    let src = 'assets/images/user-profile/user-img.jpg';
+    if (this.avatar) {
+      src = this.avatar;
+    } else {
+      src = this.userProfile ? this.userProfile.avatar : 'assets/images/user-profile/user-img.jpg';
+    }
+    return src;
   }
 
   deleteImage(background) {
@@ -99,6 +123,7 @@ export class ProfileComponent implements OnInit {
   toggleEditProfile() {
     this.editProfileIcon = (this.editProfileIcon === 'icofont-close') ? 'icofont-edit' : 'icofont-close';
     this.editProfile = !this.editProfile;
+    this.birthDate = new Date(this.userProfile.birthDate);
   }
 
   toggleEditAbout() {
@@ -112,15 +137,63 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfile() {
-    console.log('hi~~~~~~~~~~~~~~~~');
     this.userService.getUserByUsername(this.username).subscribe(res => {
       this.userProfile = res;
+      this.userProfileEdit = {...res};
       if (!this.userProfile.avatar) {
         this.userProfile.avatar = 'assets/images/user-profile/user-img.jpg';
       }
       if (!this.userProfile.background) {
         this.userProfile.background = 'assets/images/user-profile/bg-img1.jpg';
       }
+    });
+  }
+
+  get isFollowed() {
+    const followList = this.followService.followList;
+    return followList.some(e => e && this.userProfile && e.userName === this.userProfile.userName);
+  }
+
+  doFollow() {
+    console.log(1);
+    const param = {
+      followee: this.userProfile.userName,
+      follower: this.currentUtc2User.username,
+    };
+    this.followService.addFollow(param).subscribe(() => {
+      console.log(param);
+      this.followService.fetch = true;
+    });
+  }
+
+  doUnFollow() {
+    const param = {
+      followee: this.userProfile.userName,
+      follower: this.currentUtc2User.username,
+    };
+    this.followService.deleteFollow(param).subscribe(() => {
+      console.log(param);
+      this.followService.fetch = true;
+    });
+  }
+
+
+  doSave() {
+    let gender;
+    if (this.userProfileEdit.gender === 'Nữ') {
+      gender = '2';
+    } else if (this.userProfileEdit.gender === 'Nam') {
+      gender = '1';
+    } else {
+      gender = '0';
+    }
+    const user = {...this.userProfile};
+    user.phone = this.userProfileEdit.phone;
+    user.gender = gender;
+    user.birthDate = this.birthDate ? this.birthDate.toISOString() : null;
+    this.userService.updateUser(user).subscribe(() => {
+      this.getProfile();
+      this.editProfile = !this.editProfile;
     });
   }
 }

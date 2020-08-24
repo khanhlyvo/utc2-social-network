@@ -22,7 +22,7 @@ export class UserService {
   }
 
   addListUser(file): Observable<boolean> {
-    return this.apiService.post(`${this.baseUrl}/import`, file);
+    return this.apiService.postOption(`${this.baseUrl}/import`, file ,{ "Content-Type": "multipart/form-data" });
   }
 
   updateUser(user: any): Observable<boolean> {
@@ -47,6 +47,10 @@ export class UserService {
 
   getUserByIdOrName(name: string): Observable<any> {
     return this.apiService.get(this.baseUrl + '/search-name/' + name);
+  }
+
+  resetPwd(id, password): Observable<boolean> {
+    return this.apiService.post(`${this.baseUrl}/password-reset?id=${id}`, password);
   }
 
 }

@@ -15,7 +15,8 @@
             </select>
             <span class="p-2 pagination-item-per">mục / 1 trang</span>
             <span class="p-2">
-                {{ (page-1)*size +1 }} đến {{ (page*size >totalCount) ? totalCount: page*size }} trong tổng cộng {{ totalCount }} mục
+                <!-- {{ (page-1)*size +1 }} đến {{ (page*size >totalCount) ? totalCount: page*size }}.  -->
+                Tổng cộng: {{ totalCount }} mục
             </span>
         </div>
     </div>

@@ -1,9 +1,13 @@
+import { PresenceService } from './../../core/services/presence.service';
+import { FollowService } from './../../core/services/follow.service';
 import { UserService } from './../../core/services/user.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {animate, AUTO_STYLE, state, style, transition, trigger} from '@angular/animations';
 import {MenuItems} from '../../shared/component/menu-items/menu-items';
 import { AuthenticationService } from '../../../app/core/services/authenticate.service';
 import { Router } from '@angular/router';
+import { zip, Subscription, interval } from 'rxjs';
+import { ChatBoxService } from '../../core/services/chat-box.service';
 
 @Component({
   selector: 'app-admin',
@@ -108,10 +112,18 @@ export class AdminComponent implements OnInit {
   searchItem;
   listSearch = [];
   userProfile: any = [];
+  presenceList = [];
+  followList = [];
+  followListOrigin = [];
+  followSubscription: Subscription;
+  subscription: Subscription;
 
   constructor(public menuItems: MenuItems,
     private router: Router,
+    private readonly chatBoxService: ChatBoxService,
+    private followService: FollowService,
     private userService: UserService,
+    private presenceService: PresenceService,
     private authenticationService: AuthenticationService) {
     this.authenticationService.currentUtc2User.subscribe(x => this.currentUtc2User = x);
     this.navType = 'st5';
@@ -155,6 +167,11 @@ export class AdminComponent implements OnInit {
     this.windowWidth = window.innerWidth;
     this.setMenuAttributes(this.windowWidth);
 
+    this.subscription = interval(10000).subscribe(() => {
+      this.getPresence();
+    });
+
+
     // dark
     /*this.setLayoutType('dark');
     this.headerTheme = 'theme5';
@@ -172,9 +189,14 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.followSubscription = this.followService.isFetch.subscribe(isFetch => {
+      if (isFetch) {
+        this.getFollow();
+      }
+    });
     this.setBackgroundPattern('pattern2');
     console.log('hi~~~~~~~~~~~~~~~~');
-    if(this.currentUtc2User.username) {
+    if (this.currentUtc2User.username) {
       this.userService.getUserByUsername(this.currentUtc2User.username).subscribe(res => {
         this.userProfile = res;
         if (!this.userProfile.avatar) {
@@ -184,7 +206,23 @@ export class AdminComponent implements OnInit {
           this.userProfile.background = 'assets/images/user-profile/bg-img1.jpg';
         }
       });
+      this.getFollow();
     }
+  }
+
+  getFollow() {
+    this.followService.getFollows(this.currentUtc2User.username).subscribe(res => {
+      this.followList = res;
+      this.followListOrigin = [...res];
+      console.log(this.followList);
+      this.followService.followList = res;
+    });
+  }
+
+  getPresence() {
+    this.presenceService.getPresences().subscribe(res => {
+      this.presenceList = res;
+    });
   }
 
   doSearch() {
@@ -208,6 +246,10 @@ export class AdminComponent implements OnInit {
     if (reSizeFlag) {
       this.setMenuAttributes(this.windowWidth);
     }
+  }
+
+  isLive(userName) {
+    return this.presenceList.some(e => e && e.userName === userName);
   }
 
   setMenuAttributes(windowWidth) {
@@ -251,27 +293,34 @@ export class AdminComponent implements OnInit {
     this.chatInnerToggleInverse = 'off';
   }
 
-  toggleChatInner() {
-    this.chatInnerToggle = this.chatInnerToggle === 'off' ? 'on' : 'off';
-    this.chatInnerToggleInverse = this.chatInnerToggleInverse === 'off' ? 'on' : 'off';
+  // toggleChatInner() {
+  //   this.chatInnerToggle = this.chatInnerToggle === 'off' ? 'on' : 'off';
+  //   this.chatInnerToggleInverse = this.chatInnerToggleInverse === 'off' ? 'on' : 'off';
+  // }
+
+  doChat(item) {
+    this.chatBoxService.display = true;
+    this.chatBoxService.friend = item.userName;
   }
 
   searchFriendList(e: Event) {
     const search = (this.search_friends.nativeElement.value).toLowerCase();
-    let search_input: string;
-    let search_parent: any;
-    const friendList = document.querySelectorAll('.userlist-box .media-body .chat-header');
-    Array.prototype.forEach.call(friendList, function(elements, index) {
-      search_input = (elements.innerHTML).toLowerCase();
-      search_parent = (elements.parentNode).parentNode;
-      if (search_input.indexOf(search) !== -1) {
-        search_parent.classList.add('show');
-        search_parent.classList.remove('hide');
-      } else {
-        search_parent.classList.add('hide');
-        search_parent.classList.remove('show');
-      }
-    });
+    console.log("search", search);
+    // const friendList = document.querySelectorAll('.userlist-box .media-body .chat-header');
+    // Array.prototype.forEach.call(friendList, function(elements, index) {
+    //   search_input = (elements.innerHTML).toLowerCase();
+    //   search_parent = (elements.parentNode).parentNode;
+    //   if (search_input.indexOf(search) !== -1) {
+    //     search_parent.classList.add('show');
+    //     search_parent.classList.remove('hide');
+    //   } else {
+    //     search_parent.classList.add('hide');
+    //     search_parent.classList.remove('show');
+    //   }
+    // });
+    console.log(this.followListOrigin);
+    this.followList = this.followListOrigin.filter(e => e.fullName.toLowerCase().indexOf(search) !== -1 ||
+      (e.department && e.department.departName.toLowerCase().indexOf(search) !== -1));
   }
 
   toggleOpenedSidebar() {
@@ -323,6 +372,10 @@ export class AdminComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

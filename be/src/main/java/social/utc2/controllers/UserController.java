@@ -19,6 +19,7 @@ import social.utc2.services.UserService;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,6 +129,18 @@ public class UserController {
     public ResponseEntity<?> importUser(@RequestParam("file") MultipartFile file) {
         try {
             userService.importFile(file.getInputStream());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/password-reset", method = RequestMethod.POST)
+    public ResponseEntity<?> resetPassword(@RequestParam("id") String id, @RequestBody HashMap<String, String> payload) {
+        try {
+            String password = payload.get("password");
+            userService.resetPassword(Integer.parseInt(id), password);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

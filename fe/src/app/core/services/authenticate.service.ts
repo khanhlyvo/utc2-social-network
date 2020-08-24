@@ -6,12 +6,13 @@ import { map } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { Constants } from '../../constants-config';
 import { ApiService } from './api.service';
-
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
   baseUrl = Constants.CONTEXT_PATH + 'login';
-
+  private stompClient;
   private currentUtc2UserSubject: BehaviorSubject<User>;
   public currentUtc2User: Observable<User>;
 
@@ -35,8 +36,17 @@ export class AuthenticationService {
   }
 
   logout() {
+    const serverUrl = Constants.CONTEXT_PATH + 'socket';
+    const ws = new SockJS(serverUrl);
+    this.stompClient = Stomp.over(ws);
     // remove user from local storage to log user out
-    localStorage.removeItem('currentUtc2User');
-    this.currentUtc2UserSubject.next(null);
+    try{
+
+      this.stompClient.disconnect();
+    }finally{
+
+      localStorage.removeItem('currentUtc2User');
+      this.currentUtc2UserSubject.next(null);
+    }
   }
 }

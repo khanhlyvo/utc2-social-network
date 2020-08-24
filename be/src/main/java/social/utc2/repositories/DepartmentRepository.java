@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import social.utc2.entities.Department;
 import social.utc2.entities.Group;
 import social.utc2.entities.User;
@@ -13,6 +14,7 @@ import social.utc2.entities.User;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface DepartmentRepository extends JpaRepository<Department, Integer> {
     Department findByDepartName(String departName);
 

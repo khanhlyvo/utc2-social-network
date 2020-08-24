@@ -3,6 +3,10 @@
     text-align: center;
 }
 .modal-body {
-  height: 600px;
+  max-height: 600px;
   overflow-y: auto;
+}
+.btn.btn-icon {
+  border-radius: unset;
+  width: auto;
 }

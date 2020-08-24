@@ -232,7 +232,7 @@
               required
               >
               <!-- <option *ngFor="let i of carType | keyvalue"  [ngValue]="i.key">{{i.value}}</option> -->
-              <option *ngFor="let item of listGroup" [ngValue]="item.id">{{item.groupName}}</option>
+              <option *ngFor="let item of listGroup" [ngValue]="item.id">{{item?.groupName}}</option>
             </select>
             <div *ngIf="f.submitted && carType.invalid" class="invalid-feedback">
               Vui lòng chọn Nhóm Tổ Chức

@@ -12,6 +12,7 @@ import { zip } from 'rxjs';
 // import { saveAs } from 'file-saver';
 import { ImportUser } from '../../../../core/models/user.model';
 import { ExcelService } from '../../../../core/services/excel.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-user-list',
@@ -28,14 +29,14 @@ export class UserListComponent implements OnInit {
     email: '',
     department: '',
     birthDate: null,
-    gender: 0,
+    gender: '0',
     phone: null,
     role: null,
     passWord: '',
     userName: null,
 
   };
-  birthDate = new Date();
+  birthDate = null;
   startDate = new Date();
   isEdit = false;
   listUser = [];
@@ -62,6 +63,8 @@ export class UserListComponent implements OnInit {
   // importUsers  = [];
   // exportUsers = [];
   file: File;
+  passWord: '';
+  passWord2: '';
 
   constructor(private modalService: NgbModal,
               private readonly userService: UserService,
@@ -70,7 +73,8 @@ export class UserListComponent implements OnInit {
               private readonly loadingService: LoadingService,
               private readonly confirmationService: ConfirmationService,
               private readonly messageService: MessageService,
-              private excelSrv: ExcelService) {}
+              private excelSrv: ExcelService,
+              private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.getDataDefault();
@@ -99,7 +103,7 @@ export class UserListComponent implements OnInit {
       this.collectionSize = res[0].totalElements;
       this.listCheckbox.length = res[0].content.length;
       this.listCheckbox.fill(false);
-
+      this.isCheckAll = false;
       res[1].content.forEach(e => {delete e.users; });
       res[2].content.forEach(e => {delete e.users; });
       this.listGroup = res[1].content;
@@ -140,6 +144,7 @@ export class UserListComponent implements OnInit {
       this.collectionSize = res.totalElements;
       this.listCheckbox.length = res.content.length;
       this.listCheckbox.fill(false);
+      this.isCheckAll = false;
       this.loadingService.stopLoading();
     }, err => {
       this.loadingService.stopLoading();
@@ -160,10 +165,12 @@ export class UserListComponent implements OnInit {
 
   openModal(content, size, userId) {
     this.listDepartment = this.listDepartOrigin.slice(0);
-    console.log("listDepartment", this.listDepartment);
+    console.log('listDepartment', this.listDepartment);
     this.groupSelected = null;
     console.log(this.page);
     this.modalService.open(content, {size, centered: true });
+    this.passWord = '';
+    this.passWord2 = '';
     if (userId) {
       this.isEdit = true;
       this.loadingService.startLoading();
@@ -172,8 +179,16 @@ export class UserListComponent implements OnInit {
         delete res.department.users;
         this.selectedDepartment = res.department;
         this.groupSelected = this.listGroup.find(e => e.id === res.department.groupId);
-        console.log("groupSelected", this.groupSelected);
-        console.log("user", res);
+        this.birthDate = new Date(this.user.birthDate);
+        console.log('groupSelected', this.groupSelected);
+        console.log('user', res);
+        if (this.user.gender === 'Nam') {
+          this.user.gender = '1';
+        } else if (this.user.gender === 'Nữ') {
+          this.user.gender = '2';
+        } else {
+          this.user.gender = '0';
+        }
         this.loadingService.stopLoading();
       }, err => {
         this.loadingService.stopLoading();
@@ -182,6 +197,10 @@ export class UserListComponent implements OnInit {
       this.isEdit = false;
       this.clearModalData();
     }
+  }
+
+  isEqualPwd(pass1, pass2) {
+    return pass1 === pass2;
   }
 
   clearModalData() {
@@ -193,7 +212,7 @@ export class UserListComponent implements OnInit {
       email: '',
       department: '',
       birthDate: null,
-      gender: null,
+      gender: '0',
       phone: null,
       role: null,
       passWord: '',
@@ -203,12 +222,19 @@ export class UserListComponent implements OnInit {
     this.groupSelected = null;
   }
 
-  doImport(evt) {
+  async doImport(evt) {
     console.log(evt);
     const file = evt.target.files[0];
-    let input = new FormData();
+    console.log(file);
+    const uploadForm = this.formBuilder.group({
+      file: ['']
+    });
   // Add your values in here
-  input.append('file', file);
+  uploadForm.get('file').setValue(file);
+
+  const input = new FormData();
+  input.append('file', uploadForm.get('file').value);
+  console.log(input);
   // etc, etc
     this.userService.addListUser(input).subscribe(() => {
       console.log(1);
@@ -252,6 +278,18 @@ export class UserListComponent implements OnInit {
     }
   }
 
+  resetPwd(password, form) {
+    if (!form.invalid && form.submitted && this.passWord === this.passWord2) {
+      this.loadingService.startLoading();
+      this.userService.resetPwd(this.user.id, {password}).subscribe(() => {
+        this.modalService.dismissAll();
+        this.loadingService.stopLoading();
+        this.passWord = '';
+        this.passWord2 = '';
+      });
+    }
+  }
+
   updateUser(user) {
     const userModel = {
       id: user.id,
@@ -260,12 +298,12 @@ export class UserListComponent implements OnInit {
       fullName: user.fullName,
       email: user.userName,
       department: this.selectedDepartment,
-      birthDate: this.birthDate.toISOString(),
+      birthDate: this.birthDate ? this.birthDate.toISOString() : user.birthDate,
       gender: user.gender,
       phone: user.phone,
       userName: user.userName,
-      role: user.role
-
+      role: user.role,
+      passWord: user.passWord,
     };
     this.loadingService.startLoading();
     this.userService.updateUser(userModel).subscribe(() => {
@@ -290,7 +328,7 @@ export class UserListComponent implements OnInit {
       email: user.userName,
       // group: user.group,
       department: this.selectedDepartment,
-      birthDate: this.birthDate.toISOString(),
+      birthDate: this.birthDate ? this.birthDate.toISOString() : null,
       gender: user.gender,
       phone: user.phone,
       role: user.role,

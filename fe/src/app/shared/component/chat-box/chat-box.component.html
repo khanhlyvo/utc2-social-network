@@ -1,8 +1,9 @@
 <div class="card card_main showChat_inner" *ngIf="display">
   <div class="media chat-inner-header">
-    <a class="back_chatBox" (click)="isDisplay(false)">
-      <i class="icofont icofont-close"></i>
+    <a class="back_chatBox">
+      <i class="icofont icofont-close" (click)="isDisplay(false)"></i>
       {{friend?.fullName}}
+      <!-- <div>{{friend?.department?.departName}}</div> -->
     </a>
   </div>
   <perfect-scrollbar

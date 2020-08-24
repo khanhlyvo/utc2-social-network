@@ -140,7 +140,9 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.componentRef.directiveRef.scrollToBottom();
+    if(this.componentRef) {
+      this.componentRef.directiveRef.scrollToBottom();
+    }
   }
 
   onScrollUp() {
@@ -218,12 +220,14 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   openSocket() {
     if (this.isLoaded) {
       this.isCustomSocketOpened = true;
-      this.stompClient.subscribe(
-        '/socket-publisher/' + this.currentUtc2User.username,
-        (message) => {
-          this.handleResult(message);
-        }
-      );
+      if(this.currentUtc2User) {
+        this.stompClient.subscribe(
+          '/socket-publisher/' + this.currentUtc2User.username,
+          (message) => {
+            this.handleResult(message);
+          }
+        );
+      }
     }
   }
 
@@ -304,7 +308,7 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sentMsg(flag) {
     console.log(this.message);
-    if (!this.message && !this.image || ((this.message.trim() == '')  && !this.image)) {
+    if (!this.message && !this.image || ((this.message.trim() === '')  && !this.image)) {
       this.message_error = true;
       // if(false){
     } else {

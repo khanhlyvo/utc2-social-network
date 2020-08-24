@@ -3,12 +3,10 @@ package social.utc2.responses;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import org.hibernate.annotations.Formula;
-import social.utc2.entities.Department;
-import social.utc2.entities.Gender;
-import social.utc2.entities.GenderConverter;
-import social.utc2.entities.User;
+import social.utc2.entities.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

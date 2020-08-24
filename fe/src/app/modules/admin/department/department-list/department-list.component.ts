@@ -81,7 +81,7 @@ export class DepartmentListComponent implements OnInit {
       this.collectionSize = res[0].totalElements;
       this.listCheckbox.length = res[0].content.length;
       this.listCheckbox.fill(false);
-
+      this.isCheckAll = false;
       // res[1].forEach(e => {delete e.departments; });
       this.listGroup = res[1].content;
       this.listDepartment.forEach(e => e.groupId = this.getGroupName(e.groupId));
@@ -92,6 +92,7 @@ export class DepartmentListComponent implements OnInit {
   }
 
   getGroupName(id) {
+    console.log("~~~", this.listGroup);
     return this.listGroup.find(e => e.id === id).groupName;
   }
 
@@ -109,7 +110,9 @@ export class DepartmentListComponent implements OnInit {
       this.listDepartment = res.content;
       this.collectionSize = res.totalElements;
       this.listCheckbox.length = res.content.length;
+      this.listDepartment.forEach(e => e.groupId = this.getGroupName(e.groupId));
       this.listCheckbox.fill(false);
+      this.isCheckAll = false;
     });
   }
 
@@ -195,7 +198,7 @@ export class DepartmentListComponent implements OnInit {
   pageChange(event: any): void {
     this.page = event.page;
     this.pageSize = event.size;
-    this.getDataDefault();
+    this.getDepartList();
   }
 
   // changePageSize(pageSize) {
@@ -242,7 +245,7 @@ export class DepartmentListComponent implements OnInit {
             life: this.lifeToast
           });
           this.modalService.dismissAll();
-          this.getDataDefault();
+          this.getDepartList();
           this.loadingService.stopLoading();
           this.listDelete.length = 0;
         }, err => {

@@ -9,7 +9,7 @@ import { map, tap, finalize } from 'rxjs/operators';
 export class ApiService {
   httpOptions = {
     headers: new HttpHeaders({
-      'Accept': 'application/json'
+      'Content-Type': 'application/json'
     })
   };
 
@@ -29,6 +29,20 @@ export class ApiService {
 
   post(url: any, body: any): Observable<any> {
     return this.http.post<any>(url, JSON.stringify(body), this.httpOptions).pipe(
+      tap(),
+      finalize(() => {
+      })
+    );
+  }
+
+  postOption(url: any, body: any, httpOption): Observable<any> {
+    return this.http.post<any>(url, body, this.httpOptions
+      //  {
+      // headers: new HttpHeaders(
+      //   httpOption
+      // )
+      // }
+    ).pipe(
       tap(),
       finalize(() => {
       })

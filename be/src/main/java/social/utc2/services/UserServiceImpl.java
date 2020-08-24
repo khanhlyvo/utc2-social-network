@@ -6,6 +6,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import social.utc2.constants.Constant.ERROR;
@@ -229,7 +230,6 @@ public class UserServiceImpl implements UserService{
                         if (cellValue != null && !StringUtils.isEmpty(cellValue)) {
                            user.setBirthDate(formatter.parse(cellValue));
                            password = cellValue.replace("-", "");
-                           System.out.println("set password " + cellValue.replace("-", "") + " " + passwordEncoder.encode(cellValue.replace("-", "")));
                            user.setPassWord(passwordEncoder.encode(password));
                         }
                         break;
@@ -249,17 +249,20 @@ public class UserServiceImpl implements UserService{
                   }
                }
                user.setRole("User");
-               users.add(user);
+               if (user.getBirthDate() != null && user.getFirstName() != null && user.getLastName() != null && user.getUserName() != null) {
+                  users.add(user);
+               }
             }
          }
          List<Department> departments = departmentRepository.search(null, "").getContent();
          List<Department> departmentInsert = new ArrayList<>();
-         for (Department department : departments) {
-            for (String s : departmentIds) {
+         for (String s : departmentIds) {
+            for (Department department : departments) {
                if (!department.getDepartName().contains(s)) {
                   Department de = new Department();
                   de.setDepartName(s);
                   de.setDepartId(s);
+                  de.setGroupId(1);
                   departmentInsert.add(de);
                   break;
                }
@@ -281,6 +284,17 @@ public class UserServiceImpl implements UserService{
       } finally {
          // Closing the workbook
          workbook.close();
+      }
+   }
+
+   @Override
+   public void resetPassword(Integer id, String password) {
+      Optional<User> user = userRepository.findById(id);
+      if (user.isPresent()) {
+         user.get().setPassWord(passwordEncoder.encode(password));
+         userRepository.save(user.get());
+      } else {
+         throw new UsernameNotFoundException("");
       }
    }
 }

@@ -1,3 +1,4 @@
+import { PresenceService } from './services/presence.service';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -18,6 +19,7 @@ import { ChatBoxService } from './services/chat-box.service';
 import { GroupService } from './services/group.service';
 import { DepartmentService } from './services/department.service';
 import { SocketService } from './services/socket.service';
+import { FollowService } from './services/follow.service';
 
 @NgModule({
   imports: [
@@ -36,6 +38,8 @@ import { SocketService } from './services/socket.service';
     MessageService,
     ConfirmationService,
     SocketService,
+    FollowService,
+    PresenceService,
     { provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true

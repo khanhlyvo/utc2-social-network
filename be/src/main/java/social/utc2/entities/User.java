@@ -2,6 +2,7 @@ package social.utc2.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "User")
-public class User {
+public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
@@ -81,4 +85,8 @@ public class User {
     @Basic(fetch = FetchType.LAZY)
     @Column
     private String background;
+//
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private List<Message> messages = new ArrayList<>();
 }

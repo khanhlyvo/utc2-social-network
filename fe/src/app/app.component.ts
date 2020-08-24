@@ -1,3 +1,4 @@
+import { LoadingService } from './shared/services/loading.service';
 import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import { AuthenticationService } from './core/services/authenticate.service';
@@ -44,7 +45,8 @@ export class AppComponent implements OnInit {
     const ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     const that = this;
-    this.stompClient.connect({}, function (frame) {
+    this.stompClient.connect(
+      {name: this.currentUtc2User.username}, function (frame) {
       that.isLoaded = true;
       that.openGlobalSocket();
       that.openSocket();
@@ -60,9 +62,11 @@ export class AppComponent implements OnInit {
   openSocket() {
     if (this.isLoaded) {
       this.isCustomSocketOpened = true;
-      this.stompClient.subscribe('/socket-publisher/' +  this.currentUtc2User.username, (message) => {
-        this.handleResult(message);
-      });
+      if (this.currentUtc2User) {
+        this.stompClient.subscribe('/socket-publisher/' +  this.currentUtc2User.username, (message) => {
+          this.handleResult(message);
+        });
+      }
     }
   }
 

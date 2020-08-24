@@ -34,4 +34,6 @@ public interface UserService {
 //    ByteArrayInputStream exportExcelFile(String fileName) throws Exception;
 
     void importFile(InputStream is) throws IOException, InvalidFormatException;
+
+    void resetPassword(Integer id, String password);
 }
