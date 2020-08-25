@@ -13,10 +13,11 @@ export class ChatBoxService {
   isDisplay: Subject<boolean> = new Subject();
   friendId: Subject<string> = new Subject();
   isNewMes: Subject<boolean> = new Subject();
+  isNotice: Subject<boolean> = new Subject();
 
   private _display = false;
   private _friend = '';
-
+  private _notification;
   private _message = {};
 
   get display() {
@@ -44,6 +45,11 @@ export class ChatBoxService {
   set message(value: any) {
     this._message = value;
     this.isNewMes.next(value);
+  }
+
+  set notification(value: any) {
+    this._notification = value;
+    this.isNotice.next(value);
   }
 
 }

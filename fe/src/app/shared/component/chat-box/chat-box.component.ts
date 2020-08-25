@@ -69,7 +69,6 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   scrollConfig = {
     scrollToTop: true,
   };
-
   pageSize = 50;
   pageNo = 0;
   startChat = false;
@@ -102,6 +101,7 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
         this.handleResult(this.chatBoxService.message);
       }
     });
+
     this.friendSubscription = this.chatBoxService.friendId.subscribe(
       (value) => {
         this.startChat = false;
@@ -194,7 +194,9 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
       messageType: 'chat',
       message: this.message,
       fromId: this.currentUtc2User.username,
+      fromUserId: +this.currentUtc2User.id,
       toId: this.friendId,
+      toUserId: this.friend.id,
       image: this.image,
       seen: false,
       fileName: this.fileName,

@@ -25,7 +25,13 @@ public class Message implements Serializable {
     private String fromId;
 
     @Column
+    private Integer toUserId;
+
+    @Column
     private String toId;
+
+    @Column
+    private Integer fromUserId;
 
     @Column
     private String type;

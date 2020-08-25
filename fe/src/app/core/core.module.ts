@@ -1,3 +1,4 @@
+import { NotificationService } from './services/notification.service';
 import { CommentService } from './services/comment.service';
 import { PostService } from './services/post.service';
 import { PresenceService } from './services/presence.service';
@@ -44,6 +45,7 @@ import { FollowService } from './services/follow.service';
     PresenceService,
     PostService,
     CommentService,
+    NotificationService,
     { provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true

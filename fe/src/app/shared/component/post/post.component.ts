@@ -39,7 +39,7 @@ export class PostComponent implements OnInit {
   ngOnInit() {
     // this.getCmtByPostId();
     this.getProfile();
-    console.log('item', this.item);
+    // console.log('item', this.item);
     // if(this.item && this.item.comments) {
       this.item.comments = this.item.comments.filter(e => e && !e.flgDel);
     // }
@@ -51,10 +51,13 @@ export class PostComponent implements OnInit {
     const param = {
       userId: +this.currentUtc2User.id,
       postId: item.id,
-      content: value
+      content: value,
+      postUserId: this.userProfile.id,
+      postUserName: this.userProfile.userName,
+      userName: this.currentUtc2User.username,
     };
       this.commentService.addComment(param).subscribe(res => {
-        console.log(res);
+        // console.log(res);
         this.commentInput = '';
         this.getCmtByPostId();
       });
@@ -102,7 +105,7 @@ export class PostComponent implements OnInit {
   getCmtByPostId() {
     this.loadingService.startLoading();
     this.commentService.getCommentsByPostId(this.item.id).subscribe(res => {
-      console.log('commnet', res);
+      // console.log('commnet', res);
       this.listComment = res.filter(e => !e.flgDel);
       this.isEdit.length = this.listComment.length;
       this.loadingService.stopLoading();
@@ -114,7 +117,7 @@ export class PostComponent implements OnInit {
   }
 
   getProfile() {
-    console.log(this.item, '@@@');
+    // console.log(this.item, '@@@');
     this.userService.getUserById(this.item.userId).subscribe(res => {
       this.userProfile = res;
     });

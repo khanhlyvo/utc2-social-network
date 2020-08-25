@@ -195,42 +195,22 @@
                 </ul>
               </li> -->
               <li class="header-notification">
-                <a href="javascript:;">
+                <a href="javascript:;" (mouseenter)="getNotice()">
                   <i class="ti-bell"></i>
-                  <span class="badge bg-c-pink"></span>
+                  <span *ngIf="_isNotice" class="badge bg-c-pink"></span>
                 </a>
-                <ul class="show-notification">
+                <ul class="show-notification" style="max-height: 400px; overflow-y: auto;" >
                   <li>
-                    <h6>Notifications</h6>
-                    <label class="label label-danger">New</label>
+                    <h6>Thông Báo</h6>
+                    <label class="label label-danger">Mới</label>
                   </li>
-                  <li>
+                  <li *ngFor="let item of cmtNotiList" >
                     <div class="media">
-                      <img class="d-flex align-self-center img-radius" src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
+                      <img *ngIf="item.fromAvatar"  class="d-flex align-self-center img-radius" [src]="item?.fromAvatar" alt="Generic placeholder image">
                       <div class="media-body">
-                        <h5 class="notification-user">{{currentUtc2User.username}}</h5>
-                        <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                        <span class="notification-time">30 minutes ago</span>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="media">
-                      <img class="d-flex align-self-center img-radius" src="assets/images/avatar-3.jpg" alt="Generic placeholder image">
-                      <div class="media-body">
-                        <h5 class="notification-user">Joseph William</h5>
-                        <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                        <span class="notification-time">30 minutes ago</span>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="media">
-                      <img class="d-flex align-self-center img-radius" src="assets/images/avatar-5.jpg" alt="Generic placeholder image">
-                      <div class="media-body">
-                        <h5 class="notification-user">Sara Soudein</h5>
-                        <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer elit.</p>
-                        <span class="notification-time">30 minutes ago</span>
+                        <!-- <h5 class="notification-user">{{item.fromFullName}}</h5> -->
+                        <p class="notification-msg"><span class="font-weight-bold">{{item.fromFullName}}</span> đã bình luận trong bài đăng của bạn</p>
+                        <span class="notification-time">{{item?.date | date: 'dd/MM/yyyy hh:mm a'}}</span>
                       </div>
                     </div>
                   </li>
@@ -239,7 +219,7 @@
               <li class="header-notification" style="margin-right: 30px;">
                 <a href="javascript:;" (click)="toggleChat()" class="displayChatbox">
                   <i class="ti-comments"></i>
-                  <!-- <span class="badge bg-c-green"></span> -->
+                  <span *ngIf="_isMesNotice"  class="badge bg-c-pink"></span>
                 </a>
               </li>
               <!-- <li class="user-profile header-notification">
@@ -300,6 +280,7 @@
                 <div *ngFor="let item of followList">
                   <div (click)="doChat(item)" class="media userlist-box" placement="left">
                     <a class="media-left" href="javascript:;">
+                      <div class="flag-chat" *ngIf="isChat(item)"></div>
                       <img class="media-object " *ngIf="item.avatar"  [src]="item.avatar" alt="Generic placeholder image">
                       <img class="media-object " *ngIf="!item.avatar"  src="assets/images/user-profile/user-img.png" alt="Generic placeholder image">
                       <div class="live-status bg-success" *ngIf="isLive(item.userName)"></div>

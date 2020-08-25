@@ -1,3 +1,4 @@
+import { NotificationService } from './core/services/notification.service';
 import { LoadingService } from './shared/services/loading.service';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
     private authenticationService: AuthenticationService,
+    private notificationService: NotificationService,
     private chatboxService: ChatBoxService) {
     this.authenticationService.currentUtc2User.subscribe(x => {
       this.currentUtc2User = x;
@@ -57,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
       {name: this.currentUtc2User.username}, (frame) => {
       that.isLoaded = true;
       that.openGlobalSocket();
-      // that.openSocket();
+      that.openSocket();
     });
   }
 
@@ -69,26 +71,48 @@ export class AppComponent implements OnInit, OnDestroy {
     this.stompClient.subscribe('/socket-publisher', (message) => {
       this.handleResult(message);
 
-    console.log(2222222222222222222222);
+    // console.log(2222222222222222222222);
     });
   }
 
   openSocket() {
     if (this.isLoaded) {
-      this.isCustomSocketOpened = true;
-      this.stompClient.subscribe('/socket-publisher/' +  this.currentUtc2User.username, (message) => {
-        this.handleResult(message);
+      // this.isCustomSocketOpened = true;
+      this.stompClient.subscribe('/socket-publisher/message/' +  this.currentUtc2User.username, (message) => {
+        // this.handleResult(message);
       });
+
+      // this.stompClient.subscribe('/socket-publisher/comment', (payload) => {
+      //   this.handleComment(payload);
+      //   console.log(2222222222222222222222);
+      // });
+
+      this.stompClient.subscribe('/socket-publisher/post/' + this.currentUtc2User.username, (payload) => {
+        this.handleComment(payload);
+        console.log(1111111111111111111);
+      });
+    }
+  }
+
+  handleComment(cmt) {
+    console.log('----', cmt);
+    if (cmt.body) {
+      const cmtBody = JSON.parse(cmt.body);
+      if(cmtBody.postUserId !== cmtBody.userId) {
+        this.notificationService.notice = true;
+      }
     }
   }
 
   handleResult(message) {
     console.log(message);
-
     if (message.body) {
       this.chatboxService.message = message;
       const messageResult: Message = JSON.parse(message.body);
       console.log(messageResult);
+      if (messageResult.fromId !== this.currentUtc2User.username) {
+        this.chatboxService.notification = message;
+      }
       // this.messages.push(messageResult);
       // this.toastr.success("new message recieved", null, {
       //   'timeOut': 3000

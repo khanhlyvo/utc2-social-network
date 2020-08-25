@@ -80,8 +80,9 @@
                       </div>
                     </div>
                   </div>
-
+                  <span><a *ngIf="!postList || postList.length === 0"  class="m-auto text-center">Chưa có bài đăng nào</a> </span>
                   <ul class="media-list" *ngFor="let item of postList; let i = index">
+
                     <app-post [item]="item"></app-post>
 
                     <!-- <li class="media">
@@ -126,7 +127,7 @@
                       </div>
                     </li> -->
                   </ul>
-                  <span><a href="javascript:;"(click)="seeMore()" *ngIf="isSeeMore || (postList.length > 0)"  class="m-r-10 f-12">Xem Thêm</a> </span>
+                  <span><a href="javascript:;"(click)="seeMore()" *ngIf="isSeeMore && (postList.length > 0)"  class="m-r-10 f-12">Xem Thêm</a> </span>
 
                   <!-- <div class="md-float-material d-flex">
                     <div class="md-group-add-on p-relative col-lg-12">

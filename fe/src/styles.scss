@@ -1864,6 +1864,7 @@ img.user-img {
 
 .profile-image img {
   border: 4px solid #fff;
+  border-radius: 60px;
 }
 
 .user-info {
@@ -23019,6 +23020,12 @@ body.dark {
 }
 
 @media (max-width: 1300px){
+  .post-content {
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 1300px){
   .post-content {
     margin-right: 0;
   }

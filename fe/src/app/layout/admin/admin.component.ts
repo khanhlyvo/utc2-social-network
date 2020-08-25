@@ -1,3 +1,4 @@
+import { NotificationService } from './../../core/services/notification.service';
 import { PresenceService } from './../../core/services/presence.service';
 import { FollowService } from './../../core/services/follow.service';
 import { UserService } from './../../core/services/user.service';
@@ -6,7 +7,7 @@ import {animate, AUTO_STYLE, state, style, transition, trigger} from '@angular/a
 import {MenuItems} from '../../shared/component/menu-items/menu-items';
 import { AuthenticationService } from '../../../app/core/services/authenticate.service';
 import { Router } from '@angular/router';
-import { zip, Subscription, interval } from 'rxjs';
+import { zip, Subscription, interval, SubscriptionLike, Subject } from 'rxjs';
 import { ChatBoxService } from '../../core/services/chat-box.service';
 
 @Component({
@@ -117,8 +118,16 @@ export class AdminComponent implements OnInit, OnDestroy {
   followListOrigin = [];
   followSubscription: Subscription;
   subscription: Subscription;
+  notiSub: Subscription;
+  mesSub: Subscription;
+  private unsubcribe$ = new Subject<void>();
+  _isNotice = false;
+  _isMesNotice = false;
+  cmtNotiList = [];
+  newMes;
 
   constructor(public menuItems: MenuItems,
+    private notificationService: NotificationService,
     private router: Router,
     private readonly chatBoxService: ChatBoxService,
     private followService: FollowService,
@@ -171,7 +180,6 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.getPresence();
     });
 
-
     // dark
     /*this.setLayoutType('dark');
     this.headerTheme = 'theme5';
@@ -189,6 +197,22 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mesSub = this.chatBoxService.isNotice.subscribe(isNew => {
+      if (isNew) {
+        const audio = new Audio();
+        audio.src = '../../../assets/audio/message.wav';
+        audio.load();
+        audio.play();
+        this._isMesNotice = true;
+        this.newMes = this.chatBoxService.message;
+        console.log(this.newMes);
+      }
+    });
+    this.notiSub = this.notificationService.isNotice.subscribe(isNotice => {
+      if (isNotice) {
+        this.doNotice();
+      }
+    });
     this.followSubscription = this.followService.isFetch.subscribe(isFetch => {
       if (isFetch) {
         this.getFollow();
@@ -207,7 +231,25 @@ export class AdminComponent implements OnInit, OnDestroy {
         }
       });
       this.getFollow();
+      this.getDefaultNotice();
     }
+  }
+
+  isChat(item) {
+    const res = false;
+    if (this.newMes && this.newMes.body) {
+      const mes = JSON.parse(this.newMes.body);
+      return mes.fromUserId === item.id;
+    }
+    return res;
+  }
+
+  doNotice() {
+    const audio = new Audio();
+    audio.src = '../../../assets/audio/alert.wav';
+    audio.load();
+    audio.play();
+    this._isNotice = true;
   }
 
   getFollow() {
@@ -287,6 +329,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   toggleChat() {
+    this.chatBoxService.notification = false;
+    this._isMesNotice = false;
     this.chatToggle = this.chatToggle === 'out' ? 'in' : 'out';
     this.chatToggleInverse = this.chatToggleInverse === 'out' ? 'in' : 'out';
     this.chatInnerToggle = 'off';
@@ -298,6 +342,28 @@ export class AdminComponent implements OnInit, OnDestroy {
   //   this.chatInnerToggleInverse = this.chatInnerToggleInverse === 'off' ? 'on' : 'off';
   // }
 
+  getNotice() {
+    if (this._isNotice) {
+      this.notificationService.getNotifications(+this.currentUtc2User.id).subscribe(res => {
+        console.log('notify', res);
+        this._isNotice = false;
+        this.cmtNotiList = res.filter(e =>
+          e.type === 'comment').reverse();
+
+        console.log('cmtNotiList', this.cmtNotiList);
+      });
+    }
+  }
+
+  getDefaultNotice() {
+    this.notificationService.getNotifications(+this.currentUtc2User.id).subscribe(res => {
+      // console.log('notify', res);
+      this.cmtNotiList = res.filter(e =>
+        e.type === 'comment').reverse();
+      console.log('cmtNotiList', this.cmtNotiList);
+    });
+  }
+
   doChat(item) {
     this.chatBoxService.display = true;
     this.chatBoxService.friend = item.userName;
@@ -305,7 +371,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   searchFriendList(e: Event) {
     const search = (this.search_friends.nativeElement.value).toLowerCase();
-    console.log("search", search);
+    console.log('search', search);
     // const friendList = document.querySelectorAll('.userlist-box .media-body .chat-header');
     // Array.prototype.forEach.call(friendList, function(elements, index) {
     //   search_input = (elements.innerHTML).toLowerCase();
@@ -375,7 +441,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.unsubcribe$.next();
+    this.unsubcribe$.complete();
   }
 
 }

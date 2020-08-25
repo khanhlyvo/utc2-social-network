@@ -3,18 +3,17 @@ package social.utc2.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import social.utc2.entities.Comment;
-import social.utc2.entities.Group;
-import social.utc2.entities.Post;
-import social.utc2.entities.User;
+import social.utc2.entities.*;
 import social.utc2.responses.ProfileResponse;
 import social.utc2.services.CommentService;
+import social.utc2.services.NotificationService;
 import social.utc2.services.UserService;
 
 import java.io.File;
@@ -34,6 +33,12 @@ public class CommentController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    NotificationService notificationService;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
     @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<?> insertComment(@RequestBody HashMap<String, Object> payload) {
         try {
@@ -48,6 +53,22 @@ public class CommentController {
             User user = new User();
             user.setId(Integer.parseInt(payload.get("userId").toString()));
             comment.setUser(user);
+
+
+            this.simpMessagingTemplate.convertAndSend("/socket-publisher/comment",payload);
+            this.simpMessagingTemplate.convertAndSend("/socket-publisher/comment/"+payload.get("postId").toString(),payload);
+            this.simpMessagingTemplate.convertAndSend("/socket-publisher/post/"+payload.get("postUserName").toString(),payload);
+
+            Notification notification = new Notification();
+            notification.setFromId(Integer.parseInt(payload.get("userId").toString()));
+            notification.setFromUserName(payload.get("userName").toString());
+            notification.setIdPost(Integer.parseInt(payload.get("postId").toString()));
+            notification.setToId(Integer.parseInt(payload.get("postUserId").toString()));
+            notification.setToUserName(payload.get("postUserName").toString());
+            notification.setType("comment");
+            if(notification.getToId() != notification.getFromId()) {
+                notificationService.insertNotification(notification);
+            }
             return new ResponseEntity<>(commentService.insertComment(comment), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
