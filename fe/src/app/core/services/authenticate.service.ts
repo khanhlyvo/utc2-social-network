@@ -36,17 +36,7 @@ export class AuthenticationService {
   }
 
   logout() {
-    const serverUrl = Constants.CONTEXT_PATH + 'socket';
-    const ws = new SockJS(serverUrl);
-    this.stompClient = Stomp.over(ws);
-    // remove user from local storage to log user out
-    try{
-
-      this.stompClient.disconnect();
-    }finally{
-
-      localStorage.removeItem('currentUtc2User');
-      this.currentUtc2UserSubject.next(null);
-    }
+    localStorage.removeItem('currentUtc2User');
+    this.currentUtc2UserSubject.next(null);
   }
 }

@@ -1,29 +1,29 @@
 package social.utc2.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import social.utc2.responses.ProfileResponse;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Post implements Serializable {
+public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
 
-    @Column
-    private Integer userId;
+    @Column(updatable = false, nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created = new Date();
 
     @Column
     private String content;
@@ -34,11 +34,13 @@ public class Post implements Serializable {
     @Column
     private boolean flgUpdate;
 
-    @Column(updatable = false, nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created = new Date();
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

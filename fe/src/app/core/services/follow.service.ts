@@ -10,6 +10,7 @@ import { Constants } from '../../constants-config';
 export class FollowService {
   baseUrl = Constants.CONTEXT_PATH + 'api/follow';
   isFetch: Subject<boolean> = new Subject();
+  list: Subject<any> = new Subject();
   private _followList = [];
 
   constructor(private apiService: ApiService) {
@@ -37,6 +38,7 @@ export class FollowService {
 
   set followList(value: any) {
     this._followList = value;
+    this.list.next(value);
   }
 
 

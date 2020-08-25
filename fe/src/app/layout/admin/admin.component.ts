@@ -1,7 +1,7 @@
 import { PresenceService } from './../../core/services/presence.service';
 import { FollowService } from './../../core/services/follow.service';
 import { UserService } from './../../core/services/user.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {animate, AUTO_STYLE, state, style, transition, trigger} from '@angular/animations';
 import {MenuItems} from '../../shared/component/menu-items/menu-items';
 import { AuthenticationService } from '../../../app/core/services/authenticate.service';
@@ -62,7 +62,7 @@ import { ChatBoxService } from '../../core/services/chat-box.service';
     ])
   ]
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
   navType: string; /* st1, st2(default), st3, st4 */
   themeLayout: string; /* vertical(default) */
   layoutType: string; /* dark, light */

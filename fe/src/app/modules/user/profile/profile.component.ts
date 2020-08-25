@@ -1,11 +1,15 @@
+import { CommentService } from './../../../core/services/comment.service';
+import { PostService } from './../../../core/services/post.service';
 import { FollowService } from './../../../core/services/follow.service';
 import { ChatBoxService } from './../../../core/services/chat-box.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../core/services/user.service';
 import { AuthenticationService } from '../../../core/services/authenticate.service';
 import { User } from '../../../core/models/user.model';
+import { Subject } from 'rxjs/internal/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +28,9 @@ import { User } from '../../../core/models/user.model';
     ])
   ]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
+
+  private unsubcribe$ = new Subject<void>();
   username: string;
 
   editProfile = true;
@@ -38,15 +44,22 @@ export class ProfileComponent implements OnInit {
   public sortOrder = 'desc';
   profitChartOption: any;
   birthDate = null;
-
+  postInput = '';
+  postList = [];
+  postListOrigin = [];
   userProfile;
   userProfileEdit;
   currentUtc2User: any;
   avatar;
   background;
+  postSubscription: Subscription;
+  pageSize = 10;
+  pageNo = 0;
 
   constructor(private readonly chatBoxService: ChatBoxService,
     private readonly followService: FollowService,
+    private commentService: CommentService,
+    private postService: PostService,
     private router: Router,
     private route: ActivatedRoute,
     private authenticationService: AuthenticationService,
@@ -61,6 +74,57 @@ export class ProfileComponent implements OnInit {
     if (this.username) {
       this.getProfile();
     }
+
+    this.postSubscription = this.postService.isFetch.subscribe(fetch => {
+      if (fetch) {
+        this.getPost(this.userProfile.id, 0);
+      }
+    });
+  }
+
+  doPost() {
+    if (this.postInput.trim() === '') { return; }
+    console.log(this.postInput);
+    // const param = null;
+    const param = {
+      userId: +this.currentUtc2User.id,
+      content: this.postInput,
+    };
+    this.postService.addPost(param).subscribe(() => {
+      this.postInput = '';
+      this.getPost(this.userProfile.id, 0);
+    });
+  }
+
+  seeMore() {
+    this.pageNo++;
+    console.log(this.pageNo);
+    this.getPost(this.userProfile.id, this.pageNo);
+  }
+
+  getPost(id, pageNo) {
+    const users = [];
+    users.push(id);
+    if(pageNo === 0) {
+      this.pageNo = 0;
+      this.postListOrigin.length = 0;
+    }
+    this.postService.getPosts(users, this.pageSize, pageNo).subscribe(res => {
+      this.postListOrigin = [...this.postListOrigin, ...res];
+      this.postList = [...this.postListOrigin];
+    });
+  }
+
+  doCmt(value, item) {
+    if(!value) {return;}
+    const param = {
+      user: +this.currentUtc2User.id,
+      postId: item.id,
+      content: value
+    };
+    this.commentService.addComment(param).subscribe(res => {
+
+    });
   }
 
   onSelectFile(event, background) {
@@ -140,6 +204,7 @@ export class ProfileComponent implements OnInit {
     this.userService.getUserByUsername(this.username).subscribe(res => {
       this.userProfile = res;
       this.userProfileEdit = {...res};
+      this.getPost(res.id, 0);
       if (!this.userProfile.avatar) {
         this.userProfile.avatar = 'assets/images/user-profile/user-img.jpg';
       }
@@ -177,7 +242,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-
   doSave() {
     let gender;
     if (this.userProfileEdit.gender === 'Nữ') {
@@ -195,5 +259,10 @@ export class ProfileComponent implements OnInit {
       this.getProfile();
       this.editProfile = !this.editProfile;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubcribe$.next();
+    this.unsubcribe$.complete();
   }
 }

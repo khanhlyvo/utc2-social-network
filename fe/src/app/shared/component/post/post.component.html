@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="card-body">
+    <li class="media">
+      <div class="media-left">
+        <a href="javascript:;">
+          <img *ngIf="!userProfile?.avatar"  class="media-object img-radius comment-img" src="assets/images/user-profile/user-img.jpg" alt="Generic placeholder image">
+          <img *ngIf="userProfile?.avatar"  class="media-object img-radius comment-img" [src]="userProfile?.avatar" alt="Generic placeholder image">
+        </a>
+      </div>
+      <div class="media-body">
+        <h6 class="media-heading"><a [routerLink]="'/profile/' + userProfile?.userName"><span>{{userProfile?.fullName}} ({{userProfile?.department?.departId}})</span></a><span class="f-12 text-muted m-l-5">{{item.created | date :'dd/MM/yyyy hh:mm a'}}</span></h6>
+        <p *ngIf="!isEditPost"  class="m-b-0">{{item.content}}</p>
+        <div *ngIf="isEditPost"  class="input-group mb-0 input-group-button input-group-primary">
+          <input type="text" value="{{item.content}}" style="height: auto!important; resize: none;" (keyup.enter)="updatePost($event.target.value)" class="form-control h-100" placeholder="Bình luận"/>
+        </div>
+        <div class="m-b-3">
+          <span><a href="javascript:;" type="button" data-toggle="collapse" [attr.data-target]="'#collapse-' + item.id" aria-expanded="false" aria-controls="collapse" (click)="getCmtByPostId(); isLoaded = true;" class="m-r-10 f-12">Bình Luận
+            <span *ngIf="item?.comments?.length > 0 && !isLoaded" >({{item?.comments?.length}})</span>
+            <span *ngIf="listComment?.length > 0 && isLoaded" >({{listComment?.length}})</span>
+          </a></span>
+          <!-- <span><a href="javascript:;" class="m-r-10 f-12">Phản Hồi</a></span> -->
+          <span><a href="javascript:;" *ngIf="item?.userId === +currentUtc2User?.id && !isEditPost" (click)="isEditPost=true" class="m-r-10 f-12">Sửa</a> </span>
+          <span><a href="javascript:;" *ngIf="item?.userId === +currentUtc2User?.id && isEditPost" (click)="isEditPost=false" class="m-r-10 f-12">Hủy</a> </span>
+          <span><a href="javascript:;" *ngIf="item?.userId === +currentUtc2User?.id" (click)="deletePost()" class="f-12">Xóa</a> </span>
+        </div>
+        <div class="collapse" id="collapse-{{item.id}}">
+          <hr>
+          <div *ngFor="let comment of listComment; let i =index" >
+            <div class="media mt-2">
+              <a class="media-left" href="javascript:;">
+                <img *ngIf="!comment.user?.avatar"  class="media-object img-radius comment-img" src="assets/images/user-profile/user-img.jpg" alt="Generic placeholder image">
+                <img *ngIf="comment.user?.avatar"  class="media-object img-radius comment-img" [src]="comment.user?.avatar" alt="Generic placeholder image">
+              </a>
+              <div class="media-body">
+                <h6 class="media-heading"><a [routerLink]="'/profile/' + comment.user?.userName">{{comment.user?.fullName}}</a><span class="f-12 text-muted m-l-5">{{comment.created | date: 'dd/MM/yyyy hh:mm a'}}</span></h6>
+                <p *ngIf="!isEdit[i]" class="m-b-0">{{comment.content}}</p>
+                <div *ngIf="isEdit[i]"  class="input-group mb-0 input-group-button input-group-primary">
+                  <input type="text" value="{{comment.content}}" style="height: auto!important; resize: none;" (keyup.enter)="doCmt($event.target.value,comment, true)" class="form-control h-100" placeholder="Bình luận"/>
+                </div>
+                <div class="m-b-3">
+                  <span><a href="javascript:;" *ngIf="comment.user?.id === +currentUtc2User?.id && !isEdit[i]" (click)="isEdit[i]=true;"  class="m-r-10 f-12">Sửa</a> </span>
+                  <span><a href="javascript:;" *ngIf="isEdit[i]" (click)="isEdit[i]=false;"  class="m-r-10 f-12">Hủy</a> </span>
+                  <span><a href="javascript:;" *ngIf="comment.user?.id === +currentUtc2User?.id" (click)="doDelete(comment.id)" class="f-12">Xóa</a> </span>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+          <div class="md-float-material d-flex">
+            <div class="md-group-add-on p-relative col-lg-12 px-0 mb-0">
+              <div class="input-group mb-0 input-group-button input-group-primary">
+                <input type="text" style="height: auto!important; resize: none;" [(ngModel)]="commentInput" (keyup.enter)="doCmt($event.target.value ,item, false)" class="form-control h-100" placeholder="Bình luận"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { CommentService } from './services/comment.service';
+import { PostService } from './services/post.service';
 import { PresenceService } from './services/presence.service';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -40,6 +42,8 @@ import { FollowService } from './services/follow.service';
     SocketService,
     FollowService,
     PresenceService,
+    PostService,
+    CommentService,
     { provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true

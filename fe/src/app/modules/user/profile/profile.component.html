@@ -60,6 +60,91 @@
   <div class="col-lg-12">
     <div class="md-tabs">
       <ngb-tabset>
+        <ngb-tab title="Tường Nhà">
+          <ng-template ngbTabContent>
+            <div [@fadeInOutTranslate] class="m-t-15">
+              <div class="card">
+                <!-- <div class="card-header">
+                  <h5 class="card-header-text">Tường Nhà</h5>
+                </div> -->
+                <div class="card-body">
+
+                  <div class="md-float-material d-flex">
+                    <div class="md-group-add-on p-relative col-lg-12 px-0 mb-4">
+                      <div class="input-group  input-group-button input-group-primary">
+                        <textarea type="text" style="height: auto!important; resize: none;" [(ngModel)]="postInput" class="form-control h-100" placeholder="Bạn đang nghĩ gì ?">
+                          </textarea>
+                        <span class="input-group-append"><label class="input-group-text">
+                                       <button type="button" class="btn btn-primary" (click)="doPost()"><i class="icofont icofont-plus"></i>Đăng</button>
+                        </label></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ul class="media-list" *ngFor="let item of postList; let i = index">
+                    <app-post [item]="item"></app-post>
+
+                    <!-- <li class="media">
+                      <div class="media-left">
+                        <a href="javascript:;">
+                          <img *ngIf="!userProfile.avatar"  class="media-object img-radius comment-img" src="assets/images/avatar-1.jpg" alt="Generic placeholder image">
+                          <img *ngIf="userProfile.avatar"  class="media-object img-radius comment-img" [src]="userProfile.avatar" alt="Generic placeholder image">
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h6 class="media-heading">{{userProfile.fullName}} ({{userProfile.department.departId}})<span class="f-12 text-muted m-l-5">{{item.created | date :'dd/MM/yyyy hh:mm a'}}</span></h6>
+                        <p class="m-b-0">{{item.content}}</p>
+                        <div class="m-b-25">
+                          <span><a type="button" data-toggle="collapse" [attr.data-target]="'#collapse-' + i" aria-expanded="false" aria-controls="collapse" class="m-r-10 f-12">Hiện Bình Luận</a></span>
+                          <span><a href="javascript:;" class="m-r-10 f-12">Sửa</a> </span>
+                          <span><a href="javascript:;" class="f-12">Xóa</a> </span>
+                        </div>
+                        <hr>
+                        <div class="collapse" id="collapse-{{i}}">
+                          <div class="media mt-2">
+                            <a class="media-left" href="javascript:;">
+                              <img class="media-object img-radius comment-img" src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
+                            </a>
+                            <div class="media-body">
+                              <h6 class="media-heading">Larry heading <span class="f-12 text-muted m-l-5">Just now</span></h6>
+                              <p class="m-b-0"> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
+                              <div class="m-b-25">
+                                <span><a href="javascript:;" class="f-12">Sửa</a> </span>
+                                <span><a href="javascript:;" class="f-12">Xóa</a> </span>
+                              </div>
+                              <hr>
+                            </div>
+                          </div>
+                          <div class="md-float-material d-flex">
+                            <div class="md-group-add-on p-relative col-lg-12 px-0 mb-4">
+                              <div class="input-group  input-group-button input-group-primary">
+                                <input type="text" style="height: auto!important; resize: none;" (keyup.enter)="doCmt($event.target.value ,item)" class="form-control h-100" placeholder="Bình luận"/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li> -->
+                  </ul>
+                  <span><a href="javascript:;"(click)="seeMore()" class="m-r-10 f-12">Xem Thêm</a> </span>
+
+                  <!-- <div class="md-float-material d-flex">
+                    <div class="md-group-add-on p-relative col-lg-12">
+                      <div class="input-group input-group-button input-group-primary">
+                        <span class="input-group-prepend"><label class="input-group-text"><i class="icofont icofont-comment"></i></label></span>
+                        <input type="text" class="form-control" placeholder="Write Comment">
+                        <span class="input-group-append"><label class="input-group-text">
+                                       <button type="button" class="btn btn-primary"><i class="icofont icofont-plus"></i>note</button>
+                        </label></span>
+                      </div>
+                    </div>
+                  </div> -->
+
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
         <ngb-tab title="Thông Tin Cá Nhân">
           <ng-template ngbTabContent>
             <div [@fadeInOutTranslate] class="m-t-15">
@@ -436,158 +521,7 @@
             </div>
           </ng-template>
         </ngb-tab> -->
-        <ngb-tab title="Bài Đăng">
-          <ng-template ngbTabContent>
-            <div [@fadeInOutTranslate] class="m-t-15">
-              <div class="card">
-                <div class="card-header">
-                  <h5 class="card-header-text">Bài Đăng</h5>
-                </div>
-                <div class="card-body">
-                  <ul class="media-list">
-                    <li class="media">
-                      <div class="media-left">
-                        <a href="javascript:;">
-                          <img class="media-object img-radius comment-img" src="assets/images/avatar-1.jpg" alt="Generic placeholder image">
-                        </a>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="media-heading">Sortino media<span class="f-12 text-muted m-l-5">Just now</span></h6>
-                        <p class="m-b-0">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                        <div class="m-b-25">
-                          <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
-                        </div>
-                        <hr>
 
-                        <div class="media mt-2">
-                          <a class="media-left" href="javascript:;">
-                            <img class="media-object img-radius comment-img" src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
-                          </a>
-                          <div class="media-body">
-                            <h6 class="media-heading">Larry heading <span class="f-12 text-muted m-l-5">Just now</span></h6>
-                            <div class="stars-example-css review-star">
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                            </div>
-                            <p class="m-b-0"> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                            <div class="m-b-25">
-                              <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
-                            </div>
-                            <hr>
-
-                          </div>
-                        </div>
-
-                      </div>
-                    </li>
-
-                    <div class="media mt-2">
-                      <div class="media-left">
-                        <a href="javascript:;">
-                          <img class="media-object img-radius comment-img" src="assets/images/avatar-1.jpg" alt="Generic placeholder image">
-                        </a>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="media-heading">Cedric Kelly<span class="f-12 text-muted m-l-5">Just now</span></h6>
-                        <div class="stars-example-css review-star">
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                        </div>
-                        <p class="m-b-0">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                        <div class="m-b-25">
-                          <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
-                        </div>
-                        <hr>
-                      </div>
-                    </div>
-                    <div class="media mt-2">
-                      <a class="media-left" href="javascript:;">
-                        <img class="media-object img-radius comment-img" src="assets/images/avatar-4.jpg" alt="Generic placeholder image">
-                      </a>
-                      <div class="media-body">
-                        <h6 class="media-heading">Larry heading <span class="f-12 text-muted m-l-5">Just now</span></h6>
-                        <div class="stars-example-css review-star">
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                        </div>
-                        <p class="m-b-0"> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                        <div class="m-b-25">
-                          <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
-                        </div>
-                        <hr>
-
-                        <div class="media mt-2">
-                          <div class="media-left">
-                            <a href="javascript:;">
-                              <img class="media-object img-radius comment-img" src="assets/images/avatar-3.jpg" alt="Generic placeholder image">
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <h6 class="media-heading">Colleen Hurst <span class="f-12 text-muted m-l-5">Just now</span></h6>
-                            <div class="stars-example-css review-star">
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                              <i class="icofont icofont-star"></i>
-                            </div>
-                            <p class="m-b-0">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                            <div class="m-b-25">
-                              <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
-                            </div>
-                          </div>
-                          <hr>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="media mt-2">
-                      <div class="media-left">
-                        <a href="javascript:;">
-                          <img class="media-object img-radius comment-img" src="assets/images/avatar-2.jpg" alt="Generic placeholder image">
-                        </a>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="media-heading">Mark Doe<span class="f-12 text-muted m-l-5">Just now</span></h6>
-                        <div class="stars-example-css review-star">
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                          <i class="icofont icofont-star"></i>
-                        </div>
-                        <p class="m-b-0">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                        <div class="m-b-25">
-                          <span><a href="javascript:;" class="m-r-10 f-12">Reply</a></span><span><a href="javascript:;" class="f-12">Edit</a> </span>
-                        </div>
-                        <hr>
-                      </div>
-                    </div>
-                  </ul>
-                  <div class="md-float-material d-flex">
-                    <div class="md-group-add-on p-relative col-lg-12">
-                      <div class="input-group input-group-button input-group-primary">
-                        <span class="input-group-prepend"><label class="input-group-text"><i class="icofont icofont-comment"></i></label></span>
-                        <input type="text" class="form-control" placeholder="Write Comment">
-                        <span class="input-group-append"><label class="input-group-text">
-                                       <button type="button" class="btn btn-primary"><i class="icofont icofont-plus"></i>note</button>
-                        </label></span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ng-template>
-        </ngb-tab> -->
       </ngb-tabset>
     </div>
   </div>

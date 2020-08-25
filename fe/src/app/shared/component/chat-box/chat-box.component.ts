@@ -23,7 +23,7 @@ import { SocketService } from '../../../core/services/socket.service';
 import { Constants } from '../../../constants-config';
 import { AuthenticationService } from '../../../core/services/authenticate.service';
 import { UserService } from '../../../core/services/user.service';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, Subject } from 'rxjs';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Component({
@@ -51,6 +51,8 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   display = false;
   displaySubscription: Subscription;
   friendSubscription: Subscription;
+  stompSubscription: Subscription;
+  private unsubcribe$ = new Subject<void>();
 
   fileToUpload: File = null;
   image;
@@ -94,7 +96,12 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
         this.display = display;
       }
     );
-    this.initializeWebSocketConnection();
+    this.stompSubscription = this.chatBoxService.isNewMes.subscribe(isNew => {
+      if (isNew) {
+        console.log(11111111111111111);
+        this.handleResult(this.chatBoxService.message);
+      }
+    });
     this.friendSubscription = this.chatBoxService.friendId.subscribe(
       (value) => {
         this.startChat = false;
@@ -140,13 +147,13 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if(this.componentRef) {
+    if (this.componentRef) {
       this.componentRef.directiveRef.scrollToBottom();
     }
   }
 
   onScrollUp() {
-    if(this.pageNo > 0) {
+    if (this.pageNo > 0) {
       this.pageNo++;
       this.getMessages(this.pageNo - 1);
     }
@@ -174,8 +181,8 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sendMessage() {
     let type;
-    if(this.image) {
-      if(this.image.includes("data:image")) {
+    if (this.image) {
+      if (this.image.includes('data:image')) {
         type = 'image';
       } else {
         type = 'file';
@@ -184,13 +191,14 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
       type = '';
     }
     const param = {
+      messageType: 'chat',
       message: this.message,
       fromId: this.currentUtc2User.username,
       toId: this.friendId,
       image: this.image,
       seen: false,
       fileName: this.fileName,
-      type: type
+      type: type,
     };
     this.socketService.sendMessage(param).subscribe((res) => {
       console.log(res, '========================================');
@@ -200,38 +208,39 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
   }
 
-  initializeWebSocketConnection() {
-    const ws = new SockJS(this.serverUrl);
-    this.stompClient = Stomp.over(ws);
-    const that = this;
-    this.stompClient.connect({}, function (frame) {
-      that.isLoaded = true;
-      that.openGlobalSocket();
-      that.openSocket();
-    });
-  }
+  // initializeWebSocketConnection() {
+  //   const ws = new SockJS(this.serverUrl);
+  //   this.stompClient = Stomp.over(ws);
+  //   const that = this;
+  //   this.stompClient.connect({}, function (frame) {
+  //     that.isLoaded = true;
+  //     that.openGlobalSocket();
+  //     that.openSocket();
+  //   });
+  // }
 
-  openGlobalSocket() {
-    this.stompClient.subscribe('/socket-publisher', (message) => {
-      this.handleResult(message);
-    });
-  }
+  // openGlobalSocket() {
+  //   this.stompClient.subscribe('/socket-publisher', (message) => {
+  //     this.handleResult(message);
+  //   });
+  // }
 
-  openSocket() {
-    if (this.isLoaded) {
-      this.isCustomSocketOpened = true;
-      if(this.currentUtc2User) {
-        this.stompClient.subscribe(
-          '/socket-publisher/' + this.currentUtc2User.username,
-          (message) => {
-            this.handleResult(message);
-          }
-        );
-      }
-    }
-  }
+  // openSocket() {
+  //   if (this.isLoaded) {
+  //     this.isCustomSocketOpened = true;
+  //     if(this.currentUtc2User) {
+  //       this.stompClient.subscribe(
+  //         '/socket-publisher/' + this.currentUtc2User.username,
+  //         (message) => {
+  //           this.handleResult(message);
+  //         }
+  //       );
+  //     }
+  //   }
+  // }
 
   handleResult(message) {
+    console.log("12345");
     if (message.body) {
       const messageResult = JSON.parse(message.body);
       let displayContent = '';
@@ -273,7 +282,7 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   doClickImg(data, name) {
     const w = window.open('about:blank');
-    if(data.includes("application/pdf") || data.includes("data:image")) {
+    if (data.includes('application/pdf') || data.includes('data:image')) {
         setTimeout(function() {
           w.document.body.appendChild(w.document.createElement('iframe'))
               .src = data;
@@ -302,8 +311,8 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.displaySubscription.unsubscribe();
-    // this.friendSubscription.unsubscribe();
+    this.unsubcribe$.next();
+    this.unsubcribe$.complete();
   }
 
   sentMsg(flag) {

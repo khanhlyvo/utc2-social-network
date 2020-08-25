@@ -21,8 +21,9 @@ import { PaginationComponent } from './component/pagination/pagination.component
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {CalendarModule} from 'primeng/calendar';
+import { RouterModule } from '@angular/router';
 
-import {} from './component/chat-box/chat-box.component';
+import { PostComponent } from './component/post/post.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -35,7 +36,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormsModule,
     ReactiveFormsModule,
     ClickOutsideModule,
-    NgbModule
+    NgbModule,
+    RouterModule
   ],
   declarations: [
     AccordionAnchorDirective,
@@ -52,7 +54,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ParentRemoveDirective,
     LoadingComponent,
     ChatBoxComponent,
-    PaginationComponent
+    PaginationComponent,
+    PostComponent
   ],
   exports: [
     FormsModule,
@@ -72,7 +75,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgbModule,
     PerfectScrollbarModule,
     ClickOutsideModule,
-
+    PostComponent,
     ChatBoxComponent,
     PaginationComponent,
     ToastModule,

@@ -23,6 +23,7 @@ export interface MainMenuItems {
   icon: string;
   badge?: BadgeItem[];
   children?: ChildrenItems[];
+  role?: any;
 }
 
 export interface Menu {
@@ -35,12 +36,21 @@ const MENUITEMS = [
     label: 'Navigation',
     main: [
       {
+        state: 'new-feed',
+        short_label: 'U',
+        name: 'Trang Chủ',
+        type: 'link',
+        icon: 'ti-home',
+        role: ['User', 'Admin']
+      },
+      {
         state: 'list',
         short_label: 'G',
         main_state: 'group',
         name: 'Nhóm Tổ Chức',
         type: 'link',
         icon: 'ti-direction-alt',
+        role: ['Admin']
       },
       {
         state: 'list',
@@ -49,6 +59,7 @@ const MENUITEMS = [
         name: 'Đơn Vị',
         type: 'link',
         icon: 'ti-home',
+        role: ['Admin']
       },
       {
         state: 'list',
@@ -57,6 +68,7 @@ const MENUITEMS = [
         name: 'Nguời Dùng',
         type: 'link',
         icon: 'ti-user',
+        role: ['Admin']
       },
       // {
       //   state: 'dashboard',

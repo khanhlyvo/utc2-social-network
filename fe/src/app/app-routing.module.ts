@@ -1,3 +1,4 @@
+import { NewFeedModule } from './modules/user/new-feed/new-feed.module';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {AdminComponent} from './layout/admin/admin.component';
@@ -12,8 +13,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'profile',
+        redirectTo: 'new-feed',
         pathMatch: 'full'
+      },
+      {
+        path: 'new-feed',
+        loadChildren: () => import('./modules/user/new-feed/new-feed.module').then(m => m.NewFeedModule)
       }, {
         path: 'dashboard',
         loadChildren: () => import('./pages/dashboard/dashboard-default/dashboard-default.module').then(m => m.DashboardDefaultModule),

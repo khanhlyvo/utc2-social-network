@@ -1,10 +1,12 @@
 <div class="card card_main showChat_inner" *ngIf="display">
   <div class="media chat-inner-header">
-    <a class="back_chatBox">
+    <div class="back_chatBox">
       <i class="icofont icofont-close" (click)="isDisplay(false)"></i>
-      {{friend?.fullName}}
+      <a [routerLink]="'/profile/' + friend?.username">
+        {{friend?.fullName}}
+      </a>
       <!-- <div>{{friend?.department?.departName}}</div> -->
-    </a>
+    </div>
   </div>
   <perfect-scrollbar
     [style.max-width]="'100%'"

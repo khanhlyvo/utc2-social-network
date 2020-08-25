@@ -21,6 +21,7 @@ import social.utc2.repositories.DepartmentRepository;
 import social.utc2.repositories.UserRepository;
 import social.utc2.request.Pagination;
 import social.utc2.responses.PageResponse;
+import social.utc2.responses.ProfileResponse;
 
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -99,7 +100,14 @@ public class UserServiceImpl implements UserService{
 
    @Override
    public User getUserById(Integer userId) {
-      return userRepository.findById(userId).get();
+       User user = userRepository.findById(userId).get();
+      if(user.getAvatar() != null) {
+         user.setAvatar(encoder(user.getAvatar()));
+      }
+      if(user.getBackground() != null) {
+         user.setBackground(encoder(user.getBackground()));
+      }
+      return user;
    }
 
    @Override
