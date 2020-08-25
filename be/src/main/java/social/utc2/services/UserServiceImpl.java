@@ -228,10 +228,10 @@ public class UserServiceImpl implements UserService{
                               if (i != names.length - 1) {
                                  firstName += names[i] + " ";
                               } else {
-                                 user.setLastName(names[i]);
+                                 user.setFirstName(names[i]);
                               }
                            }
-                           user.setFirstName(firstName);
+                           user.setLastName(firstName);
                         }
                         break;
                      case 3:
