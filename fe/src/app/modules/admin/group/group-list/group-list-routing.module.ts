@@ -5,7 +5,13 @@ import {GroupListComponent} from './group-list.component';
 const routes: Routes = [
   {
     path: '',
-    component: GroupListComponent
+    component: GroupListComponent,
+    data: {
+      breadcrumb: 'Quản Lý Nhóm Tổ Chức',
+      icon: 'icofont-justify-all bg-c-green',
+      breadcrumb_caption: 'Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit - About Us',
+      status: true
+    }
   }
 ];
 

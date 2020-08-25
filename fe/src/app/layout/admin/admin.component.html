@@ -18,7 +18,7 @@
             <i class="ti-menu"></i>
           </a>
           <a [routerLink]="['/']">
-            <!-- <img class="img-fluid" src="assets/images/logo.png" alt="Theme-Logo"/> -->
+            <!-- <img class="img-fluid" src="assets/images/LogoUTC.jpg" alt="Theme-Logo"/> -->
           </a>
           <a (click)="onMobileMenu()" class="mobile-options">
             <i class="ti-more"></i>
@@ -27,10 +27,10 @@
 
         <div class="navbar-container">
           <div class="d-flex flex-align-between">
-              <div class="pcoded-search" style="width: 350px; position: relative; height: 35px; align-self: center; margin-left: 8px;">
+              <div class="pcoded-search" style="width: 350px; position: relative; height: 35px; align-self: center; margin-left: 38px;">
                 <span class="searchbar-toggle">  </span>
                 <div class="pcoded-search-box ">
-                  <input type="text" placeholder="Search" [(ngModel)]="searchItem" (change)="doSearch()">
+                  <input type="text" placeholder="Tìm Kiếm" [(ngModel)]="searchItem" (change)="doSearch()">
                   <span class="search-icon"><i class="ti-search" aria-hidden="true"></i></span>
                 </div>
                 <ul *ngIf="listSearch.length>0" class="search-ul">
@@ -194,7 +194,7 @@
                   </li>
                 </ul>
               </li> -->
-              <!-- <li class="header-notification">
+              <li class="header-notification">
                 <a href="javascript:;">
                   <i class="ti-bell"></i>
                   <span class="badge bg-c-pink"></span>
@@ -235,8 +235,8 @@
                     </div>
                   </li>
                 </ul>
-              </li> -->
-              <li class="header-notification">
+              </li>
+              <li class="header-notification" style="margin-right: 30px;">
                 <a href="javascript:;" (click)="toggleChat()" class="displayChatbox">
                   <i class="ti-comments"></i>
                   <!-- <span class="badge bg-c-green"></span> -->
@@ -301,7 +301,7 @@
                   <div (click)="doChat(item)" class="media userlist-box" placement="left">
                     <a class="media-left" href="javascript:;">
                       <img class="media-object " *ngIf="item.avatar"  [src]="item.avatar" alt="Generic placeholder image">
-                      <img class="media-object " *ngIf="!item.avatar"  src="assets/images/user-profile/user-img.jpg" alt="Generic placeholder image">
+                      <img class="media-object " *ngIf="!item.avatar"  src="assets/images/user-profile/user-img.png" alt="Generic placeholder image">
                       <div class="live-status bg-success" *ngIf="isLive(item.userName)"></div>
                     </a>
                     <div class="media-body">
@@ -430,9 +430,9 @@
               <div class="main-menu-content">
                 <ul>
                   <li [@mobileMenuTop]="isCollapsedSideBar" class="more-details" [ngClass]="isCollapsedSideBar">
-                    <a routerLink="/profile/{{currentUtc2User?.username}}"><i class="ti-user"></i>View Profile</a>
+                    <a routerLink="/profile/{{currentUtc2User?.username}}"><i class="ti-user"></i>Trang Cá Nhân</a>
                     <!-- <a [routerLink]="['/crm-contact']"><i class="ti-settings"></i>Settings</a> -->
-                    <a (click)="logout()"><i class="ti-layout-sidebar-left"></i>Logout</a>
+                    <a (click)="logout()"><i class="ti-layout-sidebar-left"></i>Đăng Xuất</a>
                   </li>
                 </ul>
               </div>

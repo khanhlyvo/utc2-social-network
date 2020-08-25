@@ -1132,6 +1132,10 @@ a.mytooltip {
 }
 
 @media (min-width: 768px) {
+  .post-content {
+    margin-right: 290px;
+  }
+
   .img-container {
     min-height: 516px;
   }
@@ -1214,6 +1218,9 @@ a.mytooltip {
 }
 
 @media (max-width: 400px) {
+  .post-content {
+    margin-right: 0;
+  }
   .btn-group-crop {
     margin-right: -15px !important;
     > .btn {
@@ -23007,3 +23014,12 @@ body.dark {
   content: "Choose file...";
 }
 
+.post-content {
+  margin-right: 290px;
+}
+
+@media (max-width: 1300px){
+  .post-content {
+    margin-right: 0;
+  }
+}

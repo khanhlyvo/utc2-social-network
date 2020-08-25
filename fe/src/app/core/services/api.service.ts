@@ -17,6 +17,7 @@ export class ApiService {
   }
 
   get(url: any, param: any = {}): Observable<any> {
+    // tslint:disable-next-line: no-use-before-declare
     let params = new HttpParams({ encoder: new CustomEncoder() });
     for (const property of Object.keys(param)) {
       params = params.set(property, param[property]);

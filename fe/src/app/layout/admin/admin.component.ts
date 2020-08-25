@@ -137,7 +137,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.pcodedHeaderPosition = 'fixed';
     this.pcodedSidebarPosition = 'fixed';
     this.headerTheme = 'theme1';
-    this.logoTheme = 'theme1';
+    this.logoTheme = 'theme5';
 
     this.toggleOn = true;
 
@@ -200,7 +200,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.userService.getUserByUsername(this.currentUtc2User.username).subscribe(res => {
         this.userProfile = res;
         if (!this.userProfile.avatar) {
-          this.userProfile.avatar = 'assets/images/user-profile/user-img.jpg';
+          this.userProfile.avatar = 'assets/images/user-profile/user-img.png';
         }
         if (!this.userProfile.background) {
           this.userProfile.background = 'assets/images/user-profile/bg-img1.jpg';

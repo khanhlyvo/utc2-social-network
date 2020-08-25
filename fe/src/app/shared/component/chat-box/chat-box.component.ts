@@ -351,7 +351,8 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
         //   let html_replay;
         //   html_replay = '<div class="media chat-messages">' +
         //     '<a class="media-left photo-table" href="javascript:">' +
-        //     '<img class="media-object img-radius img-radius m-t-5" src="' + this.chatMessage.photo + '" alt="' + this.chatMessage.name + '">' +
+        //     '<img class="media-object img-radius
+        //img-radius m-t-5" src="' + this.chatMessage.photo + '" alt="' + this.chatMessage.name + '">' +
         //     '</a>' +
         //     '<div class="media-body chat-menu-content">' +
         //     '<div class="">' +

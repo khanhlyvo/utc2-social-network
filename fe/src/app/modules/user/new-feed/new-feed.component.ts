@@ -21,6 +21,7 @@ export class NewFeedComponent implements OnInit, OnDestroy {
   listFollowId = [];
   followList = [];
   userProfile;
+  isSeeMore = false;
   postSubscription: Subscription;
   currentUtc2User: any;
   pageSize = 10;
@@ -90,6 +91,11 @@ export class NewFeedComponent implements OnInit, OnDestroy {
       this.postListOrigin.length = 0;
     }
     this.postService.getPosts(this.listFollowId, this.pageSize, pageNo).subscribe(res => {
+      if ( res.length === 0) {
+        this.isSeeMore = false;
+      } else {
+        this.isSeeMore = true;
+      }
       this.postListOrigin = [...this.postListOrigin, ...res];
       this.postList = [...this.postListOrigin];
       // this.postList = this.postListOrigin.sort( (a, b) => {

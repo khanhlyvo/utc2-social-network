@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private unsubcribe$ = new Subject<void>();
   username: string;
 
+  isSeeMore = false;
   editProfile = true;
   editProfileIcon = 'icofont-edit';
   editAbout = true;
@@ -105,18 +106,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getPost(id, pageNo) {
     const users = [];
     users.push(id);
-    if(pageNo === 0) {
+    if (pageNo === 0) {
       this.pageNo = 0;
       this.postListOrigin.length = 0;
     }
     this.postService.getPosts(users, this.pageSize, pageNo).subscribe(res => {
+      if ( res.length === 0) {
+        this.isSeeMore = false;
+      } else {
+        this.isSeeMore = true;
+      }
       this.postListOrigin = [...this.postListOrigin, ...res];
       this.postList = [...this.postListOrigin];
     });
   }
 
   doCmt(value, item) {
-    if(!value) {return;}
+    if (!value) {return; }
     const param = {
       user: +this.currentUtc2User.id,
       postId: item.id,
@@ -170,11 +176,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   get srcAvatar() {
-    let src = 'assets/images/user-profile/user-img.jpg';
+    let src = 'assets/images/user-profile/user-img.png';
     if (this.avatar) {
       src = this.avatar;
     } else {
-      src = this.userProfile ? this.userProfile.avatar : 'assets/images/user-profile/user-img.jpg';
+      src = this.userProfile ? this.userProfile.avatar : 'assets/images/user-profile/user-img.png';
     }
     return src;
   }
@@ -206,7 +212,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userProfileEdit = {...res};
       this.getPost(res.id, 0);
       if (!this.userProfile.avatar) {
-        this.userProfile.avatar = 'assets/images/user-profile/user-img.jpg';
+        this.userProfile.avatar = 'assets/images/user-profile/user-img.png';
       }
       if (!this.userProfile.background) {
         this.userProfile.background = 'assets/images/user-profile/bg-img1.jpg';

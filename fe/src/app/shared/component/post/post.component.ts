@@ -81,6 +81,7 @@ export class PostComponent implements OnInit {
     this.postService.updatePost(param).subscribe(_res => {
       this.postService.fetch = true;
       this.isEditPost = false;
+    // tslint:disable-next-line: no-unused-expression
     }), _err => {
       this.isEditPost = false;
     };

@@ -34,5 +34,5 @@ export const Constants = {
   TRUE: 1,
   FALSE: 0,
   DATE_FORMAT: 'dd/MM/yyyy',
-  USERNAME_EXIST: "USERNAME IS EXIST"
+  USERNAME_EXIST: 'USERNAME IS EXIST'
 };

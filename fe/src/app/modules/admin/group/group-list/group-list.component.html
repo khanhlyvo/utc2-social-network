@@ -59,7 +59,7 @@
       <button
         type="button"
         class="btn btn-danger mb-3 mr-3"
-        (click)="doDelete()"
+        (click)="doDelete(false)"
       >
         Xóa
       </button>
@@ -74,7 +74,7 @@
         <button
           type="button"
           class="btn btn-primary mb-3"
-          (click)="openModal(createModal, 'lg'); isEdit = false"
+          (click)="openModal(createModal, 'lg', false); isEdit = false"
         >
           Tạo Mới
         </button>

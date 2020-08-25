@@ -3,7 +3,7 @@
     <li class="media">
       <div class="media-left">
         <a href="javascript:;">
-          <img *ngIf="!userProfile?.avatar"  class="media-object img-radius comment-img" src="assets/images/user-profile/user-img.jpg" alt="Generic placeholder image">
+          <img *ngIf="!userProfile?.avatar"  class="media-object img-radius comment-img" src="assets/images/user-profile/user-img.png" alt="Generic placeholder image">
           <img *ngIf="userProfile?.avatar"  class="media-object img-radius comment-img" [src]="userProfile?.avatar" alt="Generic placeholder image">
         </a>
       </div>
@@ -28,7 +28,7 @@
           <div *ngFor="let comment of listComment; let i =index" >
             <div class="media mt-2">
               <a class="media-left" href="javascript:;">
-                <img *ngIf="!comment.user?.avatar"  class="media-object img-radius comment-img" src="assets/images/user-profile/user-img.jpg" alt="Generic placeholder image">
+                <img *ngIf="!comment.user?.avatar"  class="media-object img-radius comment-img" src="assets/images/user-profile/user-img.png" alt="Generic placeholder image">
                 <img *ngIf="comment.user?.avatar"  class="media-object img-radius comment-img" [src]="comment.user?.avatar" alt="Generic placeholder image">
               </a>
               <div class="media-body">

@@ -22,7 +22,7 @@ export class UserService {
   }
 
   addListUser(file): Observable<boolean> {
-    return this.apiService.postOption(`${this.baseUrl}/import`, file ,{ "Content-Type": "multipart/form-data" });
+    return this.apiService.postOption(`${this.baseUrl}/import`, file , { 'Content-Type': 'multipart/form-data' });
   }
 
   updateUser(user: any): Observable<boolean> {
