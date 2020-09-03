@@ -72,7 +72,7 @@ export class NewFeedComponent implements OnInit, OnDestroy {
   }
 
   doPost() {
-    if (this.postInput.trim() === '') { return; }
+    if ( this.postInput.trim() === '') { return; }
     console.log(this.postInput);
     // const param = null;
     const param = {

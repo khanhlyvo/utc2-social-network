@@ -23015,9 +23015,9 @@ body.dark {
   content: "Choose file...";
 }
 
-.post-content {
-  margin-right: 290px;
-}
+// .post-content {
+//   margin-right: 290px;
+// }
 
 @media (max-width: 1300px){
   .post-content {
@@ -23027,6 +23027,6 @@ body.dark {
 
 @media (min-width: 1300px){
   .post-content {
-    margin-right: 0;
+    margin-right: 290px;
   }
 }

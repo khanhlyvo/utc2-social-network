@@ -95,7 +95,7 @@ export class PostComponent implements OnInit {
       header: 'Xóa Bình Luận',
       message: 'Bạn có chắc chắn muốn xóa bình luận này?',
       accept: () => {
-        this.commentService.deleteComment(this.item.id).subscribe(() => {
+        this.postService.deletePost(this.item.id).subscribe(() => {
           this.postService.fetch = true;
         }, _err => {});
       }

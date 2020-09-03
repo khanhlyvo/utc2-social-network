@@ -113,14 +113,16 @@ export class AppComponent implements OnInit, OnDestroy {
       if (messageResult.fromId !== this.currentUtc2User.username) {
         this.chatboxService.notification = message;
       }
+      if (messageResult.toId === this.currentUtc2User.username) {
+        if (!this.chatboxService.display) {
+          this.chatboxService.display = true;
+          this.chatboxService.friend = messageResult.fromId;
+        }
+      }
       // this.messages.push(messageResult);
       // this.toastr.success("new message recieved", null, {
       //   'timeOut': 3000
       // });
-      if (!this.chatboxService.display) {
-        this.chatboxService.display = true;
-        this.chatboxService.friend = messageResult.fromId;
-      }
     }
   }
 

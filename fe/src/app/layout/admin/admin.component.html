@@ -277,10 +277,10 @@
             </div>
             <div class="main-friend-list scroll-window">
               <perfect-scrollbar [style.max-width]="'100%'" [config]="config">
-                <div *ngFor="let item of followList">
-                  <div (click)="doChat(item)" class="media userlist-box" placement="left">
+                <div *ngFor="let item of followList; let i = index">
+                  <div (click)="doChat(item, i)" class="media userlist-box" placement="left">
                     <a class="media-left" href="javascript:;">
-                      <div class="flag-chat" *ngIf="isChat(item)"></div>
+                      <div class="flag-chat" *ngIf="isChat(item, i)"></div>
                       <img class="media-object " *ngIf="item.avatar"  [src]="item.avatar" alt="Generic placeholder image">
                       <img class="media-object " *ngIf="!item.avatar"  src="assets/images/user-profile/user-img.png" alt="Generic placeholder image">
                       <div class="live-status bg-success" *ngIf="isLive(item.userName)"></div>

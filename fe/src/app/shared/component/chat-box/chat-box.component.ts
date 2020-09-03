@@ -160,8 +160,8 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteImg() {
-    this.image = null;
-    this.fileName = null;
+    this.image = '';
+    this.fileName = '';
   }
 
   handleFileInput(files: FileList) {
@@ -204,8 +204,8 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     this.socketService.sendMessage(param).subscribe((res) => {
       console.log(res, '========================================');
-      this.image = null;
-      this.fileName = null;
+      this.image = '';
+      this.fileName = '';
     });
     // }
   }
@@ -319,7 +319,7 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   sentMsg(flag) {
     console.log(this.message);
-    if (!this.message && !this.image || ((this.message.trim() === '')  && !this.image)) {
+    if (!this.message && !this.image || ( this.message && (this.message.trim() === '')  && !this.image)) {
       this.message_error = true;
       // if(false){
     } else {

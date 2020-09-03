@@ -1,3 +1,4 @@
+import { InoutService } from './../../core/services/inout.service';
 import { NotificationService } from './../../core/services/notification.service';
 import { PresenceService } from './../../core/services/presence.service';
 import { FollowService } from './../../core/services/follow.service';
@@ -125,6 +126,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   _isMesNotice = false;
   cmtNotiList = [];
   newMes;
+  chatFlagList = [];
 
   constructor(public menuItems: MenuItems,
     private notificationService: NotificationService,
@@ -206,6 +208,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this._isMesNotice = true;
         this.newMes = this.chatBoxService.message;
         console.log(this.newMes);
+        this.chatFlagList.fill(true);
       }
     });
     this.notiSub = this.notificationService.isNotice.subscribe(isNotice => {
@@ -235,13 +238,13 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  isChat(item) {
+  isChat(item, i) {
     const res = false;
     if (this.newMes && this.newMes.body) {
       const mes = JSON.parse(this.newMes.body);
       return mes.fromUserId === item.id;
     }
-    return res;
+    return res && !this.chatFlagList[i];
   }
 
   doNotice() {
@@ -258,6 +261,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.followListOrigin = [...res];
       console.log(this.followList);
       this.followService.followList = res;
+      this.chatFlagList.length = res.length;
+      this.chatFlagList.fill(true);
     });
   }
 
@@ -364,7 +369,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     });
   }
 
-  doChat(item) {
+  doChat(item, i) {
+    this.chatFlagList[i] = false;
     this.chatBoxService.display = true;
     this.chatBoxService.friend = item.userName;
   }
