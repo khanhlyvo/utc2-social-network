@@ -1,9 +1,3 @@
-# utc2-social-network
-Đồ án: Mạng nội bộ trường đại học GTVT cs2
-Họ Tên : Võ Thị Khánh Ly
-Ngôn ngữ : Java Spring Boot + Angular ́́
-
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.0.
 
 ## Development server
