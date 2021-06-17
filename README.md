@@ -1,5 +1,5 @@
 # utc2-social-network
-Đồ án: Mạng xã hội trường đại học GTVT cs2
+Đồ án: Mạng nội bộ trường đại học GTVT cs2
 Họ Tên : Võ Thị Khánh Ly
 Ngôn ngữ : Java Spring Boot + Angular ́́
 
